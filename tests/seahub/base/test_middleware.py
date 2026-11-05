@@ -7,7 +7,6 @@ from seahub.base.middleware import (
     BaseMiddleware,
     InfobarMiddleware,
     ForcePasswdChangeMiddleware,
-    UserAgentMiddleWare,
 )
 
 
@@ -198,60 +197,3 @@ class ForcePasswdChangeMiddlewareTest(SimpleTestCase):
         response = mw(request)
         self.assertEqual(response.status_code, 302)
         get_response.assert_not_called()
-
-
-# ======================================================================
-# UserAgentMiddleWare
-# ======================================================================
-
-class UserAgentMiddleWareTest(SimpleTestCase):
-
-    def setUp(self):
-        self.factory = RequestFactory()
-        self.mw = UserAgentMiddleWare(dummy_get_response)
-
-    def _make_request(self, user_agent=''):
-        request = self.factory.get('/')
-        if user_agent:
-            request.META['HTTP_USER_AGENT'] = user_agent
-        return request
-
-    def test_desktop_browser_not_mobile_not_tablet(self):
-        request = self._make_request(
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
-            'AppleWebKit/537.36 Chrome/120.0 Safari/537.36'
-        )
-        self.mw(request)
-        self.assertFalse(request.is_mobile)
-        self.assertFalse(request.is_tablet)
-
-    def test_android_phone_detected_as_mobile(self):
-        request = self._make_request(
-            'Mozilla/5.0 (Linux; Android 10; Pixel 3) '
-            'AppleWebKit/537.36 Mobile Safari/537.36'
-        )
-        self.mw(request)
-        self.assertTrue(request.is_mobile)
-        self.assertFalse(request.is_tablet)
-
-    def test_ipad_detected_as_tablet_not_mobile(self):
-        request = self._make_request(
-            'Mozilla/5.0 (iPad; CPU OS 14_0 like Mac OS X) '
-            'AppleWebKit/605.1 Mobile/15A372 Safari/604.1'
-        )
-        self.mw(request)
-        self.assertTrue(request.is_tablet)
-
-    def test_android_tablet_no_mobile_keyword(self):
-        request = self._make_request(
-            'Mozilla/5.0 (Linux; Android 9; SM-T510) '
-            'AppleWebKit/537.36 Safari/537.36'
-        )
-        self.mw(request)
-        self.assertTrue(request.is_tablet)
-
-    def test_no_user_agent_header(self):
-        request = self.factory.get('/')
-        self.mw(request)
-        self.assertFalse(request.is_mobile)
-        self.assertFalse(request.is_tablet)

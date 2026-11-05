@@ -8,11 +8,7 @@
 <meta name="keywords" content="{% trans "File, Collaboration, Team, Organization" %}" />
 {% if site_description != '' %}<meta name="description" content="{{ site_description }}" />{% endif %}
 {% block viewport %}
-{% if request.is_mobile or request.is_tablet %}
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-{% else %}
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-{% endif %}
 {% endblock %}
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
 <link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}" type="image/x-icon">
@@ -20,7 +16,7 @@
 {% block extra_base_style %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/seafile-ui.css?t=20260713" />
 {% endblock %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1792496655751" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1793350117776" />
 {% block extra_style %}{% endblock %}
 {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
 {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
@@ -31,7 +27,7 @@
         {% if request.user.is_authenticated and request.cur_note %}
         <div id="info-bar" class="d-flex justify-content-between align-items-center">
             <p id="info-bar-info" class="m-0">{{ request.cur_note.message|urlize }}</p>
-            <span class="close d-flex align-items-center" data="{{ request.cur_note.id }}" title="{% trans "Close" %}" role="button" aria-label="{% trans 'Close' %}"><span class="info-bar-close-icon" aria-hidden="true"></span></span>
+            <span class="close d-flex align-items-center" data="{{ request.cur_note.id }}" title="{% trans "Close" %}" role="button" aria-label="{% trans 'Close' %}" tabindex="0"><span class="info-bar-close-icon" aria-hidden="true"></span></span>
         </div>
         {% endif %}
         {% endblock info_bar_message %}
@@ -62,7 +58,7 @@
             {% endblock %}
         </div>
 
-        <div id="main" class="container-fluid w100 flex-auto {% block main_class %}ov-auto{% endblock %}">{# since #wrapper is `d-flex`, 'w100' is necessary here. #}
+        <main id="main" class="container-fluid w100 flex-auto {% block main_class %}ov-auto{% endblock %}">{# since #wrapper is `d-flex`, 'w100' is necessary here. #}
             {% block main_content %}
             <div class="row">
                 <div id="main-panel" class="w100 ovhd">
@@ -70,7 +66,7 @@
                 </div>
             </div>
             {% endblock %}
-        </div>
+        </main>
 
         {% if messages %}
         <ul class="messages hide">
@@ -130,6 +126,12 @@ $('#info-bar .close').on('click', function() {
         if (!info_id_exist) {
             document.cookie = 'info_id=' + new_info_id;
         }
+    }
+});
+$('#info-bar .close').on('keydown', function(event) {
+    if (event.which === 13 || event.which === 32) {
+        event.preventDefault();
+        $(this).trigger('click');
     }
 });
 {% endif %}

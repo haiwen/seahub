@@ -15,14 +15,14 @@
       <label for="password" class="form-label">{% trans "Password" %}</label>
       <div class="input-group">
         <input type="password" name="password" id="password" value="" required="" class="form-control" autocomplete="off" />
-        <button type="button" class="btn btn-secondary"></button>
+        <button type="button" class="btn btn-secondary" title="{% trans 'Show password' %}" aria-label="{% trans 'Show password' %}" data-show-label="{% trans 'Show password' %}" data-hide-label="{% trans 'Hide password' %}" aria-pressed="false"></button>
       </div>
     </div>
     <div class="mb-3">
       <label for="password2" class="form-label">{% trans "Confirm Password" %}</label>
       <div class="input-group">
         <input type="password" name="password2" required="" id="password2" class="form-control" />
-        <button type="button" class="btn btn-secondary"></button>
+        <button type="button" class="btn btn-secondary" title="{% trans 'Show password' %}" aria-label="{% trans 'Show password' %}" data-show-label="{% trans 'Show password' %}" data-hide-label="{% trans 'Hide password' %}" aria-pressed="false"></button>
       </div>
     </div>
     <p class="error hide"></p>

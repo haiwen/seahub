@@ -981,7 +981,21 @@ textarea:-moz-placeholder {
 }
 
 #refresh-captcha {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
   margin: 10px 3px 0 5px;
+  border: 0;
+  padding: 0;
+  color: #999;
+  background-color: currentColor;
+  -webkit-mask: url('../img/refresh.svg') center / contain no-repeat;
+  mask: url('../img/refresh.svg') center / contain no-repeat;
+}
+
+#refresh-captcha:hover,
+#refresh-captcha:focus {
+  color: #666;
 }
 
 #id_captcha_1 {
@@ -1035,6 +1049,10 @@ textarea:-moz-placeholder {
   font-size: 14px;
 }
 
+.login-panel .input:focus {
+  border-color: #1991eb;
+}
+
 .login-panel .cf-turnstile {
   transform: scale(0.9);
   transform-origin: top left;
@@ -1058,6 +1076,8 @@ textarea:-moz-placeholder {
   position: absolute;
   top: 12px;
   right: 10px;
+  border: 0;
+  padding: 0;
   cursor: pointer;
   color: #999;
   background-color: currentColor;
@@ -1070,7 +1090,8 @@ textarea:-moz-placeholder {
   mask-image: url('../img/eye.svg');
 }
 
-#toggle-show-password:hover {
+#toggle-show-password:hover,
+#toggle-show-password:focus {
   color: #666;
 }
 
