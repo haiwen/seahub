@@ -221,10 +221,10 @@ from seahub.api2.endpoints.repo_auto_delete import RepoAutoDeleteView
 from seahub.seadoc.views import sdoc_revision, sdoc_revisions, sdoc_to_docx, sdoc_to_markdown, sdoc_preview
 from seahub.ocm.settings import OCM_ENDPOINT
 from seahub.wiki2.views import wiki_view, wiki_publish_view, wiki_history_view, wiki_search_result_view
-from seahub.api2.endpoints.wiki2 import Wiki2FileView, Wiki2FileViewDuplicateView, Wiki2FileViews, Wiki2LinkedRepoFileUuidView, Wiki2PageConfigView, Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView, \
+from seahub.api2.endpoints.wiki2 import Wiki2PageConfigView, Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView, \
     Wiki2DuplicatePageView, WikiPageTrashView, Wiki2PublishView, Wiki2PublishConfigView, Wiki2PublishPageView, \
     WikiSearch, Wiki2MultiSearch, WikiConvertView, WikiPageExport, ImportConfluenceView, Wiki2ImportPageView, \
-    Wiki2SettingsView, Wiki2LinkedReposView, Wiki2FileViewRecords, Wiki2LinkedRepoDirView, Wiki2ImportSdocPageView
+    Wiki2ImportSdocPageView
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
 from seahub.api2.endpoints.user_list import UserListView
 from seahub.api2.endpoints.seahub_io import SeahubIOStatus
@@ -622,10 +622,6 @@ urlpatterns = [
     re_path(r'^api/v2.1/wikis2/$', Wikis2View.as_view(), name='api-v2.1-wikis2'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/$', Wiki2View.as_view(), name='api-v2.1-wiki2'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/config/$', Wiki2ConfigView.as_view(), name='api-v2.1-wiki2-config'),
-    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/settings/$', Wiki2SettingsView.as_view(), name='api-v2.1-wiki2-settings'),
-    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/linked-repos/$', Wiki2LinkedReposView.as_view(), name='api-v2.1-wiki2-linked-repos'),
-    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/linked-repos/(?P<linked_repo_id>[-0-9a-f]{36})/dir/$', Wiki2LinkedRepoDirView.as_view(), name='api-v2.1-wiki2-linked-repo-dir'),
-    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/linked-repos/(?P<linked_repo_id>[-0-9a-f]{36})/file-uuid/$', Wiki2LinkedRepoFileUuidView.as_view(), name='api-v2.1-wiki2-linked-repo-file-uuid'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/publish/config/$', Wiki2PublishConfigView.as_view(), name='api-v2.1-wiki2-publish-config'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/pages/$', Wiki2PagesView.as_view(), name='api-v2.1-wiki2-pages'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/page/(?P<page_id>[-0-9a-zA-Z]{4})/$', Wiki2PageView.as_view(), name='api-v2.1-wiki2-page'),
@@ -637,10 +633,6 @@ urlpatterns = [
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/import-sdoc-page/$', Wiki2ImportSdocPageView.as_view(), name='api-v2.1-wiki2-import-sdoc-page'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/trash/', WikiPageTrashView.as_view(), name='api-v2.1-wiki2-trash'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/publish/$', Wiki2PublishView.as_view(), name='api-v2.1-wiki2-publish'),
-    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/file-views/$', Wiki2FileViews.as_view(), name='api-v2.1-wiki2-file-views'),
-    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/file-views/(?P<file_view_id>\d+)/$', Wiki2FileView.as_view(), name='api-v2.1-wiki2-file-view'),
-    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/file-views/(?P<file_view_id>\d+)/duplicate/$', Wiki2FileViewDuplicateView.as_view(), name='api-v2.1-wiki2-file-view-duplicate'),
-    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/file-view/(?P<file_view_id>\d+)/records/$', Wiki2FileViewRecords.as_view(), name='api-v2.1-wiki2-metadata-records'),
     re_path(r'^api/v2.1/wiki2/search/$', WikiSearch.as_view(), name='api-v2.1-wiki2-search'),
     re_path(r'^api/v2.1/wiki2/multi-search/$', Wiki2MultiSearch.as_view(), name='api-v2.1-wiki2-multi-search'),
     re_path(r'^api/v2.1/convert-wiki/$', WikiConvertView.as_view(), name='api-v2.1-wiki-convert'),
