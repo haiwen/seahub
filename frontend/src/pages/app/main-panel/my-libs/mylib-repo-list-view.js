@@ -6,6 +6,7 @@ import ContextMenu from '@/components/context-menu/context-menu';
 import LibsMobileThead from '@/components/libs-mobile-thead';
 import RepoListCard from '@/components/repo-list-card';
 import { LIST_MODE } from '@/constants/view-mode';
+import { storages } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import MylibRepoListItem from './mylib-repo-list-item';
 
@@ -16,6 +17,7 @@ const propTypes = {
   onTransferRepo: PropTypes.func.isRequired,
   onToggleStarRepo: PropTypes.func.isRequired,
   currentViewMode: PropTypes.string,
+  inAllLibs: PropTypes.bool,
   updateRepoStatus: PropTypes.func,
   isItemFreezed: PropTypes.bool,
   onFreezedItem: PropTypes.func,
@@ -91,6 +93,7 @@ class MylibRepoListView extends React.Component {
               idx={index}
               key={item.repo_id}
               repo={item}
+              inAllLibs={this.props.inAllLibs}
               isItemFreezed={this.getIsItemFreezed()}
               onFreezedItem={this.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}
@@ -109,12 +112,12 @@ class MylibRepoListView extends React.Component {
   };
 
   renderPCUI = () => {
-    const { currentViewMode = LIST_MODE } = this.props;
+    const { currentViewMode = LIST_MODE, inAllLibs } = this.props;
 
     if (currentViewMode === LIST_MODE) {
       return (
         <>
-          <RepoListCard>
+          <RepoListCard showStorage={storages.length > 0 && !inAllLibs}>
             {this.renderRepoListView()}
           </RepoListCard>
           <ContextMenu

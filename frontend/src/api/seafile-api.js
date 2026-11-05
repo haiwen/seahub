@@ -229,6 +229,9 @@ class SeafileAPI {
       form.append('passwd', repo.passwd);
     }
     form.append('permission', permission);
+    if (repo.storage_id) {
+      form.append('storage_id', repo.storage_id);
+    }
     if (repo.library_template) {
       form.append('library_template', repo.library_template);
     }

@@ -5,10 +5,13 @@ import './index.css';
 
 const propTypes = {
   children: PropTypes.node.isRequired,
-  customColumns: PropTypes.bool // only for 'shared with ocm' at present
+  customColumns: PropTypes.bool, // only for 'shared with ocm' at present
+  showStorage: PropTypes.bool // replaces the owner column in 'my libraries'
 };
 
-const RepoListCard = ({ children, customColumns = false }) => {
+const RepoListCard = ({ children, customColumns = false, showStorage = false }) => {
+  const showStorageColumn = showStorage && !customColumns;
+
   return (
     <div className="repo-list-card">
       <div className="repo-list-card-header">
@@ -20,10 +23,11 @@ const RepoListCard = ({ children, customColumns = false }) => {
           : (
             <>
               <span className="repo-list-col-size">{gettext('Size')}</span>
+              {showStorageColumn && <span className="repo-list-card__storage">{gettext('Storage Backend')}</span>}
               <span className="repo-list-col-time">{gettext('Last modified')}</span>
             </>
           )}
-        <span className="repo-list-col-owner">{gettext('Owner')}</span>
+        {!showStorageColumn && <span className="repo-list-col-owner">{gettext('Owner')}</span>}
       </div>
       <div className="repo-list-card-body">
         {children}
