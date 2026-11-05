@@ -1119,4 +1119,3 @@ if getattr(settings, 'ENABLE_METADATA_MANAGEMENT', False):
         urlpatterns += [
             re_path(r'^api/v2.1/ai/', include('seahub.ai.urls')),
         ]
-
