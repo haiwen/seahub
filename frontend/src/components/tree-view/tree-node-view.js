@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { permission } from '../../utils/constants';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { Utils, isMobile } from '../../utils/utils';
 import { gettext } from '@/utils/constants';
@@ -259,7 +258,6 @@ class TreeNodeView extends React.Component {
       return '';
     }
 
-    const { isCustomPermission } = Utils.getUserPermission(userPerm);
     const nodeMenuList = getTreeNodeMenuList(node, userPerm, currentRepoInfo);
     return (
       <div className="tree-node">
@@ -300,7 +298,7 @@ class TreeNodeView extends React.Component {
             )}
             <span className="tree-node-icon">{icon}</span>
           </div>
-          {isNodeMenuShow && nodeMenuList.length > 0 && ((userPerm === 'rw' || permission || isCustomPermission) && this.state.isShowOperationMenu) && (
+          {isNodeMenuShow && nodeMenuList.length > 0 && this.state.isShowOperationMenu && (
             <div className="right-icon">
               <ItemDropdownMenu
                 item={this.props.node}
