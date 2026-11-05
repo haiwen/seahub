@@ -171,10 +171,7 @@ class ExternalOperations extends React.Component {
     if (!params?.repoID || !params?.filePath) return;
 
     seafileAPI.getInternalLink(params.repoID, params?.filePath).then((res) => {
-      const url = new URL(res.data.smart_link);
-      url.searchParams.set('readonly', 'true');
-      url.searchParams.set('filetype', 'Excalidraw');
-      const link = url.toString();
+      const link = `${res.data.smart_link}embed-link/`;
       if (params?.onSuccess) {
         params?.onSuccess(link);
       }
