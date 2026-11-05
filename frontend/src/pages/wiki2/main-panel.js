@@ -369,11 +369,13 @@ class MainPanel extends Component {
           onClick: this.toggleFreezeStatus,
         });
       }
-      items.push({
-        key: 'History',
-        label: gettext('History'),
-        onClick: this.openHistory,
-      });
+      if (Utils.isDesktop()) {
+        items.push({
+          key: 'History',
+          label: gettext('History'),
+          onClick: this.openHistory,
+        });
+      }
       items.push({
         key: 'Export',
         label: gettext('Export'),
