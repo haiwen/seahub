@@ -1867,6 +1867,9 @@ class WikiPageExport(APIView):
         response = HttpResponse(content_type='application/octet-stream')
         if export_type == 'markdown':
             resp_with_md_file = sdoc_export_to_md(page_path, doc_uuid, file_token, 'sdoc', 'md')
+            if not resp_with_md_file.ok:
+                logger.error(resp_with_md_file.text)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
             new_filename = f'{page_name}.md'
             encoded_filename = quote(new_filename)
             response.write(resp_with_md_file.content)

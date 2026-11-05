@@ -183,6 +183,11 @@ def sdoc_to_docx(request, repo_id):
     dst_type = 'docx'
     resp_with_docx_file = sdoc_export_to_docx(file_path, username, doc_uuid,
                                               file_token, src_type, dst_type)
+    if not resp_with_docx_file.ok:
+        logger.error(resp_with_docx_file.text)
+        response = render_error(request)
+        response.status_code = 500
+        return response
 
     docx_mime_type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     response = HttpResponse(content_type=docx_mime_type)
@@ -227,6 +232,11 @@ def sdoc_to_markdown(request, repo_id):
     dst_type = 'md'
     resp_with_md_file = sdoc_export_to_md(file_path, doc_uuid,
                                           file_token, src_type, dst_type)
+    if not resp_with_md_file.ok:
+        logger.error(resp_with_md_file.text)
+        response = render_error(request)
+        response.status_code = 500
+        return response
 
     response = HttpResponse(content_type='text/markdown; charset=utf-8')
     new_file_name = quote(f'{filename[:-5]}.md')
