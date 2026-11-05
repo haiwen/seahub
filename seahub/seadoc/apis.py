@@ -70,7 +70,7 @@ from seahub.base.accounts import User
 from seahub.repo_tags.models import RepoTags
 from seahub.file_tags.models import FileTags
 from seahub.wiki2.models import Wiki2Publish
-from seahub.api2.endpoints.utils import sdoc_export_to_md
+from seahub.api2.endpoints.utils import sdoc_export_to_md, convert_file_token
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
     from seahub.search.utils import search_files, ai_search_files, format_repos
 
@@ -3514,13 +3514,9 @@ class SdocRevisionContent(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         username = request.user.username
-        token = seafile_api.get_fileserver_access_token(repo_id, revision_file_id, 'download', username)
-        if not token:
-            error_msg = 'Revision file %s not found.' % revision_file_uuid
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        download_url = gen_inner_file_get_url(token, revision_file_name)
-        resp = sdoc_export_to_md(revision_file_path, revision_file_uuid, download_url, 'sdoc', 'md')
+        file_token = convert_file_token(repo_id, revision_file_id, revision_file_name,
+                                        username, revision_file_uuid)
+        resp = sdoc_export_to_md(revision_file_path, revision_file_uuid, file_token, 'sdoc', 'md')
         if not resp.ok:
             logger.error(resp.text)
             error_msg = 'Internal Server Error'
@@ -3559,13 +3555,8 @@ class SdocSmartLinkContent(APIView):
             error_msg = 'File %s not found.' % file_path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', request.user.username)
-        if not token:
-            error_msg = 'File %s not found.' % file_path
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        download_url = gen_inner_file_get_url(token, filename)
-        resp = sdoc_export_to_md(file_path, file_uuid, download_url, 'sdoc', 'md')
+        file_token = convert_file_token(repo_id, file_id, filename, request.user.username, file_uuid)
+        resp = sdoc_export_to_md(file_path, file_uuid, file_token, 'sdoc', 'md')
         if not resp.ok:
             logger.error(resp.text)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
