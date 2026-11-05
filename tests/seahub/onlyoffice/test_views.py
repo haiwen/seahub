@@ -222,3 +222,65 @@ class OnlyofficeEditorCallbackJwtTest(TestCase):
 
         self.assertEqual(resp.content, b'{"error": 0}')
         mock_requests.get.assert_called_once()
+
+    @patch('seahub.onlyoffice.views.gen_inner_file_upload_url', return_value='http://inner/update')
+    @patch('seahub.onlyoffice.views.delete_doc_key')
+    @patch('seahub.onlyoffice.views.seafile_api')
+    @patch('seahub.onlyoffice.views.requests')
+    @patch('seahub.onlyoffice.views.ONLYOFFICE_JWT_SECRET', SECRET)
+    def test_unsigned_body_cannot_override_signed_callback_parameters(
+            self, mock_requests, mock_seafile_api, mock_delete_doc_key, mock_upload_url):
+        mock_seafile_api.get_fileserver_access_token.return_value = 'update_token'
+        mock_requests.get.return_value.content = b'signed document content'
+        mock_requests.post.return_value.status_code = 200
+        signed_data = {'key': DOC_KEY, 'status': 6, 'url': FILE_URL}
+        tampered_body = {
+            'key': 'unsigned-document-key',
+            'status': 4,
+            'url': 'http://untrusted.example/unsigned-content',
+        }
+
+        for body_token in (True, False):
+            with self.subTest(body_token=body_token):
+                mock_requests.reset_mock()
+                mock_seafile_api.reset_mock()
+                payload = signed_data if body_token else {'payload': signed_data}
+                token = jwt.encode(payload, SECRET, algorithm='HS256')
+
+                resp = self._post(tampered_body, token=token,
+                                  header=not body_token, body_token=body_token)
+
+                self.assertEqual(resp.content, b'{"error": 0}')
+                mock_requests.get.assert_called_once()
+                self.assertEqual(mock_requests.get.call_args.args[0], FILE_URL)
+                mock_seafile_api.get_fileserver_access_token.assert_called_once_with(
+                    REPO_ID, json.dumps({'online_office_update': True}), 'update', USERNAME)
+                mock_requests.post.assert_called_once_with(
+                    'http://inner/update',
+                    files={'file': ('oo-jwt-test.xlsx', b'signed document content')},
+                    data={'target_file': FILE_PATH})
+                mock_delete_doc_key.assert_not_called()
+                mock_seafile_api.unlock_file.assert_not_called()
+
+    @patch('seahub.onlyoffice.views.ONLYOFFICE_JWT_SECRET', SECRET)
+    @patch('seahub.onlyoffice.views.requests')
+    def test_invalid_body_token_does_not_fall_back_to_valid_header(self, mock_requests):
+        resp = self._post(
+            {'key': DOC_KEY, 'status': 2, 'url': FILE_URL},
+            token=self._encode(secret='another-secret-0123456789abcdefghij'),
+            header_token=self._encode())
+
+        self.assertEqual(resp.content, b'{"error": 1}')
+        mock_requests.get.assert_not_called()
+        mock_requests.post.assert_not_called()
+
+    @patch('seahub.onlyoffice.views.ONLYOFFICE_JWT_SECRET', SECRET)
+    @patch('seahub.onlyoffice.views.requests')
+    def test_expired_jwt_does_not_fall_back_to_unsigned_body(self, mock_requests):
+        resp = self._post(
+            {'key': DOC_KEY, 'status': 2, 'url': FILE_URL},
+            token=self._encode(exp=1))
+
+        self.assertEqual(resp.content, b'{"error": 1}')
+        mock_requests.get.assert_not_called()
+        mock_requests.post.assert_not_called()
