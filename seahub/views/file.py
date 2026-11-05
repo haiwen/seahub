@@ -18,6 +18,7 @@ import logging
 import posixpath
 import re
 
+from django.conf import settings
 from django.core.cache import cache
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
@@ -2101,6 +2102,9 @@ def view_media_file_via_share_link(request):
 
 
 def view_media_file_via_public_wiki(request):
+    if not settings.ENABLE_WIKI:
+        raise Http404
+
     image_path = request.GET.get('path', '')
     slug = request.GET.get('slug', '')
     if not image_path or not slug:

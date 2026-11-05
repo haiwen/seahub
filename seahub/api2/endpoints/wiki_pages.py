@@ -13,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from seaserv import seafile_api, get_file_id_by_path
 from pysearpc import SearpcError
+from django.conf import settings
 from django.utils.translation import gettext as _
 
 from seahub.views import check_folder_permission
@@ -39,6 +40,9 @@ class WikiPagesDirView(APIView):
     def get(self, request, wiki_id):
         """List all dir files in a wiki.
         """
+        if not settings.ENABLE_WIKI:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Feature disabled.')
+
         try:
             wiki = Wiki.objects.get(id=wiki_id)
         except Wiki.DoesNotExist:
@@ -108,6 +112,9 @@ class WikiPageContentView(APIView):
     def get(self, request, wiki_id):
         """Get content of a wiki
         """
+        if not settings.ENABLE_WIKI:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Feature disabled.')
+
         path = request.GET.get('p', '/')
         try:
             wiki = Wiki.objects.get(id=wiki_id)
