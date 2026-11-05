@@ -345,6 +345,9 @@ class InternalConverterFile(APIView):
                     return api_error(400, 'image_name invalid.')
                 doc_uuid = claims.get('doc_uuid')
                 uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(doc_uuid) if doc_uuid else None
+                repo = seafile_api.get_repo(repo_id)
+                if repo and repo.is_virtual:
+                    repo_id = repo.origin_repo_id
                 if not uuid_map or uuid_map.repo_id != repo_id:
                     return api_error(403, 'Permission denied.')
                 image_path = posixpath.join(SDOC_IMAGES_DIR, str(doc_uuid), image_name)
