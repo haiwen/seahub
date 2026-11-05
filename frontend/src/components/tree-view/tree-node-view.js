@@ -1,17 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { permission } from '../../utils/constants';
-import TextTranslation from '../../utils/text-translation';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { Utils, isMobile } from '../../utils/utils';
 import { gettext } from '@/utils/constants';
 import OpIcon from '../../components/op-icon';
 import Icon from '../icon';
+import getTreeNodeMenuList from './get-tree-node-menu-list';
 
 const LEFT_INDENT = 20;
 
 const propTypes = {
   userPerm: PropTypes.string,
+  currentRepoInfo: PropTypes.object,
   node: PropTypes.object.isRequired,
   currentPath: PropTypes.string.isRequired,
   leftIndent: PropTypes.number.isRequired,
@@ -208,37 +209,6 @@ class TreeNodeView extends React.Component {
     return { icon, type };
   };
 
-  calculateMenuList = (node) => {
-    let { NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE, OPEN_VIA_CLIENT } = TextTranslation;
-
-    let menuList = [RENAME, DELETE, COPY, MOVE, OPEN_VIA_CLIENT];
-    if (node.object.type === 'dir') {
-      menuList = [NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE];
-    }
-
-    const { userPerm } = this.props;
-    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
-    if (!isCustomPermission) {
-      return menuList;
-    }
-
-    menuList = [];
-    const { create: canCreate, modify: canModify, delete: canDelete, copy: canCopy } = customPermission.permission;
-    if (node.object.type === 'dir') {
-      canCreate && menuList.push(NEW_FOLDER, NEW_FILE);
-    }
-
-    canCopy && menuList.push(COPY);
-    canModify && menuList.push(MOVE, RENAME);
-    canDelete && menuList.push(DELETE);
-
-    if (node.object.type !== 'dir') {
-      menuList.push(OPEN_VIA_CLIENT);
-    }
-
-    return menuList;
-  };
-
   renderChildren = () => {
     let { node } = this.props;
     if (!node.hasChildren()) {
@@ -251,6 +221,7 @@ class TreeNodeView extends React.Component {
             <TreeNodeView
               key={item.path}
               node={item}
+              currentRepoInfo={this.props.currentRepoInfo}
               leftIndent={this.props.leftIndent + LEFT_INDENT}
               userPerm={this.props.userPerm}
               currentPath={this.props.currentPath}
@@ -277,7 +248,7 @@ class TreeNodeView extends React.Component {
   };
 
   render() {
-    let { currentPath, node, isNodeMenuShow, userPerm, leftIndent } = this.props;
+    let { currentPath, node, isNodeMenuShow, userPerm, currentRepoInfo, leftIndent } = this.props;
     let { type, icon } = this.getNodeTypeAndIcon();
     let hlClass = this.state.isHighlight ? 'tree-node-inner-hover ' : '';
     if (node.path === currentPath) {
@@ -289,6 +260,7 @@ class TreeNodeView extends React.Component {
     }
 
     const { isCustomPermission } = Utils.getUserPermission(userPerm);
+    const nodeMenuList = getTreeNodeMenuList(node, userPerm, currentRepoInfo);
     return (
       <div className="tree-node">
         <div
@@ -328,12 +300,12 @@ class TreeNodeView extends React.Component {
             )}
             <span className="tree-node-icon">{icon}</span>
           </div>
-          {isNodeMenuShow && ((userPerm === 'rw' || permission || isCustomPermission) && this.state.isShowOperationMenu) && (
+          {isNodeMenuShow && nodeMenuList.length > 0 && ((userPerm === 'rw' || permission || isCustomPermission) && this.state.isShowOperationMenu) && (
             <div className="right-icon">
               <ItemDropdownMenu
                 item={this.props.node}
                 toggleClass={'sf3-font sf3-font-more'}
-                getMenuList={this.calculateMenuList}
+                getMenuList={() => nodeMenuList}
                 onMenuItemClick={this.onMenuItemClick}
                 freezeItem={this.props.freezeItem}
                 unfreezeItem={this.unfreezeItem}
