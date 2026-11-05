@@ -23,11 +23,10 @@ from seahub.auth.decorators import login_required
 from seahub.wiki2.utils import (check_wiki_permission, get_wiki_config,
                                WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME)
 from seahub.views import get_seadoc_file_uuid
-from seahub.utils import gen_file_get_url
 from seahub.utils.repo import get_repo_owner, is_repo_admin, list_user_admin_reops
 from seahub.settings import SEADOC_SERVER_URL
 from seahub.seadoc.utils import gen_seadoc_access_token
-from seahub.api2.endpoints.utils import sdoc_export_to_html
+from seahub.api2.endpoints.utils import sdoc_export_to_html, convert_file_token
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -351,16 +350,11 @@ def wiki_publish_view(request, publish_url, page_id=None):
             })
 
         file_id = seafile_api.get_file_id_by_path(wiki_id, file_path)
-        download_token = seafile_api.get_fileserver_access_token(wiki_id,
-                                                                 file_id,
-                                                                 'download',
-                                                                 '',
-                                                                 use_onetime=False)
         src_type = 'sdoc'
         dst_type = 'html'
         filename = os.path.basename(file_path)
         doc_uuid = get_seadoc_file_uuid(repo, file_path)
-        download_url = gen_file_get_url(download_token, filename)
+        file_token = convert_file_token(wiki_id, file_id, filename, '', doc_uuid)
 
         def get_page_id_name_dict(wiki_config):
             page_id_name_dict = {}
@@ -370,7 +364,7 @@ def wiki_publish_view(request, publish_url, page_id=None):
 
         page_id_name_dict = get_page_id_name_dict(wiki_config)
         html_resp = sdoc_export_to_html(file_path, '', doc_uuid,
-                                        download_url, src_type, dst_type,
+                                        file_token, src_type, dst_type,
                                         publish_url, page_id_name_dict)
         if not html_resp.ok:
             raise ValueError('converter returned non-success status {}'.format(html_resp.status_code))

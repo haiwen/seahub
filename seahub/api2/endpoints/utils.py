@@ -312,7 +312,7 @@ def sdoc_export_to_md(path, doc_uuid, file_token,
     return resp
 
 
-def sdoc_export_to_html(path, username, doc_uuid, download_url,
+def sdoc_export_to_html(path, username, doc_uuid, file_token,
                         src_type, dst_type, publish_url, page_id_name_dict):
 
     headers = convert_file_gen_headers()
@@ -320,7 +320,7 @@ def sdoc_export_to_html(path, username, doc_uuid, download_url,
         'path': path,
         'username': username,
         'doc_uuid': doc_uuid,
-        'download_url': download_url,
+        'file_token': file_token,
         'src_type': src_type,
         'dst_type': dst_type,
         'publish_url': publish_url,
