@@ -57,27 +57,22 @@ const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePageConfig }) =>
       {currentPageConfig.icon && (
         <PageIcon currentPageConfig={currentPageConfig} onUpdatePageConfig={onUpdatePageConfig} />
       )}
-      {wikiPermission === 'rw' ?
-        <>
-          <div className={classnames('wiki-page-controller', { 'show': isShowController, 'd-none': !isDesktop })}>
-            {!currentPageConfig.icon &&
-              <div className='wiki-page-controller-item' onClick={handleAddIcon}>
-                <Icon symbol='icon' />
-                <span className='text'>{gettext('Add icon')}</span>
-              </div>
-            }
-            {!currentPageConfig.cover_img_url &&
-              <div className='wiki-page-controller-item' onClick={handleAddCover}>
-                <Icon symbol='gallery' />
-                <span className='text'>{gettext('Add cover')}</span>
-              </div>
-            }
+      <div className={classnames('wiki-page-controller', { 'show': wikiPermission === 'rw' && isDesktop && isShowController })}>
+        {!currentPageConfig.icon &&
+          <div className='wiki-page-controller-item' onClick={handleAddIcon}>
+            <Icon symbol='icon' />
+            <span className='text'>{gettext('Add icon')}</span>
           </div>
-          {!currentPageConfig.locked ?
-            <PageTitleEditor isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePageConfig={onUpdatePageConfig} /> :
-            <div className='wiki-sdoc-title'>{currentPageConfig.name}</div>
-          }
-        </>
+        }
+        {!currentPageConfig.cover_img_url &&
+          <div className='wiki-page-controller-item' onClick={handleAddCover}>
+            <Icon symbol='gallery' />
+            <span className='text'>{gettext('Add cover')}</span>
+          </div>
+        }
+      </div>
+      {wikiPermission === 'rw' && !currentPageConfig.locked ?
+        <PageTitleEditor isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePageConfig={onUpdatePageConfig} />
         :
         <div className='wiki-sdoc-title'>{currentPageConfig.name}</div>}
     </div>
