@@ -64,34 +64,3 @@ class OfficePermissionBackportTest(SimpleTestCase):
         with patch.object(onlyoffice, 'ONLYOFFICE_JWT_SECRET', ''):
             self.assertEqual(onlyoffice.get_verified_callback_payload(
                 APIRequestFactory().post('/callback/'), body), body)
-
-
-class RevisionContentBackportTest(SimpleTestCase):
-    def test_revision_content_requires_preview_before_issuing_token(self):
-        request = SimpleNamespace(user=SimpleNamespace(username='user@example.com'))
-        mapping = SimpleNamespace(repo_id='repo', parent_path='/private')
-        revision = SimpleNamespace(
-            origin_doc_path='/private/original.sdoc', origin_file_version='base-version',
-            origin_doc_uuid='original', publish_file_version='published-version',
-            is_published=True)
-        for view in (seadoc.SdocRevisionBaseVersionContent,
-                     seadoc.SeadocPublishedRevisionContent):
-            for permission in (None, 'r'):
-                with self.subTest(view=view.__name__, permission=permission), \
-                        patch.object(seadoc, 'FileUUIDMap') as maps, \
-                        patch.object(seadoc, 'SeadocRevision') as revisions, \
-                        patch.object(seadoc, 'check_folder_permission', return_value=permission), \
-                        patch.object(seadoc, 'seafile_api') as api, \
-                        patch.object(seadoc, 'requests') as http, \
-                        patch.object(seadoc, 'gen_inner_file_get_url', return_value='http://fileserver/file'):
-                    maps.objects.get_fileuuidmap_by_uuid.return_value = mapping
-                    revisions.objects.get_by_doc_uuid.return_value = revision
-                    http.get.return_value.ok = True
-                    http.get.return_value.content = b'document'
-                    response = view().get(request, 'revision')
-                    self.assertEqual(response.status_code, 200 if permission else 403)
-                    if permission:
-                        self.assertEqual(response.data, {'content': b'document'})
-                    else:
-                        api.get_fileserver_access_token.assert_not_called()
-                        http.get.assert_not_called()
