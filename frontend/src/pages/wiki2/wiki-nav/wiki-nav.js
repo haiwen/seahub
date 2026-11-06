@@ -216,7 +216,7 @@ class WikiNav extends Component {
           return this.renderPage(item, index, canDeletePage, id_page_map);
         })}
         {wikiPermission === 'rw' &&
-          <>
+          <div className="d-none d-md-block">
             <div className="wiki-nav-group-header px-2">
               <h2 className="h6 font-weight-normal m-0">{gettext('Other')}</h2>
             </div>
@@ -224,7 +224,7 @@ class WikiNav extends Component {
               <span className="d-flex align-items-center mr-2"><Icon symbol="trash" /></span>
               <span className="other-op-label">{gettext('Trash')}</span>
             </div>
-          </>
+          </div>
         }
       </div>
     );
