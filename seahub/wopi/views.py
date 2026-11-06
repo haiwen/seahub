@@ -463,6 +463,18 @@ class WOPIFilesContentsView(APIView):
         repo_id = info_dict['repo_id']
         file_path = info_dict['file_path']
 
+        # PutFile must honour the lock of the session editing the file: a
+        # missing or mismatched X-WOPI-Lock would let another client overwrite
+        # the content silently.
+        current_lock_id = get_current_lock_id(request)
+        if current_lock_id and request.headers.get('x-wopi-lock') != current_lock_id:
+            logger.warning('WOPI PutFile rejected, lock mismatch, user: %s, repo: %s, path: %s',
+                           request_user, repo_id, file_path)
+            response_409 = HttpResponse(json.dumps({}), status=409,
+                                        content_type=json_content_type)
+            response_409['X-WOPI-Lock'] = current_lock_id
+            return response_409
+
         try:
             file_obj = request.read()
 
