@@ -344,6 +344,9 @@ class ExdrawDownloadImage(APIView):
 
     def get(self, request, file_uuid, filename):
 
+        if filename != os.path.basename(filename):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid image filename')
+
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
             error_msg = 'exdraw uuid %s not found.' % file_uuid
