@@ -6,7 +6,6 @@ import re
 import requests
 import jwt
 import time
-import uuid
 from copy import deepcopy
 from urllib.parse import urljoin
 
@@ -25,7 +24,6 @@ from seahub.constants import DEFAULT_USER, PERMISSION_INVISIBLE
 from seahub.share.utils import is_repo_admin
 from seahub.utils import gen_inner_file_upload_url, get_service_url, is_org_context, is_pro_version, mkstemp
 from seahub.utils.user_permissions import get_user_role
-from seahub.utils.ccnet_db import CcnetDB
 from seahub.organizations.models import OrgMemberQuota, OrgSettings
 from seahub.ai.models import AIUsageStatistics, ChatMessageThoughtProcess, ChatMessages, ChatSessions
 

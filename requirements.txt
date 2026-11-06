@@ -31,3 +31,4 @@ pillow-heif==1.2.*
 redis==7.1.*
 cairosvg==2.9.*
 pyyaml==6.0.*
+jsonschema==4.25.*

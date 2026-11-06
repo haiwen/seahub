@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState, useImperativeHandle, forwardRef } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import { chatAPI } from '@/api/chat-api';
 import { gettext } from '@/utils/constants';
 import ClickOutside from '../../click-outside';
 import Icon from '../../icon';
@@ -9,6 +10,7 @@ import { useAIChatTools } from '../hooks';
 import AIModelSelector from './ai-model-selector';
 import AttachmentsFormatter from './attachments';
 import LibraryFilesSelector from './library-files-selector';
+import { getSkillOptions, hasTaskInput } from './skill-commands';
 
 import './index.css';
 
@@ -22,6 +24,24 @@ const ChatInput = forwardRef(({
   const [containerFocus, setContainerFocus] = useState(true);
   const [selectedModel, setSelectedModel] = useState(null);
   const [value, setValue] = useState('');
+  const [skills, setSkills] = useState([]);
+  const [skillSelectorClosed, setSkillSelectorClosed] = useState(false);
+  const [activeSkillIndex, setActiveSkillIndex] = useState(0);
+  const skillOptions = useMemo(() => skillSelectorClosed ? [] : getSkillOptions(value, skills), [value, skills, skillSelectorClosed]);
+
+  useEffect(() => {
+    let mounted = true;
+    chatAPI.getBuiltinSkills().then(({ data }) => {
+      if (mounted) setSkills((data.skills || []).filter((skill) => typeof skill.name === 'string' && typeof skill.description === 'string'));
+    }).catch(() => {}); // Skill discovery must not block ordinary chat.
+    return () => { mounted = false; };
+  }, []);
+
+  const selectSkill = useCallback((name) => {
+    setValue(`/${name} `);
+    setSkillSelectorClosed(true);
+    inputRef.current?.focus();
+  }, []);
 
   const inputRef = useRef(null);
   const previewContentRef = useRef(null);
@@ -37,6 +57,7 @@ const ChatInput = forwardRef(({
 
   const handleSend = useCallback((event) => {
     event && event.preventDefault();
+    if (disabled || !hasTaskInput(value, skills)) return;
     sendMessage({
       message: value,
       attachments,
@@ -44,14 +65,31 @@ const ChatInput = forwardRef(({
     });
     setValue('');
     clearAttachments();
-  }, [attachments, clearAttachments, selectedModel, sendMessage, value]);
+  }, [attachments, clearAttachments, selectedModel, sendMessage, value, disabled, skills]);
 
   const handleKeyDown = useCallback((event) => {
+    if (event.nativeEvent.isComposing) return;
+    if (skillOptions.length > 0) {
+      if (event.key === 'Escape') {
+        setSkillSelectorClosed(true);
+        return;
+      }
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        setActiveSkillIndex((index) => (index + (event.key === 'ArrowDown' ? 1 : -1) + skillOptions.length) % skillOptions.length);
+        return;
+      }
+      if (event.key === 'Tab' || (event.key === 'Enter' && !event.shiftKey)) {
+        event.preventDefault();
+        selectSkill(skillOptions[activeSkillIndex % skillOptions.length].name);
+        return;
+      }
+    }
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       handleSend(event);
     }
-  }, [handleSend]);
+  }, [handleSend, skillOptions, activeSkillIndex, selectSkill]);
 
   const onContainerBlur = useCallback(() => {
     setContainerFocus(false);
@@ -70,8 +108,8 @@ const ChatInput = forwardRef(({
   }, [value]);
 
   const isSendDisabled = useMemo(() => {
-    return disabled || !value.trim();
-  }, [disabled, value]);
+    return disabled || !hasTaskInput(value, skills);
+  }, [disabled, value, skills]);
 
   useImperativeHandle(ref, () => ({
     clearInput: () => setValue(''),
@@ -98,13 +136,29 @@ const ChatInput = forwardRef(({
               className="message-input message-input-value"
               ref={inputRef}
               value={value}
-              onChange={(event) => setValue(event.target.value)}
+              onChange={(event) => {
+                setValue(event.target.value);
+                setSkillSelectorClosed(false);
+                setActiveSkillIndex(0);
+              }}
               onKeyDown={handleKeyDown}
               placeholder={isEmpty ? gettext('Ask anything about your files') : ''}
               rows={1}
               disabled={disabled}
             />
             <div ref={previewContentRef} className="message-input message-input-preview" />
+            {skillOptions.length > 0 && !disabled && (
+              <div className="sea-ai-skill-options" role="listbox" aria-label={gettext('Skills')}>
+                {skillOptions.map((skill, index) => (
+                  <button type="button" role="option" aria-selected={index === activeSkillIndex} key={skill.name}
+                    className={classNames('sea-ai-skill-option', { active: index === activeSkillIndex })}
+                    onMouseDown={(event) => event.preventDefault()} onClick={() => selectSkill(skill.name)}>
+                    <strong>/{skill.name}</strong>
+                    <span>{skill.description}</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
           <div className="sea-ai-ask-chat-operations-container">
             <div className="sea-ai-ask-chat-operations-container-left">

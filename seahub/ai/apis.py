@@ -2,6 +2,7 @@ import time
 import logging
 import os.path
 import json
+import jwt
 from django.core.cache import cache
 from django.http import StreamingHttpResponse
 from django.utils.translation import gettext as _
@@ -12,7 +13,8 @@ from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
 from seahub.repo_metadata.models import RepoMetadata
 from seaserv import seafile_api
 
-from rest_framework.authentication import SessionAuthentication
+from rest_framework.authentication import BaseAuthentication, SessionAuthentication
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
@@ -31,6 +33,10 @@ from seahub.ai.utils import AI_SCENARIO_SEARCH_ICONS, image_caption, translate, 
     generate_session_title
 from seahub.tags.models import FileUUIDMap
 from seahub.views.file import get_file_view_path_and_perm, get_file_content
+from seahub.base.accounts import User
+from seahub.settings import SEAFILE_AI_SECRET_KEY
+from seahub.ai.sdoc import create_sdoc
+from seahub.ai.skills import extract_skill_command, get_builtin_skills
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +48,47 @@ def is_chat_and_search_enabled(repo_id):
     if not enabled:
         logger.info('AI Chat and Search is unavailable for library %s: configured=%s', repo_id, configured)
     return enabled
+
+
+class SdocCreateAuthentication(BaseAuthentication):
+    def authenticate(self, request):
+        auth = request.headers.get('Authorization', '').split()
+        if len(auth) != 2 or auth[0].lower() != 'token':
+            raise AuthenticationFailed('Invalid SDoc creation token.')
+        try:
+            payload = jwt.decode(auth[1], SEAFILE_AI_SECRET_KEY, algorithms=['HS256'],
+                                 options={'require': ['exp', 'username', 'repo_id', 'session_uuid', 'message_id']})
+            if payload.get('purpose') != 'ai-chat-create-sdoc':
+                raise ValueError('Invalid token purpose')
+            user = User.objects.get(email=payload['username'])
+            if not user.is_active:
+                raise ValueError('Inactive user')
+        except (jwt.InvalidTokenError, ValueError, User.DoesNotExist):
+            raise AuthenticationFailed('Invalid SDoc creation token.')
+        return user, payload
+
+
+class ChatSdocCreateView(APIView):
+    authentication_classes = (SdocCreateAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        context = request.auth
+        repo_id = context['repo_id']
+        session = ChatSessions.objects.get_session_by_uuid(context['session_uuid'])
+        if not session or session.repo_id != repo_id or session.username != request.user.username:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        task = cache.get(gen_chat_task_id(context['session_uuid']))
+        if not task or task.get('message_id') != context['message_id']:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Chat request is no longer active.')
+        if task.get('selected_skill_id') != 'sdoc-create':
+            return api_error(status.HTTP_403_FORBIDDEN, 'SDoc creation requires /sdoc-create.')
+        repo = seafile_api.get_repo(repo_id)
+        if not repo or repo.is_virtual or not is_chat_and_search_enabled(repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Library is unavailable.')
+        if not check_folder_permission(request, repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        return Response(create_sdoc(request.data, repo_id, request, request.user.username))
 
 
 class ImageCaption(APIView):
@@ -761,6 +808,21 @@ class ChatMarkdownArtifactView(APIView):
         })
 
 
+class ChatSkillsView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        if not verify_chat_ai_config():
+            return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
+        try:
+            return Response({'skills': get_builtin_skills()})
+        except Exception:
+            logger.exception('Failed to load builtin skills')
+            return api_error(status.HTTP_502_BAD_GATEWAY, 'Failed to load builtin skills.')
+
+
 class ChatView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
@@ -814,6 +876,19 @@ class ChatView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id parameter is required.')
         if not query:
             return api_error(status.HTTP_400_BAD_REQUEST, 'query invalid.')
+        if not isinstance(query, str):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'query invalid.')
+        selected_skill_id, skill_input = extract_skill_command(query)
+        if selected_skill_id:
+            try:
+                available_names = {skill['name'] for skill in get_builtin_skills()}
+            except Exception:
+                logger.exception('Failed to validate skill command')
+                return api_error(status.HTTP_502_BAD_GATEWAY, 'Failed to load builtin skills.')
+            if selected_skill_id not in available_names:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Unknown skill command.')
+            if not skill_input.strip():
+                return api_error(status.HTTP_400_BAD_REQUEST, 'A skill command must include a task.')
         if not isinstance(attachments, list):
             return api_error(status.HTTP_400_BAD_REQUEST, 'attachments invalid.')
 
@@ -875,9 +950,21 @@ class ChatView(APIView):
             'llm_model': request.data.get('model'),
             'repo_prompt': get_repo_prompt(repo_id),
             'scenario': AI_SCENARIO_CHAT,
+            'message_id': message_id,
         }
+        if selected_skill_id == 'sdoc-create':
+            params['sdoc_create_token'] = jwt.encode({
+                'exp': int(time.time()) + AI_REPLY_TIMEOUT,
+                'purpose': 'ai-chat-create-sdoc',
+                'username': request.user.username,
+                'repo_id': repo_id,
+                'session_uuid': session_uuid,
+                'message_id': message_id,
+            }, SEAFILE_AI_SECRET_KEY, algorithm='HS256')
 
         task_info = {
+            'message_id': message_id,
+            'selected_skill_id': selected_skill_id,
             'user_input': {
                 'message': query,
                 'attachments': strip_content_details_from_attachments(attachments),
