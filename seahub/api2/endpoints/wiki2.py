@@ -744,6 +744,11 @@ class Wiki2PageView(APIView):
             logger.error(e)
             latest_contributor, last_modified = None, 0
 
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_path(
+            repo_id, os.path.dirname(posixpath.normpath(path)), filename, is_dir=False)
+        if not uuid_map or str(uuid_map.uuid) != doc_uuid:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         assets_url = '/api/v2.1/seadoc/download-image/' + doc_uuid
         seadoc_access_token = gen_seadoc_access_token(doc_uuid, filename, request.user.username, permission=permission, default_title='')
 
@@ -888,6 +893,11 @@ class Wiki2PublishPageView(APIView):
         except SearpcError as e:
             logger.error(e)
             latest_contributor, last_modified = None, 0
+
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_path(
+            repo_id, os.path.dirname(posixpath.normpath(path)), filename, is_dir=False)
+        if not uuid_map or str(uuid_map.uuid) != doc_uuid:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         assets_url = '/api/v2.1/seadoc/download-image/' + doc_uuid
         seadoc_access_token = gen_seadoc_access_token(doc_uuid, filename, request.user.username, permission='r',
@@ -1487,4 +1497,3 @@ class WikiConvertView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         return Response({"task_id": task_id})
-

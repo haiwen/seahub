@@ -27,7 +27,7 @@ from django.views.decorators.csrf import csrf_exempt
 from seaserv import seafile_api
 
 
-from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE, ONLYOFFICE_JWT_SECRET
+from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE, ONLYOFFICE_JWT_SECRET, ONLYOFFICE_JWT_HEADER
 from seahub.onlyoffice.utils import get_onlyoffice_dict, get_doc_key_by_repo_id_file_path
 from seahub.onlyoffice.utils import delete_doc_key, get_file_info_by_doc_key
 from seahub.onlyoffice.converter_utils import get_file_name_without_ext, \
@@ -44,6 +44,30 @@ from seahub.utils.file_types import SPREADSHEET
 
 # Get an instance of a logger
 logger = logging.getLogger('onlyoffice')
+
+
+def get_verified_callback_payload(request, body_data):
+    if not isinstance(body_data, dict):
+        return None
+    # Preserve deployments that have not enabled JWT on their document server.
+    if not ONLYOFFICE_JWT_SECRET:
+        return body_data
+
+    token = body_data.get('token') or ''
+    if not token:
+        authorization = request.headers.get(ONLYOFFICE_JWT_HEADER, '')
+        if authorization.lower().startswith('bearer '):
+            token = authorization.split(' ', 1)[1].strip()
+    if not token:
+        return None
+    try:
+        payload = jwt.decode(token, ONLYOFFICE_JWT_SECRET, algorithms=['HS256'])
+    except Exception as e:
+        logger.warning('Failed to verify OnlyOffice callback JWT: %s', e)
+        return None
+    if isinstance(payload.get('payload'), dict):
+        payload = payload['payload']
+    return payload if payload.get('key') else None
 
 
 @csrf_exempt
@@ -105,7 +129,9 @@ def onlyoffice_editor_callback(request):
     #
     # Status 6 (7) is received when the force saving request is performed.
 
-    post_data = json.loads(request.body)
+    post_data = get_verified_callback_payload(request, json.loads(request.body))
+    if not post_data:
+        return HttpResponse('{"error": 1}')
     status = int(post_data.get('status', -1))
 
     # get doc key and file basic info from database
