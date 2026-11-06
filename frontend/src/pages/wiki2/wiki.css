@@ -192,6 +192,10 @@ body {
   color: var(--bs-body-color);
 }
 
+.wiki-editor-container .sdoc-editor-container.mobile .sdoc-editor-content.readonly .article {
+  padding-top: 0;
+}
+
 .sdoc-editor-container .sdoc-article-container .article>div {
   caret-color: blue;
 }
