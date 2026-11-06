@@ -1,7 +1,7 @@
 .wiki-page-title-wrapper {
   position: relative;
   width: 100%;
-  padding: 0 1rem;
+  padding: 0 1.5rem;
 }
 
 @media (min-width: 768px) {

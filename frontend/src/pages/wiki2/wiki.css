@@ -120,7 +120,12 @@ body {
 
 .main-panel-center .cur-view-content {
   padding: 0;
-  min-width: 500px;
+}
+
+@media (min-width: 768px) {
+  .main-panel-center .cur-view-content {
+    min-width: 500px;
+  }
 }
 
 .main-panel-center .wiki-content-right-panel-wrapper,
@@ -185,11 +190,17 @@ body {
   justify-content: center;
   min-height: 800px;
   width: 100%;
-  padding: 0 142px 60px;
+  padding: 1.5rem!important;
   box-shadow: none;
   border: none;
   background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
+}
+
+@media (min-width: 768px) {
+  .sdoc-editor-container .sdoc-article-container .article {
+    padding: 0 142px 60px!important;
+  }
 }
 
 .sdoc-editor-container .sdoc-article-container .article>div {
