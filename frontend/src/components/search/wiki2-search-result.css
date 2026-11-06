@@ -117,7 +117,7 @@
 @media (max-width: 767px) {
   .wiki2-search-modal .wiki2-search-input {
     position: relative;
-    margin: 16px 16px 0;
+    margin: 8px 16px 0;
   }
 
   .wiki2-search-modal .wiki2-search-input:not(:focus) {
