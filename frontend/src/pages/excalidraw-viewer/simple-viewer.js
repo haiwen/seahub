@@ -9,14 +9,32 @@ import { langList } from './constants';
 
 import '@excalidraw/excalidraw/index.css';
 
-const { serviceURL } = window.app.config;
-const { repoID, sharedToken } = window.shared.pageOptions;
-
-export const getImageUrl = (fileName) => {
+export const getImageUrl = (fileName, dataURL) => {
   const { serviceURL } = window.app.config;
-  const { docUuid } = window.shared.pageOptions;
-  const url = `${serviceURL}/api/v2.1/exdraw/download-image/${docUuid}/${fileName}`;
-  return url;
+  const { docUuid, repoID, sharedToken, exdrawAccessToken } = window.shared.pageOptions;
+  if (dataURL && isUrl(dataURL)) {
+    const imageUrl = new URL(dataURL);
+    const repoUrl = new URL(`${serviceURL}/lib/${repoID}/file`);
+    if (imageUrl.origin !== repoUrl.origin ||
+      !imageUrl.pathname.startsWith(`${repoUrl.pathname}/`) ||
+      imageUrl.searchParams.get('raw') !== '1') {
+      return dataURL;
+    }
+
+    const params = new URLSearchParams({
+      path: decodeURIComponent(imageUrl.pathname.slice(repoUrl.pathname.length)),
+    });
+    if (sharedToken || !exdrawAccessToken) {
+      params.set('token', sharedToken || '');
+    } else {
+      params.set('file_uuid', docUuid);
+      params.set('access_token', exdrawAccessToken);
+    }
+    return `${serviceURL}/view-image-via-share-link/?${params.toString()}`;
+  }
+
+  const url = `${serviceURL}/api/v2.1/exdraw/download-image/${docUuid}/${encodeURIComponent(fileName)}`;
+  return exdrawAccessToken ? `${url}?access_token=${encodeURIComponent(exdrawAccessToken)}` : url;
 };
 
 const fetchImageFilesFromServer = (elements) => {
@@ -29,18 +47,7 @@ const fetchImageFilesFromServer = (elements) => {
   imageElements.forEach(element => {
     try {
       const { fileId, filename, dataURL } = element;
-      let imageUrl = getImageUrl(filename);
-      if (dataURL && isUrl(imageUrl)) {
-        imageUrl = element.dataURL;
-        const re = new RegExp(serviceURL + '/lib/' + repoID + '/file.*raw=1');
-        if (re.test(dataURL)) {
-          // get image path
-          let index = dataURL.indexOf('/file');
-          let index2 = dataURL.indexOf('?');
-          imageUrl = dataURL.substring(index + 5, index2);
-        }
-        imageUrl = serviceURL + '/view-image-via-share-link/?token=' + sharedToken + '&path=' + imageUrl;
-      }
+      const imageUrl = getImageUrl(filename, dataURL);
 
       loadedFiles.push({
         mimeType: 'image/jpeg',
