@@ -38,6 +38,14 @@ json_content_type = 'application/json; charset=utf-8'
 WOPI_LOCK_EXPIRATION = 30 * 60
 
 
+def check_edit_permission(request):
+    token = request.GET.get('access_token')
+    info_dict = get_file_info_by_token(token)
+    if info_dict and info_dict.get('can_edit'):
+        return None
+    return HttpResponse(json.dumps({}), status=403, content_type=json_content_type)
+
+
 def generate_file_lock_key_value(request):
 
     token = request.GET.get('access_token', None)
@@ -284,6 +292,11 @@ class WOPIFilesView(APIView):
         x_wopi_oldlock = request.headers.get('x-wopi-oldlock', None)
         current_lock_id = get_current_lock_id(request)
 
+        if x_wopi_override in ('LOCK', 'REFRESH_LOCK', 'UNLOCK'):
+            error_response = check_edit_permission(request)
+            if error_response is not None:
+                return error_response
+
         if x_wopi_override == 'LOCK':
 
             if x_wopi_oldlock:
@@ -424,6 +437,10 @@ class WOPIFilesContentsView(APIView):
 
     @access_token_check
     def post(self, request, file_id, format=None):
+
+        error_response = check_edit_permission(request)
+        if error_response is not None:
+            return error_response
 
         token = request.GET.get('access_token', None)
         info_dict = get_file_info_by_token(token)

@@ -15,6 +15,7 @@ except ImportError:
 from seaserv import seafile_api
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import gettext as _
@@ -109,15 +110,15 @@ def format_markdown_file_content(slug, repo_id, file_path, token, file_response)
     for p in html_content.split('\n'):
         if p.startswith('<h1>') and p.endswith('</h1>'):
             h1_head_content = p.replace('<h1>', '', 1).replace('</h1>', '', 1)
-            head = p.replace('<h1>', '<h1 id="user-content-%s">' % p.replace('<h1>', '', 1).replace('</h1>', '', 1), 1)
+            head = p.replace('<h1>', '<h1 id="user-content-%s">' % escape(p.replace('<h1>', '', 1).replace('</h1>', '', 1)), 1)
             html_content = html_content.replace(p, head)
         elif p.startswith('<h2>') and p.endswith('</h2>'):
-            head = p.replace('<h2>', '<h2 id="user-content-%s">' % p.replace('<h2>', '', 1).replace('</h2>', '', 1), 1)
+            head = p.replace('<h2>', '<h2 id="user-content-%s">' % escape(p.replace('<h2>', '', 1).replace('</h2>', '', 1)), 1)
             html_content = html_content.replace(p, head)
             outline = '<div class="outline-h2">' + p.replace('<h2>', '', 1).replace('</h2>', '', 1) + '</div>'
             outlines.append(mark_safe(outline))
         elif p.startswith('<h3>') and p.endswith('</h3>'):
-            head = p.replace('<h3>', '<h3 id="user-content-%s">' % p.replace('<h3>', '', 1).replace('</h3>', '', 1), 1)
+            head = p.replace('<h3>', '<h3 id="user-content-%s">' % escape(p.replace('<h3>', '', 1).replace('</h3>', '', 1)), 1)
             html_content = html_content.replace(p, head)
             outline = '<div class="outline-h3">' + p.replace('<h3>', '', 1).replace('</h3>', '', 1) + '</div>'
             outlines.append(mark_safe(outline))

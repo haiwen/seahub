@@ -1473,6 +1473,9 @@ class GroupOwnedLibraryTransferView(APIView):
         else:
             repo_owner = seafile_api.get_repo_owner(repo_id)
         cur_group_id = int(group_id)
+
+        if repo_owner != f'{cur_group_id}@seafile_group':
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         
         if not is_group_admin(cur_group_id, username):
             error_msg = 'Permission denied.'
@@ -1527,4 +1530,3 @@ class GroupOwnedLibraryTransferView(APIView):
             break
 
         return Response({'success': True})
-    
