@@ -29,6 +29,13 @@ jobs:
 
       - name: clone and build
         run: |
+          git clone --depth=1 --branch=v1.2.0 https://github.com/redis/hiredis.git /tmp/hiredis
+          make -C /tmp/hiredis -j2
+          sudo make -C /tmp/hiredis PREFIX=/usr/local install
+          sudo ldconfig
+          export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+          pkg-config --modversion hiredis
+          pkg-config --atleast-version=0.15.0 hiredis
           git clone --depth=1 --branch=master https://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
           cd /tmp/seafile-test-deploy && git fetch origin master:master && git checkout master
           export JWT_PRIVATE_KEY=qwertyuiop SITE_ROOT=/ SEAFILE_MYSQL_DB_CCNET_DB_NAME=ccnet SEAFILE_MYSQL_DB_SEAFILE_DB_NAME=seafile SEAFILE_MYSQL_DB_SEAHUB_DB_NAME=seahub
