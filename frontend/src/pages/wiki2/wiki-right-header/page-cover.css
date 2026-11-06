@@ -1,8 +1,14 @@
 /* Cover */
 .cur-view-content .wiki-page-cover {
   position: relative;
-  height: 30vh;
+  height: 160px;
   width: 100%;
+}
+
+@media (min-width: 768px) {
+  .cur-view-content .wiki-page-cover {
+    height: 30vh;
+  }
 }
 
 .wiki-page-cover__img {
