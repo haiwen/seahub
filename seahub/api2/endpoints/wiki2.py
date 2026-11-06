@@ -23,7 +23,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
 from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.endpoints.utils import sdoc_export_to_md
+from seahub.api2.endpoints.utils import sdoc_export_to_md, convert_file_token
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_wiki_repo, to_python_boolean
 from seahub.utils.db_api import SeafileDB
@@ -1859,15 +1859,17 @@ class WikiPageExport(APIView):
         try:
             file_id = seafile_api.get_file_id_by_path(repo_id, page_path)
             filename = os.path.basename(page_path)
-            download_token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username)
-            download_url = gen_file_get_url(download_token, filename)
+            file_token = convert_file_token(repo_id, file_id, filename, username, doc_uuid)
         except Exception as e:
             logger.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         response = HttpResponse(content_type='application/octet-stream')
         if export_type == 'markdown':
-            resp_with_md_file = sdoc_export_to_md(page_path, doc_uuid, download_url, 'sdoc', 'md')
+            resp_with_md_file = sdoc_export_to_md(page_path, doc_uuid, file_token, 'sdoc', 'md')
+            if not resp_with_md_file.ok:
+                logger.error(resp_with_md_file.text)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
             new_filename = f'{page_name}.md'
             encoded_filename = quote(new_filename)
             response.write(resp_with_md_file.content)

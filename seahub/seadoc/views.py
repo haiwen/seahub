@@ -12,12 +12,12 @@ from seaserv import get_repo, seafile_api
 
 from seahub.auth.decorators import login_required
 from seahub.settings import JWT_PRIVATE_KEY
-from seahub.utils import render_error, normalize_file_path, gen_file_get_url
+from seahub.utils import render_error, normalize_file_path
 from seahub.views import check_folder_permission, validate_owner, get_seadoc_file_uuid
 from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocRevision
 
-from seahub.api2.endpoints.utils import sdoc_export_to_docx, sdoc_export_to_md
+from seahub.api2.endpoints.utils import sdoc_export_to_docx, sdoc_export_to_md, convert_file_token
 from .utils import is_seadoc_revision, get_seadoc_download_link, gen_path_link
 
 
@@ -177,14 +177,17 @@ def sdoc_to_docx(request, repo_id):
     username = request.user.username
     filename = os.path.basename(file_path)
     doc_uuid = get_seadoc_file_uuid(repo, file_path)
-    download_token = seafile_api.get_fileserver_access_token(repo_id, file_id,
-                                                             'download', username)
-    download_url = gen_file_get_url(download_token, filename)
+    file_token = convert_file_token(repo_id, file_id, filename, username, doc_uuid)
 
     src_type = 'sdoc'
     dst_type = 'docx'
     resp_with_docx_file = sdoc_export_to_docx(file_path, username, doc_uuid,
-                                              download_url, src_type, dst_type)
+                                              file_token, src_type, dst_type)
+    if not resp_with_docx_file.ok:
+        logger.error(resp_with_docx_file.text)
+        response = render_error(request)
+        response.status_code = 500
+        return response
 
     docx_mime_type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     response = HttpResponse(content_type=docx_mime_type)
@@ -223,14 +226,17 @@ def sdoc_to_markdown(request, repo_id):
     username = request.user.username
     filename = os.path.basename(file_path)
     doc_uuid = get_seadoc_file_uuid(repo, file_path)
-    download_token = seafile_api.get_fileserver_access_token(repo_id, file_id,
-                                                             'download', username)
-    download_url = gen_file_get_url(download_token, filename)
+    file_token = convert_file_token(repo_id, file_id, filename, username, doc_uuid)
 
     src_type = 'sdoc'
     dst_type = 'md'
     resp_with_md_file = sdoc_export_to_md(file_path, doc_uuid,
-                                          download_url, src_type, dst_type)
+                                          file_token, src_type, dst_type)
+    if not resp_with_md_file.ok:
+        logger.error(resp_with_md_file.text)
+        response = render_error(request)
+        response.status_code = 500
+        return response
 
     response = HttpResponse(content_type='text/markdown; charset=utf-8')
     new_file_name = quote(f'{filename[:-5]}.md')
