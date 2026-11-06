@@ -4,7 +4,7 @@ import Picker from '@emoji-mart/react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { gettext, wikiPermission } from '@/utils/constants';
-import { Utils } from '@/utils/utils';
+import { Utils, isMobile } from '@/utils/utils';
 import { data } from './../utils/emoji-utils';
 
 const PageIcon = ({ currentPageConfig, onUpdatePageConfig }) => {
@@ -28,11 +28,11 @@ const PageIcon = ({ currentPageConfig, onUpdatePageConfig }) => {
   return (
     <>
       <div className={classNames('wiki-page-icon-wrapper', { 'no-page-cover': currentPageConfig.cover_img_url })}>
-        <div className='wiki-page-icon-container' id='wiki-page-icon-container'>
+        <div className={classNames('wiki-page-icon-container', { 'is-editable': isDesktop && !isMobile && wikiPermission === 'rw' })} id='wiki-page-icon-container'>
           <span>{currentPageConfig.icon}</span>
         </div>
       </div>
-      {isDesktop && wikiPermission === 'rw' &&
+      {isDesktop && !isMobile && wikiPermission === 'rw' &&
         <UncontrolledPopover
           ref={popoverRef}
           flip

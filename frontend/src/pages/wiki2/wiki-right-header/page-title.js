@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import Icon from '@/components/icon';
 import { gettext, wikiPermission } from '@/utils/constants';
-import { Utils } from '@/utils/utils';
+import { Utils, isMobile } from '@/utils/utils';
 import { WIKI_COVER_LIST } from '../constant';
 import { generateARandomEmoji, generateEmojiIcon } from '../utils/emoji-utils';
 import PageIcon from './page-icon';
@@ -71,7 +71,7 @@ const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePageConfig }) =>
           </div>
         }
       </div>
-      {wikiPermission === 'rw' && !currentPageConfig.locked ?
+      {wikiPermission === 'rw' && isDesktop && !isMobile && !currentPageConfig.locked ?
         <PageTitleEditor isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePageConfig={onUpdatePageConfig} />
         :
         <div className='wiki-sdoc-title'>{currentPageConfig.name}</div>}
