@@ -64,8 +64,6 @@
   }
 
   .wiki2-search-modal .wiki2-search-mobile-header {
-    display: flex;
-    align-items: center;
     height: 44px;
     min-height: 44px;
     padding: 0 0 0 16px;
@@ -73,22 +71,19 @@
     flex-shrink: 0;
   }
 
-  .wiki2-search-modal .wiki2-search-mobile-header .modal-title {
-    flex: 1;
-    min-width: 0;
-    margin: 0;
-    color: #212529;
+  .wiki2-search-modal .wiki2-search-mobile-header .seahub-modal-title-content {
     font-size: 18px;
-    font-weight: 500;
   }
 
-  .wiki2-search-modal .wiki2-search-mobile-header .btn-close {
+  .wiki2-search-modal .wiki2-search-mobile-header .seahub-modal-btn.close {
     width: 44px;
     height: 44px;
     margin: 0;
-    padding: 0;
-    background-size: 16px 16px;
-    opacity: .6;
+  }
+
+  .wiki2-search-modal .wiki2-search-mobile-header .seahub-modal-btn-inner {
+    width: 44px;
+    height: 44px;
   }
 
   .wiki2-search-modal .wiki2-search-input {

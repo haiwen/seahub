@@ -1,8 +1,9 @@
 import React, { useCallback, useState, useRef, useEffect, useMemo } from 'react';
-import { Modal, ModalBody, ModalHeader, Input, Button } from 'reactstrap';
+import { Modal, ModalBody, Input, Button } from 'reactstrap';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
 import searchAPI from '@/api/search-api';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext, mediaUrl } from '@/utils/constants';
 import { debounce, Utils } from '@/utils/utils';
 import Icon from '../icon';
@@ -197,9 +198,9 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
       </Button>
       {isModalOpen &&
         <Modal className="wiki2-search-modal" isOpen={isModalOpen} toggle={resetToDefault} autoFocus={false} returnFocusAfterClose={false} size='lg' fullscreen="md">
-          <ModalHeader className="wiki2-search-mobile-header d-md-none" toggle={resetToDefault} closeAriaLabel={gettext('Close')}>
+          <SeahubModalHeader className="wiki2-search-mobile-header d-md-none" toggle={resetToDefault} isShowCloseTooltip={false}>
             {gettext('Search')}
-          </ModalHeader>
+          </SeahubModalHeader>
           <ModalBody>
             <div className="wiki2-search-input">
               <span className="d-flex align-items-center search-icon-left input-icon-addon">
