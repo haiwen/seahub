@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { seafileAPI } from '@/api/seafile-api';
 
-const { rawPath, docUuid, exdrawAccessToken, exdrawServerUrl } = window.shared.pageOptions;
+const { rawPath, docUuid, exdrawAccessToken, exdrawServerUrl, sharedExdrawSceneUrl } = window.shared.pageOptions;
 
 class EditorApi {
 
@@ -10,6 +10,9 @@ class EditorApi {
   };
 
   getExdrawContent = () => {
+    if (sharedExdrawSceneUrl) {
+      return axios.get(sharedExdrawSceneUrl);
+    }
     const url = `${exdrawServerUrl}/api/v1/exdraw/${docUuid}/`;
     return axios.get(url, { headers: { Authorization: `Token ${exdrawAccessToken}` } });
   };

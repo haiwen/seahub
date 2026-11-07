@@ -19,7 +19,7 @@ export const getImageUrl = (fileName) => {
   return url;
 };
 
-const fetchImageFilesFromServer = (elements) => {
+const fetchImageFilesFromServer = (elements, imageFiles) => {
   const imageElements = elements.filter(element => {
     return isInitializedImageElement(element) && !element.isDeleted;
   });
@@ -29,18 +29,24 @@ const fetchImageFilesFromServer = (elements) => {
   imageElements.forEach(element => {
     try {
       const { fileId, filename, dataURL } = element;
-      let imageUrl = getImageUrl(filename);
-      if (dataURL && isUrl(imageUrl)) {
-        imageUrl = element.dataURL;
-        const re = new RegExp(serviceURL + '/lib/' + repoID + '/file.*raw=1');
-        if (re.test(dataURL)) {
-          // get image path
-          let index = dataURL.indexOf('/file');
-          let index2 = dataURL.indexOf('?');
-          imageUrl = dataURL.substring(index + 5, index2);
+      let imageUrl;
+      if (imageFiles) {
+        imageUrl = imageFiles[fileId]?.url;
+      } else {
+        // Preserve the existing internal/standalone viewer image behavior.
+        imageUrl = getImageUrl(filename);
+        if (dataURL && isUrl(imageUrl)) {
+          imageUrl = element.dataURL;
+          const re = new RegExp(serviceURL + '/lib/' + repoID + '/file.*raw=1');
+          if (re.test(dataURL)) {
+            const index = dataURL.indexOf('/file');
+            const index2 = dataURL.indexOf('?');
+            imageUrl = dataURL.substring(index + 5, index2);
+          }
+          imageUrl = serviceURL + '/view-image-via-share-link/?token=' + sharedToken + '&path=' + imageUrl;
         }
-        imageUrl = serviceURL + '/view-image-via-share-link/?token=' + sharedToken + '&path=' + imageUrl;
       }
+      if (!imageUrl) throw new Error('Image unavailable');
 
       loadedFiles.push({
         mimeType: 'image/jpeg',
@@ -58,7 +64,7 @@ const fetchImageFilesFromServer = (elements) => {
   return { loadedFiles, erroredFiles };
 };
 
-const SimpleViewer = ({ sceneContent = null, isFetching, isInSdoc, isFullScreen, isResizeSdocPageWidth }) => {
+const SimpleViewer = ({ sceneContent = null, imageFiles = null, isFetching, isInSdoc, isFullScreen, isResizeSdocPageWidth }) => {
   // eslint-disable-next-line
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
 
@@ -74,7 +80,7 @@ const SimpleViewer = ({ sceneContent = null, isFetching, isInSdoc, isFullScreen,
     if (isFetching) return;
     if (!excalidrawAPI) return;
     const { elements } = sceneContent;
-    const { loadedFiles, erroredFiles } = fetchImageFilesFromServer(elements);
+    const { loadedFiles, erroredFiles } = fetchImageFilesFromServer(elements, imageFiles);
 
     excalidrawAPI.addFiles(loadedFiles);
     updateStaleImageStatuses({
@@ -82,7 +88,7 @@ const SimpleViewer = ({ sceneContent = null, isFetching, isInSdoc, isFullScreen,
       erroredFiles,
       elements: excalidrawAPI.getSceneElementsIncludingDeleted(),
     });
-  }, [excalidrawAPI, isFetching, sceneContent]);
+  }, [excalidrawAPI, isFetching, sceneContent, imageFiles]);
 
   // Fit iframe inner element size within sdoc-editor
   useEffect(() => {

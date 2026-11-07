@@ -549,6 +549,7 @@ def view_lib_file_via_smart_link(request, dirent_uuid, dirent_name):
 
     return HttpResponseRedirect(redirect_to)
 
+
 def convert_repo_path_when_can_not_view_file(request, repo_id, path):
 
     path = normalize_file_path(path)
@@ -2156,7 +2157,7 @@ def view_media_file_via_share_link(request):
     image_file_name = image_file_name.replace(')', r'\)')
     encoded_image_file_name = urllib.parse.quote(image_file_name)
 
-    safe_pattern = f'({serviceURL})/lib/({repo_id})/file(.*?){re.escape(encoded_image_file_name)}\\?raw=1'
+    safe_pattern = f'({re.escape(serviceURL)})/lib/({re.escape(repo_id)})/file(.*?){re.escape(encoded_image_file_name)}\\?raw=1'
     p = re.compile(safe_pattern)
     result = re.search(p, file_content)
     if not result:
