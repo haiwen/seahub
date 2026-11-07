@@ -12,7 +12,7 @@ from seahub.auth import login as auth_login, authenticate
 from seahub.auth import get_backends
 from seahub.auth.utils import get_virtual_id_by_email
 from seahub.base.accounts import User
-from seahub.constants import GUEST_USER
+from seahub.constants import DEFAULT_USER, GUEST_USER
 from seahub.invitations.models import Invitation, RepoShareInvitation
 from seahub.invitations.signals import accept_guest_invitation_successful
 from seahub.settings import SITE_ROOT, NOTIFY_ADMIN_AFTER_REGISTRATION
@@ -54,22 +54,26 @@ def token_view(request, token):
                 messages.error(request, _('A user with this email already exists.'))
                 return render(request, 'invitations/token_view.html', {'iv': i, })
             else:
-                # user is inactive
-                # non-guest role user can not accept invitation
-                if user.role != GUEST_USER:
+                # A guest invitation must not activate an existing regular
+                # account.  Default invitations are created by administrators.
+                if i.is_guest() and user.role != GUEST_USER:
                     messages.error(request, _('An (inactive) regular account already exists for this mail address, can not proceed to accept the invitation.'))
                     return render(request, 'invitations/token_view.html', {'iv': i, })
-                
+
                 user.set_password(passwd)
                 user.is_active = True
                 user.save()
+                if not user.role:
+                    role = GUEST_USER if i.is_guest() else DEFAULT_USER
+                    User.objects.update_role(user.username, role)
                 user = authenticate(username=user.username, password=passwd)
 
         except User.DoesNotExist:
-            # Create user, set that user as guest.
+            # Create user, then set the role according to the invitation type.
             user = User.objects.create_user(
                 email=i.accepter, password=passwd, is_active=True)
-            User.objects.update_role(user.username, GUEST_USER)
+            role = GUEST_USER if i.is_guest() else DEFAULT_USER
+            User.objects.update_role(user.username, role)
             for backend in get_backends():
                 user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
 
@@ -80,8 +84,9 @@ def token_view(request, token):
         auth_login(request, user)
 
         # send signal to notify inviter
-        accept_guest_invitation_successful.send(
-            sender=None, invitation_obj=i)
+        if i.is_guest():
+            accept_guest_invitation_successful.send(
+                sender=None, invitation_obj=i)
 
         # send email to notify admin
         if NOTIFY_ADMIN_AFTER_REGISTRATION:

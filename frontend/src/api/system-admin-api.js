@@ -1007,6 +1007,15 @@ class SystemAdminAPI {
     return this._sendPostRequest(url, formData);
   }
 
+  sysAdminInviteUsers(emails) {
+    const url = this.server + '/api/v2.1/admin/invite-users/';
+    let formData = new FormData();
+    emails.forEach(email => {
+      formData.append('email', email);
+    });
+    return this._sendPostRequest(url, formData);
+  }
+
   sysAdminUpdateUser(email, attribute, value, options = {}) {
     const url = this.server + '/api/v2.1/admin/users/' + encodeURIComponent(email) + '/';
     let formData = new FormData();
