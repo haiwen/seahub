@@ -268,14 +268,49 @@ class SharedWhiteboardGatewayTest(SimpleTestCase):
     @patch.object(shared, 'authorize_share')
     def test_image_request_uses_original_filename_parameter(self, authorize, server, resource, stream):
         authorize.return_value = self.context
-        server.side_effect = AssertionError('Attachments must not call the scene service')
+        server.return_value = {'elements': [{'type': 'image', 'filename': 'photo.png'}]}
         resource.return_value = (self.context[2], '/images/photo.png', 'image-id', 'image/png')
         stream.return_value = JsonResponse({})
         request = RequestFactory().get('/images/', {'filename': 'photo.png'})
         response = shared.shared_whiteboard(request, 'abcd', PARENT, BOARD, 'image')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(resource.call_args.args[0], {'filename': 'photo.png'})
-        server.assert_not_called()
+        self.assertEqual(resource.call_args.args[0], {'type': 'image', 'filename': 'photo.png'})
+        server.assert_called_once_with(self.context[0], self.context[1])
+
+    @patch.object(shared, 'image_stream')
+    @patch.object(shared, 'image_resource')
+    @patch.object(shared, 'server_read')
+    @patch.object(shared, 'authorize_share')
+    def test_actual_image_endpoint_rejects_unreferenced_or_deleted_attachment(self, authorize, server, resource, stream):
+        authorize.return_value = self.context
+        for elements in ([], [{'type': 'image', 'filename': 'old.png', 'isDeleted': True}],
+                         [{'type': 'image', 'filename': 'another.png'}]):
+            with self.subTest(elements=elements):
+                server.return_value = {'elements': elements}
+                request = RequestFactory().get('/images/', {'filename': 'old.png'})
+                request.user = AnonymousUser()
+                request.session = {}
+                with patch.object(SharedSdocWhiteboardImage, 'throttle_classes', ()):
+                    response = SharedSdocWhiteboardImage.as_view()(
+                        request, share_token='abcd', sdoc_uuid=PARENT, file_uuid=BOARD)
+                self.assertEqual(response.status_code, 403)
+        resource.assert_not_called()
+        stream.assert_not_called()
+
+    @patch.object(shared, 'image_stream')
+    @patch.object(shared, 'image_resource')
+    @patch.object(shared, 'server_read')
+    @patch.object(shared, 'authorize_share')
+    def test_attachment_with_one_remaining_live_reference_is_readable(self, authorize, server, resource, stream):
+        authorize.return_value = self.context
+        server.return_value = {'elements': [
+            {'type': 'image', 'filename': 'photo.png', 'isDeleted': True},
+            {'type': 'image', 'filename': 'photo.png'},
+        ]}
+        resource.return_value = (self.context[2], '/images/photo.png', 'image-id', 'image/png')
+        stream.return_value = JsonResponse({})
+        request = RequestFactory().get('/images/', {'filename': 'photo.png'})
+        self.assertEqual(shared.shared_whiteboard(request, 'abcd', PARENT, BOARD, 'image').status_code, 200)
 
     @patch.object(shared, 'image_stream')
     @patch.object(shared, 'server_read')
@@ -310,7 +345,6 @@ class SharedWhiteboardGatewayTest(SimpleTestCase):
         request = RequestFactory().get('/images/', {'filename': '../private.png'})
         self.assertEqual(shared.shared_whiteboard(request, 'abcd', PARENT, BOARD, 'image').status_code, 403)
         resource.assert_not_called()
-        server.assert_not_called()
         stream.assert_not_called()
 
     @patch.object(shared, 'image_stream')
