@@ -26,6 +26,7 @@ const UsersLayout = ({ ...commonProps }) => {
   const [hasUserSelected, setHasUserSelected] = useState(false);
   const [isImportUserDialogOpen, setIsImportUserDialogOpen] = useState(false);
   const [isAddUserDialogOpen, setIsAddUserDialogOpen] = useState(false);
+  const [isInviteUserDialogOpen, setIsInviteUserDialogOpen] = useState(false);
   const [isBatchSetQuotaDialogOpen, setIsBatchSetQuotaDialogOpen] = useState(false);
   const [isBatchDeleteUserDialogOpen, setIsBatchDeleteUserDialogOpen] = useState(false);
   const [isBatchAddAdminDialogOpen, setIsBatchAddAdminDialogOpen] = useState(false);
@@ -52,6 +53,10 @@ const UsersLayout = ({ ...commonProps }) => {
 
   const toggleAddUserDialog = () => {
     setIsAddUserDialogOpen(!isAddUserDialogOpen);
+  };
+
+  const toggleInviteUserDialog = () => {
+    setIsInviteUserDialogOpen(!isInviteUserDialogOpen);
   };
 
   const toggleBatchSetQuotaDialog = () => {
@@ -86,6 +91,7 @@ const UsersLayout = ({ ...commonProps }) => {
       <>
         <Button className="btn btn-secondary operation-item" onClick={toggleImportUserDialog}>{gettext('Import Users')}</Button>
         <Button className="btn btn-secondary operation-item" onClick={toggleAddUserDialog}>{gettext('Add User')}</Button>
+        <Button className="btn btn-secondary operation-item" onClick={toggleInviteUserDialog}>{gettext('Invite users')}</Button>
         <a className="btn btn-secondary operation-item" href={`${siteRoot}sys/useradmin/export-excel/`}>{gettext('Export Excel')}</a>
       </>
     );
@@ -110,6 +116,7 @@ const UsersLayout = ({ ...commonProps }) => {
     isLDAPImported,
     isAddUserDialogOpen,
     isImportUserDialogOpen,
+    isInviteUserDialogOpen,
     isBatchAddAdminDialogOpen,
     isBatchDeleteUserDialogOpen,
     isBatchSetQuotaDialogOpen,
@@ -117,6 +124,7 @@ const UsersLayout = ({ ...commonProps }) => {
     onHasUserSelected,
     toggleAddUserDialog,
     toggleImportUserDialog,
+    toggleInviteUserDialog,
     toggleBatchAddAdminDialog,
     toggleBatchDeleteUserDialog,
     toggleBatchSetQuotaDialog
