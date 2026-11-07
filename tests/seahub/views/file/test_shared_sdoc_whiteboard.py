@@ -6,8 +6,11 @@ import jwt
 from django.core.exceptions import PermissionDenied
 from django.test import RequestFactory, SimpleTestCase, override_settings
 from django.http import JsonResponse
+from rest_framework.test import APIRequestFactory
 
 from seahub.exdraw import shared
+from seahub.exdraw.apis import SharedSdocWhiteboard, SharedSdocWhiteboardImage
+from seahub.auth.models import AnonymousUser
 
 
 PARENT = 'aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee'
@@ -324,3 +327,39 @@ class SharedWhiteboardGatewayTest(SimpleTestCase):
         request = RequestFactory().get('/images/', {'path': '/images/photo.png'})
         self.assertEqual(shared.shared_whiteboard(request, 'abcd', PARENT, BOARD, 'image').status_code, 200)
         self.assertEqual(resource.call_args.args[0], element)
+
+
+class SharedWhiteboardAPIClassTest(SimpleTestCase):
+    def request(self, method='get', data=None):
+        request = getattr(APIRequestFactory(), method)('/whiteboard/', data or {})
+        request.user = AnonymousUser()
+        request.session = {'visited_fs_abcd': True}
+        return request
+
+    @patch.object(SharedSdocWhiteboard, 'throttle_classes', ())
+    @patch('seahub.exdraw.apis.shared_whiteboard')
+    def test_scene_class_preserves_anonymous_share_session(self, gateway):
+        gateway.return_value = JsonResponse({'scene': {}})
+        response = SharedSdocWhiteboard.as_view()(
+            self.request(), share_token='abcd', sdoc_uuid=PARENT, file_uuid=BOARD, action='scene')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(gateway.call_args.args[0].session['visited_fs_abcd'])
+        self.assertEqual(gateway.call_args.args[1:], ('abcd', PARENT, BOARD, 'scene'))
+
+    @patch.object(SharedSdocWhiteboardImage, 'throttle_classes', ())
+    @patch('seahub.exdraw.apis.shared_whiteboard')
+    def test_image_class_passes_filename_and_uses_image_action(self, gateway):
+        gateway.return_value = JsonResponse({})
+        response = SharedSdocWhiteboardImage.as_view()(
+            self.request(data={'filename': 'photo.png'}), share_token='abcd', sdoc_uuid=PARENT, file_uuid=BOARD)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(gateway.call_args.args[0].GET['filename'], 'photo.png')
+        self.assertEqual(gateway.call_args.args[-1], 'image')
+
+    @patch.object(SharedSdocWhiteboard, 'throttle_classes', ())
+    @patch('seahub.exdraw.apis.shared_whiteboard')
+    def test_write_methods_are_not_exposed(self, gateway):
+        response = SharedSdocWhiteboard.as_view()(
+            self.request('post'), share_token='abcd', sdoc_uuid=PARENT, file_uuid=BOARD, action='scene')
+        self.assertEqual(response.status_code, 405)
+        gateway.assert_not_called()

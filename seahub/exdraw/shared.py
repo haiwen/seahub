@@ -17,7 +17,6 @@ from django.http import Http404, JsonResponse, StreamingHttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.cache import never_cache
-from django.views.decorators.http import require_GET
 from seaserv import seafile_api
 
 from seahub.exdraw.settings import EXDRAW_IMAGES_DIR, FILE_TYPE_MIMETYPE_MAPPING
@@ -260,7 +259,6 @@ def image_stream(repo, path, file_id, content_type, username):
     return response
 
 
-@require_GET
 @never_cache
 def shared_whiteboard(request, share_token, sdoc_uuid, file_uuid, action):
     try:
