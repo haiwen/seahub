@@ -4,7 +4,6 @@ import json
 import time
 import logging
 import posixpath
-import urllib.parse
 
 from seaserv import seafile_api
 
@@ -12,7 +11,7 @@ from seahub.constants import PERMISSION_INVISIBLE
 from seahub.exdraw.settings import EXDRAW_IMAGES_DIR
 from seahub.tags.models import FileUUIDMap
 from seahub.settings import EXCALIDRAW_PRIVATE_KEY
-from seahub.utils import gen_inner_file_upload_url, normalize_file_path, gen_file_get_url, gen_file_upload_url, gen_inner_file_get_url, get_service_url
+from seahub.utils import gen_inner_file_upload_url, normalize_file_path, gen_file_get_url, gen_file_upload_url, gen_inner_file_get_url
 from seahub.utils.auth import AUTHORIZATION_PREFIX
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
@@ -175,10 +174,6 @@ def get_exdraw_asset_download_link(repo_id, parent_path, filename, username):
     return download_link
 
 def can_access_exdraw_asset(request, repo_id, path, file_uuid):
-    access_token = request.GET.get('access_token')
-    if access_token and is_valid_exdraw_access_token(['Token', access_token], file_uuid):
-        return True
-
     # login user
     if request.user.username and check_folder_permission(request, repo_id, path):
         return True
@@ -186,42 +181,5 @@ def can_access_exdraw_asset(request, repo_id, path, file_uuid):
     exdraw_share_session = request.session.get('exdraw_share_session')
     if exdraw_share_session and exdraw_share_session.get('file_uuid') == file_uuid:
         return True
-
-    return False
-
-
-def is_exdraw_image_referenced(file_content, repo_id, image_path):
-    """Only authorize library images referenced by this whiteboard's image elements."""
-    if not image_path.startswith('/') or '\x00' in image_path:
-        return False
-
-    try:
-        scene = json.loads(file_content)
-    except (TypeError, ValueError):
-        return False
-    if not isinstance(scene, dict) or not isinstance(scene.get('elements'), list):
-        return False
-
-    service_url = urllib.parse.urlsplit(get_service_url().rstrip('/'))
-    prefix = '%s/lib/%s/file/' % (service_url.path, repo_id)
-    image_path = posixpath.normpath('/' + image_path.lstrip('/'))
-    for element in scene['elements']:
-        if not isinstance(element, dict) or element.get('type') != 'image' or element.get('isDeleted'):
-            continue
-        data_url = element.get('dataURL')
-        if not isinstance(data_url, str):
-            continue
-        try:
-            image_url = urllib.parse.urlsplit(data_url)
-        except ValueError:
-            continue
-        if (image_url.scheme != service_url.scheme or image_url.netloc != service_url.netloc or
-                not image_url.path.startswith(prefix) or
-                urllib.parse.parse_qs(image_url.query).get('raw') != ['1']):
-            continue
-        referenced_path = urllib.parse.unquote(image_url.path[len(prefix) - 1:])
-        referenced_path = posixpath.normpath('/' + referenced_path.lstrip('/'))
-        if referenced_path == image_path:
-            return True
 
     return False

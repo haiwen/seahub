@@ -24,7 +24,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
 from django.urls import reverse
 from django.db.models import F
-from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
+from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render
 from django.utils.translation import get_language, gettext as _
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -71,8 +71,7 @@ from seahub.utils.repo import is_repo_owner, parse_repo_perm, is_repo_admin
 from seahub.group.utils import is_group_member
 from seahub.seadoc.utils import get_seadoc_file_uuid, \
         gen_seadoc_access_token, is_seadoc_revision, gen_share_seadoc_access_token
-from seahub.exdraw.utils import get_exdraw_file_uuid, gen_exdraw_access_token, gen_share_exdraw_access_token, \
-    is_valid_exdraw_access_token, is_exdraw_image_referenced
+from seahub.exdraw.utils import get_exdraw_file_uuid, gen_exdraw_access_token, gen_share_exdraw_access_token
 from seahub.seadoc.models import SeadocRevision
 
 import seahub.settings as settings
@@ -552,54 +551,11 @@ def view_lib_file_via_smart_link(request, dirent_uuid, dirent_name):
     return HttpResponseRedirect(redirect_to)
 
 
+@login_required
 def view_lib_file_via_embed_link(request, dirent_uuid):
-    uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(dirent_uuid)
-    if not uuid_map or uuid_map.is_dir:
-        raise Http404
-
-    filename = uuid_map.filename
-    filetype, fileext = get_file_type_and_ext(filename)
-    if filetype != EXCALIDRAW:
-        raise Http404
-
-    repo_id = uuid_map.repo_id
-    repo = seafile_api.get_repo(repo_id)
-    if not repo or repo.encrypted:
-        raise Http404
-
-    path = posixpath.join(uuid_map.parent_path, filename.strip('/'))
-    file_id = seafile_api.get_file_id_by_path(repo_id, path)
-    if not file_id:
-        raise Http404
-
-    username = request.user.username if request.user.is_authenticated else ANONYMOUS_EMAIL
-    file_uuid = get_exdraw_file_uuid(repo, path)
-    access_token = gen_exdraw_access_token(file_uuid, filename, username, permission='r')
-
-    data = {
-        'repo': repo,
-        'obj_id': file_id,
-        'from_shared_dir': True,
-        'path': path,
-        'file_name': filename,
-        'file_size': seafile_api.get_file_size(repo.store_id, repo.version, file_id),
-        'filetype': filetype,
-        'fileext': fileext,
-        'raw_path': '',
-        'traffic_over_limit': False,
-        'permissions': {'can_edit': False, 'can_download': False},
-        'can_edit_file': False,
-        'file_perm': 'r',
-        'file_uuid': file_uuid,
-        'excalidraw_server_url': EXCALIDRAW_SERVER_URL,
-        'excalidraw_access_token': access_token,
-    }
-    request.session['exdraw_share_session'] = {
-        'file_uuid': file_uuid,
-        'permission': 'r',
-        'excalidraw_access_token': access_token,
-    }
-    return render(request, 'shared_file_view_react.html', data)
+    # Compatibility for previously saved embed links; keep internal authorization.
+    url = reverse('view_lib_file_via_smart_link', args=[dirent_uuid, ''])
+    return HttpResponseRedirect(url + '?readonly=true&filetype=Excalidraw')
 
 
 def convert_repo_path_when_can_not_view_file(request, repo_id, path):
@@ -2152,68 +2108,45 @@ def text_diff(request, repo_id):
 
 
 def view_media_file_via_share_link(request):
-    """Read images using a FileShare token or file_uuid plus a whiteboard access_token."""
     image_path = request.GET.get('path', '')
     token = request.GET.get('token', '')
-    file_uuid = request.GET.get('file_uuid', '')
-    exdraw_access_token = request.GET.get('access_token', '')
 
-    if not image_path or not (token or (file_uuid and exdraw_access_token)):
+    if not image_path or not token:
         return HttpResponseBadRequest('invalid params')
 
-    if token:
-        file_share = FileShare.objects.get_valid_file_link_by_token(token)
+    file_share = FileShare.objects.get_valid_file_link_by_token(token)
 
-        if not file_share:
-            err_msg = 'Share link does not exist'
-            return render_error(request, err_msg)
+    if not file_share:
+        err_msg = 'Share link does not exist'
+        return render_error(request, err_msg)
 
-        if file_share.is_expired():
-            err_msg = 'Share link has expired'
-            return render_error(request, err_msg)
+    if file_share.is_expired():
+        err_msg = 'Share link has expired'
+        return render_error(request, err_msg)
 
-        if not check_share_link_user_access(file_share, request.user.username):
-            err_msg = _('Permission denied')
-            return render_error(request, err_msg)
+    if not check_share_link_user_access(file_share, request.user.username):
+        err_msg = _('Permission denied')
+        return render_error(request, err_msg)
 
-        password_check_passed, err_msg = check_share_link_common(request, file_share)
+    password_check_passed, err_msg = check_share_link_common(request, file_share)
 
-        if not password_check_passed:
-            return render_error(request, err_msg or _('Permission denied'))
+    if not password_check_passed:
+        return render_error(request, err_msg or _('Permission denied'))
 
-        repo_id = file_share.repo_id
-        shared_file_path = file_share.path
-        shared_file_name = os.path.basename(shared_file_path)
-        file_type, file_ext = get_file_type_and_ext(shared_file_name)
+    shared_file_name = os.path.basename(file_share.path)
+    file_type, file_ext = get_file_type_and_ext(shared_file_name)
 
-        if file_type != MARKDOWN and file_type != EXCALIDRAW:
-            err_msg = 'Invalid file type'
-            return render_error(request, err_msg)
-    else:
-        try:
-            file_uuid = str(uuid.UUID(file_uuid))
-        except ValueError:
-            return HttpResponseBadRequest('invalid params')
-        if not is_valid_exdraw_access_token(['Token', exdraw_access_token], file_uuid):
-            return HttpResponseForbidden(_('Permission denied'))
-        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
-        if not uuid_map or uuid_map.is_dir:
-            raise Http404
-        file_type, file_ext = get_file_type_and_ext(uuid_map.filename)
-        if file_type != EXCALIDRAW:
-            raise Http404
-        repo_id = uuid_map.repo_id
-        shared_file_name = uuid_map.filename
-        shared_file_path = posixpath.join(uuid_map.parent_path, shared_file_name)
+    if file_type != MARKDOWN and file_type != EXCALIDRAW:
+        err_msg = 'Invalid file type'
+        return render_error(request, err_msg)
 
     # recourse check
+    repo_id = file_share.repo_id
     repo = get_repo(repo_id)
     if not repo:
         return render_error(request, 'Repo does not exist')
-    if not token and repo.encrypted:
-        return HttpResponseForbidden(_('Permission denied'))
 
-    file_id = seafile_api.get_file_id_by_path(repo_id, shared_file_path)
+    file_id = seafile_api.get_file_id_by_path(repo_id, file_share.path)
     if not file_id:
         return render_error(request, 'File does not exist')
 
@@ -2223,29 +2156,20 @@ def view_media_file_via_share_link(request):
     if err_msg:
         return render_error(request, err_msg)
 
+    # If the image does not exist in markdown
+    serviceURL = get_service_url().rstrip('/')
     image_file_name = os.path.basename(image_path)
-    if token:
-        # If the image does not exist in markdown
-        serviceURL = get_service_url().rstrip('/')
 
-        # Translation ‘(’ ')'
-        image_file_name = image_file_name.replace('(', r'\(')
-        image_file_name = image_file_name.replace(')', r'\)')
-        encoded_image_file_name = urllib.parse.quote(image_file_name)
+    # Translation ‘(’ ')'
+    image_file_name = image_file_name.replace('(', r'\(')
+    image_file_name = image_file_name.replace(')', r'\)')
+    encoded_image_file_name = urllib.parse.quote(image_file_name)
 
-        safe_pattern = f'({re.escape(serviceURL)})/lib/({re.escape(repo_id)})/file(.*?){re.escape(encoded_image_file_name)}\\?raw=1'
-        p = re.compile(safe_pattern)
-        result = re.search(p, file_content)
-        if not result:
-            return render_error(request, 'Image does not exist')
-    else:
-        if not is_exdraw_image_referenced(file_content, repo_id, image_path):
-            return HttpResponseForbidden(_('Permission denied'))
-        image_path = posixpath.normpath('/' + image_path.lstrip('/'))
-        image_type, image_ext = get_file_type_and_ext(image_path)
-        if image_type not in (IMAGE, SVG):
-            return HttpResponseForbidden(_('Permission denied'))
-        image_file_name = posixpath.basename(image_path)
+    safe_pattern = f'({re.escape(serviceURL)})/lib/({re.escape(repo_id)})/file(.*?){re.escape(encoded_image_file_name)}\\?raw=1'
+    p = re.compile(safe_pattern)
+    result = re.search(p, file_content)
+    if not result:
+        return render_error(request, 'Image does not exist')
 
     # get image
     obj_id = seafile_api.get_file_id_by_path(repo_id, image_path)

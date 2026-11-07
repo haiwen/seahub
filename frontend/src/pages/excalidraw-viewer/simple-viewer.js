@@ -9,35 +9,17 @@ import { langList } from './constants';
 
 import '@excalidraw/excalidraw/index.css';
 
-export const getImageUrl = (fileName, dataURL) => {
+const { serviceURL } = window.app.config;
+const { repoID, sharedToken } = window.shared.pageOptions;
+
+export const getImageUrl = (fileName) => {
   const { serviceURL } = window.app.config;
-  const { docUuid, repoID, sharedToken, exdrawAccessToken } = window.shared.pageOptions;
-  if (dataURL && isUrl(dataURL)) {
-    const imageUrl = new URL(dataURL);
-    const repoUrl = new URL(`${serviceURL}/lib/${repoID}/file`);
-    if (imageUrl.origin !== repoUrl.origin ||
-      !imageUrl.pathname.startsWith(`${repoUrl.pathname}/`) ||
-      imageUrl.searchParams.get('raw') !== '1') {
-      return dataURL;
-    }
-
-    const params = new URLSearchParams({
-      path: decodeURIComponent(imageUrl.pathname.slice(repoUrl.pathname.length)),
-    });
-    if (sharedToken || !exdrawAccessToken) {
-      params.set('token', sharedToken || '');
-    } else {
-      params.set('file_uuid', docUuid);
-      params.set('access_token', exdrawAccessToken);
-    }
-    return `${serviceURL}/view-image-via-share-link/?${params.toString()}`;
-  }
-
-  const url = `${serviceURL}/api/v2.1/exdraw/download-image/${docUuid}/${encodeURIComponent(fileName)}`;
-  return exdrawAccessToken ? `${url}?access_token=${encodeURIComponent(exdrawAccessToken)}` : url;
+  const { docUuid } = window.shared.pageOptions;
+  const url = `${serviceURL}/api/v2.1/exdraw/download-image/${docUuid}/${fileName}`;
+  return url;
 };
 
-const fetchImageFilesFromServer = (elements) => {
+const fetchImageFilesFromServer = (elements, imageFiles) => {
   const imageElements = elements.filter(element => {
     return isInitializedImageElement(element) && !element.isDeleted;
   });
@@ -47,7 +29,24 @@ const fetchImageFilesFromServer = (elements) => {
   imageElements.forEach(element => {
     try {
       const { fileId, filename, dataURL } = element;
-      const imageUrl = getImageUrl(filename, dataURL);
+      let imageUrl;
+      if (imageFiles) {
+        imageUrl = imageFiles[fileId]?.url;
+      } else {
+        // Preserve the existing internal/standalone viewer image behavior.
+        imageUrl = getImageUrl(filename);
+        if (dataURL && isUrl(imageUrl)) {
+          imageUrl = element.dataURL;
+          const re = new RegExp(serviceURL + '/lib/' + repoID + '/file.*raw=1');
+          if (re.test(dataURL)) {
+            const index = dataURL.indexOf('/file');
+            const index2 = dataURL.indexOf('?');
+            imageUrl = dataURL.substring(index + 5, index2);
+          }
+          imageUrl = serviceURL + '/view-image-via-share-link/?token=' + sharedToken + '&path=' + imageUrl;
+        }
+      }
+      if (!imageUrl) throw new Error('Image unavailable');
 
       loadedFiles.push({
         mimeType: 'image/jpeg',
@@ -65,7 +64,7 @@ const fetchImageFilesFromServer = (elements) => {
   return { loadedFiles, erroredFiles };
 };
 
-const SimpleViewer = ({ sceneContent = null, isFetching, isInSdoc, isFullScreen, isResizeSdocPageWidth }) => {
+const SimpleViewer = ({ sceneContent = null, imageFiles = null, isFetching, isInSdoc, isFullScreen, isResizeSdocPageWidth }) => {
   // eslint-disable-next-line
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
 
@@ -81,7 +80,7 @@ const SimpleViewer = ({ sceneContent = null, isFetching, isInSdoc, isFullScreen,
     if (isFetching) return;
     if (!excalidrawAPI) return;
     const { elements } = sceneContent;
-    const { loadedFiles, erroredFiles } = fetchImageFilesFromServer(elements);
+    const { loadedFiles, erroredFiles } = fetchImageFilesFromServer(elements, imageFiles);
 
     excalidrawAPI.addFiles(loadedFiles);
     updateStaleImageStatuses({
@@ -89,7 +88,7 @@ const SimpleViewer = ({ sceneContent = null, isFetching, isInSdoc, isFullScreen,
       erroredFiles,
       elements: excalidrawAPI.getSceneElementsIncludingDeleted(),
     });
-  }, [excalidrawAPI, isFetching, sceneContent]);
+  }, [excalidrawAPI, isFetching, sceneContent, imageFiles]);
 
   // Fit iframe inner element size within sdoc-editor
   useEffect(() => {

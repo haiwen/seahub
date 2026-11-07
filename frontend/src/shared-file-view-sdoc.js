@@ -14,7 +14,7 @@ const {
   repoID, filePerm,
   canDownload, canEdit,
   trafficOverLimit, zipped,
-  docPath, docName, docUuid, seadocAccessToken, seadocServerUrl, assetsUrl
+  docPath, docName, docUuid, seadocAccessToken, seadocServerUrl, assetsUrl, sharedToken
 } = window.shared.pageOptions;
 
 // share permission of this sdoc
@@ -41,6 +41,7 @@ window.seafile = {
   docPerm: filePerm,
   historyURL: Utils.generateHistoryURL(siteRoot, repoID, docPath),
   assetsUrl,
+  sdocShareContext: sharedToken ? { shareToken: sharedToken, sdocUuid: docUuid } : null,
 };
 
 (function () {

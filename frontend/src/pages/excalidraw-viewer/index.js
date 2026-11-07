@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { gettext } from '@/utils/constants';
 import editorApi from './editor-api';
 import SimpleViewer from './simple-viewer';
 
@@ -10,14 +11,22 @@ const ExcaliViewer = () => {
   const [isInSdoc, setIsInSdoc] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isResize, setIsResize] = useState(false);
+  const [imageFiles, setImageFiles] = useState(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     editorApi.getExdrawContent().then(res => {
-      if (res.data?.appState?.collaborators && !Array.isArray(res.data.appState.collaborators)) {
+      const isSharedEmbed = Boolean(window.shared.pageOptions.sharedExdrawSceneUrl);
+      const scene = isSharedEmbed ? res.data.scene : res.data;
+      if (scene?.appState?.collaborators && !Array.isArray(scene.appState.collaborators)) {
         // collaborators.forEach is not a function
-        res.data['appState']['collaborators'] = [];
+        scene.appState.collaborators = [];
       }
-      setFileContent(res.data);
+      setImageFiles(isSharedEmbed ? res.data.images : null);
+      setFileContent(scene);
+      setIsFetching(false);
+    }).catch(() => {
+      setError(true);
       setIsFetching(false);
     });
   }, []);
@@ -49,10 +58,13 @@ const ExcaliViewer = () => {
   }, []);
 
 
+  if (error) return <div role="alert">{gettext('Unable to view file')}</div>;
+
   return (
     <SimpleViewer
       isFetching={isFetching}
       sceneContent={fileContent}
+      imageFiles={imageFiles}
       isInSdoc={isInSdoc}
       isFullScreen={isFullScreen}
       isResizeSdocPageWidth={isResize}
