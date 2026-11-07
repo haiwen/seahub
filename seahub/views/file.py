@@ -550,13 +550,6 @@ def view_lib_file_via_smart_link(request, dirent_uuid, dirent_name):
     return HttpResponseRedirect(redirect_to)
 
 
-@login_required
-def view_lib_file_via_embed_link(request, dirent_uuid):
-    # Compatibility for previously saved embed links; keep internal authorization.
-    url = reverse('view_lib_file_via_smart_link', args=[dirent_uuid, ''])
-    return HttpResponseRedirect(url + '?readonly=true&filetype=Excalidraw')
-
-
 def convert_repo_path_when_can_not_view_file(request, repo_id, path):
 
     path = normalize_file_path(path)
