@@ -18,6 +18,10 @@ class ShareLinkImageReferenceTest(TestCase):
             GET={'path': self.image_path, 'token': 'share-token'},
             user=SimpleNamespace(username='reader@example.com'))
 
+        text_extensions_patch = patch('seahub.utils.get_conf_text_ext', return_value=[])
+        text_extensions_patch.start()
+        self.addCleanup(text_extensions_patch.stop)
+
         patcher = patch.multiple(
             file_views, FileShare=DEFAULT, get_repo=DEFAULT,
             check_share_link_user_access=DEFAULT, check_share_link_common=DEFAULT,
