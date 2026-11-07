@@ -265,22 +265,49 @@ class SharedWhiteboardGatewayTest(SimpleTestCase):
     @patch.object(shared, 'authorize_share')
     def test_image_request_uses_original_filename_parameter(self, authorize, server, resource, stream):
         authorize.return_value = self.context
-        server.return_value = {'elements': [{'type': 'image', 'filename': 'photo.png'}]}
+        server.side_effect = AssertionError('Attachments must not call the scene service')
         resource.return_value = (self.context[2], '/images/photo.png', 'image-id', 'image/png')
         stream.return_value = JsonResponse({})
         request = RequestFactory().get('/images/', {'filename': 'photo.png'})
         response = shared.shared_whiteboard(request, 'abcd', PARENT, BOARD, 'image')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(resource.call_args.args[0], {'type': 'image', 'filename': 'photo.png'})
+        self.assertEqual(resource.call_args.args[0], {'filename': 'photo.png'})
+        server.assert_not_called()
+
+    @patch.object(shared, 'image_stream')
+    @patch.object(shared, 'server_read')
+    @patch.object(shared, 'authorize_share', side_effect=PermissionDenied)
+    def test_attachment_requires_share_authorization_before_file_access(self, authorize, server, stream):
+        request = RequestFactory().get('/images/', {'filename': 'photo.png'})
+        response = shared.shared_whiteboard(request, 'abcd', PARENT, BOARD, 'image')
+        self.assertEqual(response.status_code, 403)
+        server.assert_not_called()
+        stream.assert_not_called()
 
     @patch.object(shared, 'image_stream')
     @patch.object(shared, 'server_read')
     @patch.object(shared, 'authorize_share')
-    def test_arbitrary_filename_does_not_read_file(self, authorize, server, stream):
+    def test_image_request_rejects_missing_or_mixed_selectors(self, authorize, server, stream):
+        authorize.return_value = self.context
+        for params in ({}, {'filename': 'photo.png', 'path': '/images/photo.png'}):
+            with self.subTest(params=params):
+                request = RequestFactory().get('/images/', params)
+                response = shared.shared_whiteboard(request, 'abcd', PARENT, BOARD, 'image')
+                self.assertEqual(response.status_code, 403)
+        server.assert_not_called()
+        stream.assert_not_called()
+
+    @patch.object(shared, 'resource')
+    @patch.object(shared, 'image_stream')
+    @patch.object(shared, 'server_read')
+    @patch.object(shared, 'authorize_share')
+    def test_traversal_filename_does_not_read_file(self, authorize, server, stream, resource):
         authorize.return_value = self.context
         server.return_value = {'elements': [{'type': 'image', 'filename': 'allowed.png'}]}
-        request = RequestFactory().get('/images/', {'filename': 'private.png'})
+        request = RequestFactory().get('/images/', {'filename': '../private.png'})
         self.assertEqual(shared.shared_whiteboard(request, 'abcd', PARENT, BOARD, 'image').status_code, 403)
+        resource.assert_not_called()
+        server.assert_not_called()
         stream.assert_not_called()
 
     @patch.object(shared, 'image_stream')

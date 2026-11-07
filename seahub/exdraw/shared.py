@@ -307,11 +307,16 @@ def shared_whiteboard(request, share_token, sdoc_uuid, file_uuid, action):
             image_path = request.GET.get('path')
             if bool(filename) == bool(image_path):
                 raise PermissionDenied
-            selector = {'filename': filename} if filename else {'path': normalized_path(image_path)}
-            scene = server_read(share, mapping)
-            if not isinstance(scene.get('elements'), list):
-                raise ValueError('Invalid scene')
-            descriptor = referenced_image(scene, selector)
+            if filename:
+                # Uploaded images are board attachments, as in the original download API.
+                # Authorization above applies to the board; image_resource fixes the directory.
+                descriptor = {'filename': filename}
+            else:
+                selector = {'path': normalized_path(image_path)}
+                scene = server_read(share, mapping)
+                if not isinstance(scene.get('elements'), list):
+                    raise ValueError('Invalid scene')
+                descriptor = referenced_image(scene, selector)
             image_repo, image_path, image_id, content_type = image_resource(descriptor, mapping, repo, share.username)
             response = image_stream(image_repo, image_path, image_id, content_type, share.username)
         else:
