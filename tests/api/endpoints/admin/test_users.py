@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
+from datetime import timedelta
 from io import BytesIO
 import json
 
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.utils import timezone
 from openpyxl import Workbook
 from seaserv import ccnet_api, seafile_api
 from tests.common.utils import randstring
 from django.urls import reverse
+from seahub.base.accounts import User
 from seahub.constants import DEFAULT_USER, GUEST_USER
+from seahub.invitations.models import Invitation
 from seahub.test_utils import BaseTestCase
 from seahub.auth.utils import get_virtual_id_by_email
 from seahub.base.templatetags.seahub_tags import email2nickname, \
@@ -504,3 +508,115 @@ class AdminAdminUsersTest(BaseTestCase):
         for admin_user in json_resp['admin_user_list']:
             assert admin_user['is_staff'] == True
 
+
+class AdminInviteUsersTest(BaseTestCase):
+
+    def setUp(self):
+        self.url = reverse('api-v2.1-admin-invite-users')
+        self.tmp_email = '%s@email.com' % randstring(10)
+        self.login_as(self.admin)
+
+    def tearDown(self):
+        self.remove_user(get_virtual_id_by_email(self.tmp_email))
+
+    def _get_user(self):
+        return User.objects.get(email=get_virtual_id_by_email(self.tmp_email))
+
+    @patch('seahub.api2.endpoints.admin.users.IS_EMAIL_CONFIGURED', True)
+    @patch('seahub.invitations.models.Invitation.send_to', return_value=True)
+    def test_create_invitation(self, mock_send_to):
+        resp = self.client.post(self.url, {'email': self.tmp_email})
+        self.assertEqual(200, resp.status_code)
+
+        user = self._get_user()
+        self.assertFalse(user.is_active)
+        self.assertEqual(user.role, DEFAULT_USER)
+
+        invitation = Invitation.objects.get(accepter=self.tmp_email)
+        self.assertEqual(invitation.invite_type, DEFAULT_USER)
+        self.assertFalse(invitation.is_expired())
+        self.assertTrue(mock_send_to.called)
+
+        json_resp = json.loads(resp.content)
+        self.assertEqual(len(json_resp['success']), 1)
+        self.assertEqual(len(json_resp['failed']), 0)
+
+    @patch('seahub.api2.endpoints.admin.users.IS_EMAIL_CONFIGURED', True)
+    def test_existing_active_user_is_rejected(self):
+        self.create_user(self.tmp_email)
+
+        resp = self.client.post(self.url, {'email': self.tmp_email})
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        self.assertEqual(len(json_resp['success']), 0)
+        self.assertEqual(len(json_resp['failed']), 1)
+        self.assertFalse(Invitation.objects.filter(accepter=self.tmp_email).exists())
+
+    @patch('seahub.api2.endpoints.admin.users.IS_EMAIL_CONFIGURED', True)
+    def test_pending_invitation_is_rejected(self):
+        User.objects.create_user(self.tmp_email, None, is_staff=False, is_active=False)
+        invitation = Invitation.objects.add(
+            inviter=self.admin.username,
+            accepter=self.tmp_email,
+            invite_type=DEFAULT_USER,
+        )
+
+        resp = self.client.post(self.url, {'email': self.tmp_email})
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        self.assertEqual(len(json_resp['success']), 0)
+        self.assertEqual(len(json_resp['failed']), 1)
+        self.assertEqual(
+            Invitation.objects.get(pk=invitation.pk).token,
+            invitation.token,
+        )
+
+    @patch('seahub.api2.endpoints.admin.users.IS_EMAIL_CONFIGURED', True)
+    @patch('seahub.invitations.models.Invitation.send_to', return_value=True)
+    def test_expired_invitation_is_resent(self, mock_send_to):
+        User.objects.create_user(self.tmp_email, None, is_staff=False, is_active=False)
+        invitation = Invitation.objects.add(
+            inviter=self.admin.username,
+            accepter=self.tmp_email,
+            invite_type=DEFAULT_USER,
+        )
+        old_token = invitation.token
+        invitation.expire_time = timezone.now() - timedelta(hours=1)
+        invitation.save()
+
+        resp = self.client.post(self.url, {'email': self.tmp_email})
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        self.assertEqual(len(json_resp['success']), 1)
+        self.assertEqual(len(json_resp['failed']), 0)
+        self.assertFalse(Invitation.objects.filter(pk=invitation.pk).exists())
+
+        new_invitation = Invitation.objects.get(accepter=self.tmp_email)
+        self.assertNotEqual(new_invitation.token, old_token)
+        self.assertTrue(mock_send_to.called)
+
+    @patch('seahub.api2.endpoints.admin.users.IS_EMAIL_CONFIGURED', True)
+    @patch('seahub.invitations.models.Invitation.send_to', return_value=False)
+    def test_send_failure_is_reported(self, mock_send_to):
+        resp = self.client.post(self.url, {'email': self.tmp_email})
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        self.assertEqual(len(json_resp['success']), 0)
+        self.assertEqual(len(json_resp['failed']), 1)
+        self.assertFalse(Invitation.objects.filter(accepter=self.tmp_email).exists())
+
+    @patch('seahub.api2.endpoints.admin.users.IS_EMAIL_CONFIGURED', False)
+    def test_email_must_be_configured(self):
+        resp = self.client.post(self.url, {'email': self.tmp_email})
+        self.assertEqual(403, resp.status_code)
+
+    def test_admin_permission_denied(self):
+        self.logout()
+        self.login_as(self.user)
+
+        resp = self.client.post(self.url, {'email': self.tmp_email})
+        self.assertEqual(403, resp.status_code)

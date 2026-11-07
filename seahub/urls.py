@@ -157,7 +157,7 @@ from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
 from seahub.api2.endpoints.admin.users import AdminUsers, AdminUser, AdminUserResetPassword, AdminAdminUsers, \
     AdminUserGroups, AdminUserShareLinks, AdminUserUploadLinks, AdminUserBeSharedRepos, \
     AdminLDAPUsers, AdminSearchUser, AdminUpdateUserCcnetEmail, AdminUserList, AdminUserConvertToTeamView, \
-    AdminUserSharedFolders, AdminUserSharedRepos
+    AdminUserSharedFolders, AdminUserSharedRepos, AdminInviteUsers
 from seahub.api2.endpoints.admin.device_trusted_ip import AdminDeviceTrustedIP
 from seahub.api2.endpoints.admin.libraries import AdminLibraries, AdminLibrary, \
         AdminSearchLibrary
@@ -698,6 +698,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/statistics/ai/detail/$', AdminAIStatisticsDetailView.as_view(), name='api-v2.1-admin-statistics-ai-detail'),
     ## admin::users
     re_path(r'^api/v2.1/admin/users/$', AdminUsers.as_view(), name='api-v2.1-admin-users'),
+    re_path(r'^api/v2.1/admin/invite-users/$', AdminInviteUsers.as_view(), name='api-v2.1-admin-invite-users'),
     re_path(r'^api/v2.1/admin/ldap-users/$', AdminLDAPUsers.as_view(), name='api-v2.1-admin-ldap-users'),
     re_path(r'^api/v2.1/admin/search-user/$', AdminSearchUser.as_view(), name='api-v2.1-admin-search-user'),
     re_path(r'^api/v2.1/admin/update-user-ccnet-email/$', AdminUpdateUserCcnetEmail.as_view(), name='api-v2.1-admin-update-user-ccnet-email'),
