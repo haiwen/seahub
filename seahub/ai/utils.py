@@ -518,9 +518,6 @@ def create_generated_sdoc(block, repo_id, username, can_upload=True, request=Non
         metadata = {'sdoc_create_uuid': identifier, 'file_name': file_name, 'description': attributes['description']}
         if not ENABLE_SEADOC:
             return result_tag(**metadata, status='failed', error_code='sdoc_not_enabled')
-        if not can_upload:
-            return result_tag(**metadata, status='failed', error_code='permission_denied')
-
         # Do not duplicate AI's content schema here. Bound parsing and only compile known fields.
         content = block['content']
         if len(content) > MAX_SDOC_TRANSPORT_LENGTH:

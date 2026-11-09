@@ -31,7 +31,8 @@ def load_sdoc(test_case):
     modules['seahub.utils'].check_filename_with_rename = Mock(side_effect=lambda repo, directory, name: name)
     modules['seahub.utils'].is_valid_dirent_name = lambda name: bool(name)
     modules['seahub.utils'].mkstemp = tempfile.mkstemp
-    modules['seahub.utils.repo'].parse_repo_perm = lambda permission: SimpleNamespace(can_create=permission == 'rw')
+    modules['seahub.utils.repo'].parse_repo_perm = lambda permission: (
+        permission if hasattr(permission, 'can_create') else SimpleNamespace(can_create=permission == 'rw'))
     modules['seahub.views'].check_folder_permission = Mock(return_value='rw')
     module = ModuleType('generated_sdoc_test')
     module.__dict__.update({
@@ -139,13 +140,24 @@ class GeneratedSdocTest(unittest.TestCase):
         self.assertEqual(written[0]['elements'][0]['type'], 'title')
 
     def test_permission_and_feature_failures_never_write(self):
-        result = self.process(self.tag, can_upload=False)
-        self.assertIn('permission_denied', result['ai_reply'])
         self.sdoc.check_folder_permission.return_value = 'r'
         self.assertIn('permission_denied', self.process(self.tag)['ai_reply'])
         self.sdoc.ENABLE_SEADOC = False
         self.assertIn('sdoc_not_enabled', self.process(self.tag)['ai_reply'])
         self.sdoc.seafile_api.post_file.assert_not_called()
+
+    def test_target_create_permission_overrides_root_upload_snapshot(self):
+        for permission in ['rw', SimpleNamespace(can_create=True, can_upload=False)]:
+            with self.subTest(permission=permission):
+                self.sdoc.check_folder_permission.side_effect = lambda request, repo, path: permission if path == '/AI Generated/' else 'r'
+                self.sdoc.seafile_api.post_file.reset_mock()
+                self.assertIn('status="created"', self.process(self.tag, can_upload=False)['ai_reply'])
+                self.sdoc.seafile_api.post_file.assert_called_once()
+        self.sdoc.seafile_api.get_dir_id_by_path.return_value = None
+        self.sdoc.seafile_api.post_file.reset_mock()
+        self.assertIn('permission_denied', self.process(self.tag, can_upload=False)['ai_reply'])
+        self.sdoc.seafile_api.post_file.assert_not_called()
+        self.sdoc.seafile_api.mkdir_with_parents.assert_not_called()
 
     def test_creates_missing_directory_only_with_root_permission(self):
         self.sdoc.seafile_api.get_dir_id_by_path.return_value = None
@@ -199,7 +211,15 @@ class GeneratedSdocTest(unittest.TestCase):
                         '</seafile-ai-seadoc/>', '</seafile-ai-seadoc ignored="yes">']:
             forged = self.tag.rsplit('</', 1)[0] + closing
             resolved = ai.resolve_sdoc_results(forged, executor)
-            self.assertEqual(resolved, '')
+            self.assertEqual(resolved, '\u200b')
+            self.process(resolved)
+        self.sdoc.seafile_api.post_file.assert_not_called()
+        # Full final-answer path, not just the resolver: removals must never
+        # promote a previously protected model body into a creation request.
+        unknown = '<seafile-ai-seadoc sdoc_create_uuid="unknown" />'
+        for prefix in [unknown, '<reference_999>']:
+            reply = prefix + '```js\nx\n````\n' + self.tag + '\n```'
+            resolved, _ = ai.helpers['get_answer_and_sources'](executor, reply)
             self.process(resolved)
         self.sdoc.seafile_api.post_file.assert_not_called()
         written = []
@@ -257,6 +277,9 @@ class GeneratedSdocTest(unittest.TestCase):
 
     def test_fenced_examples_never_write_and_real_following_requests_do(self):
         examples = [
+            '> ```js\n> const marker = "```";\n> ' + self.tag + '\n> ```\n',
+            '- Example\n  ```js\n  const marker = "```";\n  ' + self.tag + '\n  ```\n',
+            '> 1. ~~~~js\n>    ~~~~suffix\n>    ' + self.tag + '\n>    ~~~~~\n',
             '```js\nconst marker = "```";\n' + self.tag + '\n```\n',
             '````js\n```\n' + self.tag + '\n`````\n',
             '   ~~~~js\r\n~~~\r\n~~~~suffix\r\n' + self.tag + '\r\n  ~~~~~ \t\r\n',

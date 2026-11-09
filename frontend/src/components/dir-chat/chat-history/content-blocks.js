@@ -1,12 +1,18 @@
 // Same boundary contract as seahub/ai/content_blocks.py: registered bodies are
 // opaque, code is protected, and incomplete blocks are never dispatched.
-const TOKEN = /(?<fence>^ {0,3}(?:`{3,}(?!`)[^`\r\n]*|~{3,}[^\r\n]*)(?:\r?\n|$))|(?<ticks>`+)|<(?<closing>\/)?(?<tag>[A-Za-z][\w:-]*)(?=[\s/>]|$)/gm;
+// Conservative protocol protection includes list continuations/mixed containers;
+// it deliberately does not claim to implement the renderer's full Markdown grammar.
+const CONTAINER_PREFIX = '[ \\t]*(?:(?:>[ \\t]?|(?:[-+*]|\\d{1,9}[.)])[ \\t]+)[ \\t]*)*';
+const TOKEN = new RegExp(`(?<fence>^${CONTAINER_PREFIX}(?:\u0060{3,}(?!\u0060)[^\u0060\\r\\n]*|~{3,}[^\\r\\n]*)(?:\\r?\\n|$))|(?<ticks>\u0060+)|<(?<closing>/)?(?<tag>[A-Za-z][\\w:-]*)(?=[\\s/>]|$)`, 'gm');
 
 const codeEnd = (value, token) => {
   const start = token.index + token[0].length;
   if (token.groups.fence) {
-    const marker = token[0].match(/^ {0,3}(`+|~+)/)[1];
-    const closing = new RegExp(`^ {0,3}${marker[0]}{${marker.length},}[ \\t]*(?:\\r?\\n|$)`, 'gm');
+    const marker = token[0].match(new RegExp(`^${CONTAINER_PREFIX}(\u0060+|~+)`))[1];
+    const prefix = token[0].split(marker)[0];
+    const quoteDepth = (prefix.match(/>/g) || []).length;
+    const closingPrefix = '[ \\t]*' + '>[ \\t]*'.repeat(quoteDepth);
+    const closing = new RegExp(`^${closingPrefix}${marker[0]}{${marker.length},}[ \\t]*(?:\\r?\\n|$)`, 'gm');
     closing.lastIndex = start;
     const match = closing.exec(value);
     return match ? closing.lastIndex : value.length;

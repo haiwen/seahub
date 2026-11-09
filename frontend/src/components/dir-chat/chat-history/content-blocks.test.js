@@ -49,6 +49,9 @@ test('incomplete protocol content stays hidden throughout streaming', () => {
 test('fenced SDoc examples do not render cards, but following real results do', () => {
   const tag = '<seafile-ai-seadoc status="created" file_name="Plan.sdoc" path="/AI Generated/Plan.sdoc"></seafile-ai-seadoc>';
   for (const example of [
+    '> ```js\n> const marker = "```";\n> ' + tag + '\n> ```\n',
+    '- Example\n  ```js\n  const marker = "```";\n  ' + tag + '\n  ```\n',
+    '> 1. ~~~~js\n>    ~~~~suffix\n>    ' + tag + '\n>    ~~~~~\n',
     '```js\nconst marker = "```";\n' + tag + '\n```\n',
     '````js\n```\n' + tag + '\n`````\n',
     '   ~~~~\n~~~~suffix\n' + tag + '\n  ~~~~~ \t\n',

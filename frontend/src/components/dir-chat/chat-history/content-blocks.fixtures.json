@@ -1,5 +1,29 @@
 [
   {
+    "name": "blockquote fence protects inline false closers",
+    "value": "> ```js\n> const marker = \"```\";\n> <image>x</image>\n> ```\n<image />",
+    "tags": ["image"],
+    "types": ["code", "block"],
+    "blockTags": ["image"],
+    "complete": [true]
+  },
+  {
+    "name": "list continuation fence",
+    "value": "- Example\n  ~~~~js\n  ~~~~suffix\n  <image>x</image>\n  ~~~~~\n<image />",
+    "tags": ["image"],
+    "types": ["text", "code", "block"],
+    "blockTags": ["image"],
+    "complete": [true]
+  },
+  {
+    "name": "nested quote and ordered list fence",
+    "value": "> 1. ```js\n>    const marker = \"```\";\n>    <image>x</image>\n>    ```\n<image />",
+    "tags": ["image"],
+    "types": ["code", "block"],
+    "blockTags": ["image"],
+    "complete": [true]
+  },
+  {
     "name": "closing tag whitespace variants",
     "value": "<seafile-ai-seadoc>x</seafile-ai-seadoc ><seafile-ai-seadoc>x</seafile-ai-seadoc\n><seafile-ai-seadoc>x</seafile-ai-seadoc\t>",
     "tags": ["seafile-ai-seadoc"],

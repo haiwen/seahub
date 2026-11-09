@@ -12,8 +12,11 @@ CONTENT_BLOCK_TAGS = frozenset({
 })
 
 
+# Conservative protocol protection, not a Markdown renderer: include list
+# continuation indentation and mixed containers even if a renderer rejects them.
+CONTAINER_PREFIX = r'[ \t]*(?:(?:>[ \t]?|(?:[-+*]|\d{1,9}[.)])[ \t]+)[ \t]*)*'
 TOKEN_RE = re.compile(
-    r'(?P<fence>^ {0,3}(?:`{3,}(?!`)[^`\r\n]*|~{3,}[^\r\n]*)(?:\r?\n|$))|'
+    r'(?P<fence>^' + CONTAINER_PREFIX + r'(?:`{3,}(?!`)[^`\r\n]*|~{3,}[^\r\n]*)(?:\r?\n|$))|'
     r'(?P<ticks>`+)|<(?P<closing>/)?(?P<tag>[A-Za-z][\w:-]*)(?=[\s/>]|$)',
     re.MULTILINE,
 )
@@ -22,8 +25,10 @@ TOKEN_RE = re.compile(
 def code_end(value, token):
     """Line-delimited fences and exact-length backtick spans, not substrings."""
     if token.group('fence'):
-        marker = re.match(r' {0,3}(`+|~+)', token.group(0)).group(1)
-        closing = re.compile(r'^ {0,3}' + re.escape(marker[0]) + '{%d,}' % len(marker) +
+        marker = re.match(CONTAINER_PREFIX + r'(`+|~+)', token.group(0)).group(1)
+        prefix = token.group(0).split(marker, 1)[0]
+        closing_prefix = r'[ \t]*' + r'>[ \t]*' * prefix.count('>')
+        closing = re.compile(r'^' + closing_prefix + re.escape(marker[0]) + '{%d,}' % len(marker) +
                              r'[ \t]*(?:\r?\n|$)', re.MULTILINE)
         match = closing.search(value, token.end())
         return match.end() if match else len(value)
