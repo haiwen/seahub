@@ -13,9 +13,24 @@ CONTENT_BLOCK_TAGS = frozenset({
 
 
 TOKEN_RE = re.compile(
-    r'(?P<code>(?P<fence>`{3,}|~{3,})[\s\S]*?(?:(?P=fence)|$)|'
-    r'`+[^`\n]*`+)|<(?P<closing>/)?(?P<tag>[A-Za-z][\w:-]*)(?=[\s/>]|$)'
+    r'(?P<fence>^ {0,3}(?:`{3,}(?!`)[^`\r\n]*|~{3,}[^\r\n]*)(?:\r?\n|$))|'
+    r'(?P<ticks>`+)|<(?P<closing>/)?(?P<tag>[A-Za-z][\w:-]*)(?=[\s/>]|$)',
+    re.MULTILINE,
 )
+
+
+def code_end(value, token):
+    """Line-delimited fences and exact-length backtick spans, not substrings."""
+    if token.group('fence'):
+        marker = re.match(r' {0,3}(`+|~+)', token.group(0)).group(1)
+        closing = re.compile(r'^ {0,3}' + re.escape(marker[0]) + '{%d,}' % len(marker) +
+                             r'[ \t]*(?:\r?\n|$)', re.MULTILINE)
+        match = closing.search(value, token.end())
+        return match.end() if match else len(value)
+    for closing in re.finditer(r'`+', value[token.end():]):
+        if len(closing.group(0)) == len(token.group('ticks')):
+            return token.end() + closing.end()
+    return None
 
 
 def tag_end(value, start):
@@ -40,9 +55,12 @@ def parse_content_blocks(value, tags):
         token = TOKEN_RE.search(value, position)
         if token is None:
             break
-        if token.group('code'):
-            end = token.end()
-            block = {'type': 'code', 'raw': token.group(0)}
+        if token.group('fence') or token.group('ticks'):
+            end = code_end(value, token)
+            if end is None:
+                position = token.end()
+                continue
+            block = {'type': 'code', 'raw': value[token.start():end]}
         else:
             tag = token.group('tag')
             end = tag_end(value, token.end())

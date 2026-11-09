@@ -255,6 +255,25 @@ class GeneratedSdocTest(unittest.TestCase):
         self.creator.assert_not_called()
         self.markdown.assert_not_called()
 
+    def test_fenced_examples_never_write_and_real_following_requests_do(self):
+        examples = [
+            '```js\nconst marker = "```";\n' + self.tag + '\n```\n',
+            '````js\n```\n' + self.tag + '\n`````\n',
+            '   ~~~~js\r\n~~~\r\n~~~~suffix\r\n' + self.tag + '\r\n  ~~~~~ \t\r\n',
+            '``start `\n' + self.tag + '\n``` still code ``',
+        ]
+        for example in examples:
+            with self.subTest(example=example[:30]):
+                self.sdoc.seafile_api.post_file.reset_mock()
+                self.creator.reset_mock()
+                self.assertEqual(self.process(example)['ai_reply'], example)
+                self.creator.assert_not_called()
+                self.sdoc.seafile_api.post_file.assert_not_called()
+                result = self.process(example + self.tag)['ai_reply']
+                self.assertTrue(result.startswith(example))
+                self.assertIn('status="created"', result[len(example):])
+                self.sdoc.seafile_api.post_file.assert_called_once()
+
     def test_markdown_handler_uploads_opaque_body_and_replaces_stale_metadata(self):
         self.helpers['GENERATED_CONTENT_HANDLERS']['seafile-ai-markdown'] = self.helpers['process_markdown_block']
         body = '<seafile-ai-markdown>nested</seafile-ai-markdown>' + self.tag

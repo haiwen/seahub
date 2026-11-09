@@ -25,7 +25,7 @@
   },
   {
     "name": "code regions and unknown HTML",
-    "value": "<div>`<image>x</image>`\n````\n```\n<image>x</image>\n````</div><image />",
+    "value": "<div>`<image>x</image>`\n````\n```\n<image>x</image>\n````\n</div><image />",
     "tags": ["image"],
     "types": ["text", "code", "text", "code", "text", "block"],
     "blockTags": ["image"],
@@ -46,6 +46,38 @@
     "types": ["text", "code"],
     "blockTags": [],
     "complete": []
+  },
+  {
+    "name": "inline fence markers cannot close fenced examples",
+    "value": "```js\nconst marker = \"```\";\n<image>x</image>\n```\n<image />",
+    "tags": ["image"],
+    "types": ["code", "block"],
+    "blockTags": ["image"],
+    "complete": [true]
+  },
+  {
+    "name": "longer indented closing fence and CRLF",
+    "value": "   ~~~~js\r\n~~~\r\n~~~~suffix\r\n<image>x</image>\r\n  ~~~~~ \t\r\n<image />",
+    "tags": ["image"],
+    "types": ["code", "block"],
+    "blockTags": ["image"],
+    "complete": [true]
+  },
+  {
+    "name": "code spans require equal complete backtick runs and allow newlines",
+    "value": "``start ` <image>x</image>\n``` still code ``<image />",
+    "tags": ["image"],
+    "types": ["code", "block"],
+    "blockTags": ["image"],
+    "complete": [true]
+  },
+  {
+    "name": "unmatched inline run is plain text",
+    "value": "text `` unmatched <image />",
+    "tags": ["image"],
+    "types": ["text", "block"],
+    "blockTags": ["image"],
+    "complete": [true]
   },
   {
     "name": "streaming partial tag name",

@@ -45,3 +45,16 @@ test('incomplete protocol content stays hidden throughout streaming', () => {
     expect(buildReplyParts(`Before${tag.slice(0, length)}`, { isStreaming: true })).toEqual([{ type: 'text', value: 'Before' }]);
   }
 });
+
+test('fenced SDoc examples do not render cards, but following real results do', () => {
+  const tag = '<seafile-ai-seadoc status="created" file_name="Plan.sdoc" path="/AI Generated/Plan.sdoc"></seafile-ai-seadoc>';
+  for (const example of [
+    '```js\nconst marker = "```";\n' + tag + '\n```\n',
+    '````js\n```\n' + tag + '\n`````\n',
+    '   ~~~~\n~~~~suffix\n' + tag + '\n  ~~~~~ \t\n',
+    '``start `\n' + tag + '\n``` still code ``',
+  ]) {
+    expect(buildReplyParts(example).filter((part) => part.type === 'seadoc')).toEqual([]);
+    expect(buildReplyParts(example + tag).filter((part) => part.type === 'seadoc')).toHaveLength(1);
+  }
+});

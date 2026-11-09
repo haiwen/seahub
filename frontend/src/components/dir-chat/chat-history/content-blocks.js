@@ -1,6 +1,24 @@
 // Same boundary contract as seahub/ai/content_blocks.py: registered bodies are
 // opaque, code is protected, and incomplete blocks are never dispatched.
-const TOKEN = /(?<code>(?<fence>`{3,}|~{3,})[\s\S]*?(?:\k<fence>|$)|`+[^`\n]*`+)|<(?<closing>\/)?(?<tag>[A-Za-z][\w:-]*)(?=[\s/>]|$)/g;
+const TOKEN = /(?<fence>^ {0,3}(?:`{3,}(?!`)[^`\r\n]*|~{3,}[^\r\n]*)(?:\r?\n|$))|(?<ticks>`+)|<(?<closing>\/)?(?<tag>[A-Za-z][\w:-]*)(?=[\s/>]|$)/gm;
+
+const codeEnd = (value, token) => {
+  const start = token.index + token[0].length;
+  if (token.groups.fence) {
+    const marker = token[0].match(/^ {0,3}(`+|~+)/)[1];
+    const closing = new RegExp(`^ {0,3}${marker[0]}{${marker.length},}[ \\t]*(?:\\r?\\n|$)`, 'gm');
+    closing.lastIndex = start;
+    const match = closing.exec(value);
+    return match ? closing.lastIndex : value.length;
+  }
+  const ticks = /`+/g;
+  ticks.lastIndex = start;
+  let match;
+  while ((match = ticks.exec(value))) {
+    if (match[0].length === token.groups.ticks.length) return ticks.lastIndex;
+  }
+  return null;
+};
 
 const tagEnd = (value, start) => {
   let quote = null;
@@ -19,7 +37,7 @@ const tagEnd = (value, start) => {
 
 export const parseContentBlocks = (value = '', tags = []) => {
   const registered = new Set(tags);
-  const tokenRe = new RegExp(TOKEN.source, 'g');
+  const tokenRe = new RegExp(TOKEN.source, 'gm');
   const blocks = [];
   let position = 0;
   let textStart = 0;
@@ -29,9 +47,13 @@ export const parseContentBlocks = (value = '', tags = []) => {
     if (!token) break;
     let end;
     let block;
-    if (token.groups.code) {
-      end = tokenRe.lastIndex;
-      block = { type: 'code', raw: token[0] };
+    if (token.groups.fence || token.groups.ticks) {
+      end = codeEnd(value, token);
+      if (end === null) {
+        position = tokenRe.lastIndex;
+        continue;
+      }
+      block = { type: 'code', raw: value.slice(token.index, end) };
     } else {
       const tag = token.groups.tag;
       end = tagEnd(value, tokenRe.lastIndex);
