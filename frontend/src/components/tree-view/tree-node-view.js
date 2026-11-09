@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import CustomDropdown from '@/components/dropdown';
 import OpIcon from '../../components/op-icon';
 import { Utils } from '../../utils/utils';
-import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import Icon from '../icon';
 import getTreeNodeMenuList from './get-tree-node-menu-list';
 
@@ -299,11 +299,16 @@ class TreeNodeView extends React.Component {
           </div>
           {isNodeMenuShow && nodeMenuList.length > 0 && this.state.isShowOperationMenu && (
             <div className="right-icon">
-              <ItemDropdownMenu
-                item={this.props.node}
-                toggleClass={'sf3-font sf3-font-more'}
-                getMenuList={() => nodeMenuList}
-                onMenuItemClick={this.onMenuItemClick}
+              <CustomDropdown
+                triggerClassName="op-icon mr-0"
+                items={nodeMenuList.map(item => ({
+                  key: item.key,
+                  label: item.value,
+                  onClick: (event) => {
+                    event.stopPropagation();
+                    this.props.onMenuItemClick(item.key, node);
+                  },
+                }))}
                 freezeItem={this.props.freezeItem}
                 unfreezeItem={this.unfreezeItem}
               />
