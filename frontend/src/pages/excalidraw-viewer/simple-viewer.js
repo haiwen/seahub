@@ -1,23 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Excalidraw, MainMenu } from '@excalidraw/excalidraw';
 import classNames from 'classnames';
-import isUrl from 'is-url';
 import CodeMirrorLoading from '@/components/code-mirror-loading';
 import { isInitializedImageElement } from '../excalidraw-editor/utils/element-utils';
 import { updateStaleImageStatuses } from '../excalidraw-editor/utils/exdraw-utils';
 import { langList } from './constants';
+import { resolveImageUrl } from './image-url';
 
 import '@excalidraw/excalidraw/index.css';
-
-const { serviceURL } = window.app.config;
-const { repoID, sharedToken } = window.shared.pageOptions;
-
-export const getImageUrl = (fileName) => {
-  const { serviceURL } = window.app.config;
-  const { docUuid } = window.shared.pageOptions;
-  const url = `${serviceURL}/api/v2.1/exdraw/download-image/${docUuid}/${fileName}`;
-  return url;
-};
 
 const fetchImageFilesFromServer = (elements, imageFiles) => {
   const imageElements = elements.filter(element => {
@@ -28,24 +18,8 @@ const fetchImageFilesFromServer = (elements, imageFiles) => {
   let erroredFiles = new Map();
   imageElements.forEach(element => {
     try {
-      const { fileId, filename, dataURL } = element;
-      let imageUrl;
-      if (imageFiles) {
-        imageUrl = imageFiles[fileId]?.url;
-      } else {
-        // Preserve the existing internal/standalone viewer image behavior.
-        imageUrl = getImageUrl(filename);
-        if (dataURL && isUrl(imageUrl)) {
-          imageUrl = element.dataURL;
-          const re = new RegExp(serviceURL + '/lib/' + repoID + '/file.*raw=1');
-          if (re.test(dataURL)) {
-            const index = dataURL.indexOf('/file');
-            const index2 = dataURL.indexOf('?');
-            imageUrl = dataURL.substring(index + 5, index2);
-          }
-          imageUrl = serviceURL + '/view-image-via-share-link/?token=' + sharedToken + '&path=' + imageUrl;
-        }
-      }
+      const { fileId } = element;
+      const imageUrl = resolveImageUrl(element, window.shared.pageOptions, window.app.config.serviceURL, imageFiles);
       if (!imageUrl) throw new Error('Image unavailable');
 
       loadedFiles.push({
