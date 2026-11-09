@@ -1,6 +1,7 @@
 .view-published-wiki {
   height: 20px;
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   margin-left: auto;
   padding: 0 8px;
