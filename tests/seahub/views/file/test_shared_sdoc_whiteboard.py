@@ -301,6 +301,7 @@ class SharedWhiteboardGatewayTest(SimpleTestCase):
         self.assertEqual(response.status_code, 200)
         data = render.call_args.args[2]
         self.assertIn('/share-links/abcd/seadoc/' + PARENT, data['shared_exdraw_scene_url'])
+        self.assertIn('/exdraw/' + BOARD + '/scene/', data['shared_exdraw_scene_url'])
         self.assertNotIn('excalidraw_access_token', data)
 
     def test_share_preview_route_precedes_generic_smart_link(self):
@@ -341,6 +342,7 @@ class SharedWhiteboardGatewayTest(SimpleTestCase):
         data = json.loads(response.content)
         self.assertNotIn('dataURL', data['scene']['elements'][0])
         self.assertTrue(data['images']['file-1']['url'].endswith('/images/?filename=photo.png'))
+        self.assertIn('/exdraw/' + BOARD + '/images/', data['images']['file-1']['url'])
         self.assertNotIn('element_id', data['images']['file-1']['url'])
         self.assertIn('no-store', response['Cache-Control'])
 
