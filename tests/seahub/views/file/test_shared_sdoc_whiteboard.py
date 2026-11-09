@@ -445,6 +445,58 @@ class SharedWhiteboardGatewayTest(SimpleTestCase):
         self.assertEqual(resource.call_args.args[0], element)
 
 
+class SharedWhiteboardSvgResponseTest(SimpleTestCase):
+    @patch.object(SharedSdocWhiteboardImage, 'throttle_classes', ())
+    @patch.object(shared, 'authorize_share')
+    @patch.object(shared, 'server_read')
+    @patch.object(shared, 'image_resource')
+    @patch.object(shared, 'seafile_api')
+    @patch.object(shared, 'gen_inner_file_get_url', return_value='http://fileserver.test/image')
+    @patch.object(shared.requests, 'get')
+    def test_real_image_endpoint_sandboxes_svg_and_preserves_raster_images(
+            self, get, inner_url, api, resource, server, authorize):
+        repo = SimpleNamespace(repo_id=REPO, store_id=REPO, version=1)
+        authorize.return_value = (
+            SimpleNamespace(username='owner'), SimpleNamespace(uuid=BOARD, filename='board.exdraw'),
+            repo, '/board.exdraw', 'board-id', SimpleNamespace(uuid=PARENT, filename='document.sdoc'))
+        api.get_fileserver_access_token.return_value = 'internal-token'
+        fixtures = (
+            ('active.svg', 'image/svg+xml', b'<svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)"><rect width="10" height="10"/></svg>'),
+            ('photo.png', 'image/png', b'\x89PNG\r\n\x1a\n'),
+            ('photo.jpg', 'image/jpeg', b'\xff\xd8\xff\xd9'),
+        )
+        for filename, content_type, body in fixtures:
+            with self.subTest(content_type=content_type):
+                server.return_value = {'elements': [{'type': 'image', 'filename': filename}]}
+                resource.return_value = (repo, '/images/' + filename, 'image-id', content_type)
+                api.get_file_size.return_value = len(body)
+                upstream = Mock(status_code=200, headers={'Content-Length': str(len(body))})
+                upstream.iter_content.return_value = iter([body])
+                get.return_value = upstream
+                request = APIRequestFactory().get('/images/', {'filename': filename})
+                request.user = AnonymousUser()
+                request.session = {}
+                response = SharedSdocWhiteboardImage.as_view()(
+                    request, share_token='abcd', sdoc_uuid=PARENT, file_uuid=BOARD)
+                try:
+                    self.assertEqual(response.status_code, 200)
+                    self.assertEqual(response['Content-Type'], content_type)
+                    self.assertEqual(b''.join(response.streaming_content), body)
+                    self.assertEqual(response['X-Content-Type-Options'], 'nosniff')
+                    if content_type == 'image/svg+xml':
+                        policy = response['Content-Security-Policy']
+                        self.assertIn('sandbox;', policy)
+                        self.assertIn("script-src 'none'", policy)
+                        self.assertNotIn('allow-scripts', policy)
+                        self.assertNotIn('allow-same-origin', policy)
+                        self.assertNotIn('Content-Security-Policy-Report-Only', response)
+                    else:
+                        self.assertNotIn('Content-Security-Policy', response)
+                finally:
+                    response.close()
+                upstream.close.assert_called()
+
+
 class SharedWhiteboardAPIClassTest(SimpleTestCase):
     def request(self, method='get', data=None):
         request = getattr(APIRequestFactory(), method)('/whiteboard/', data or {})

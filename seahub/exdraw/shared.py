@@ -260,6 +260,13 @@ def image_stream(repo, path, file_id, content_type, username):
             upstream.close()
 
     response = StreamingHttpResponse(chunks(), content_type=content_type)
+    if content_type == 'image/svg+xml':
+        # SVG is an active document when navigated to directly, even with nosniff.
+        # Do not grant scripts or same-origin privileges to uploaded SVG content.
+        response['Content-Security-Policy'] = (
+            "sandbox; default-src 'none'; script-src 'none'; "
+            "style-src 'unsafe-inline'; object-src 'none'; base-uri 'none'"
+        )
     response._resource_closers.append(upstream.close)
     return response
 
