@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextTranslation from '@/utils/text-translation';
-import { Utils } from '@/utils/utils';
+import TextTranslation from '../../utils/text-translation';
 import { hideMenu, showMenu } from '../context-menu/actions';
 import ContextMenu from '../context-menu/context-menu';
+import getTreeNodeMenuList from './get-tree-node-menu-list';
 import TreeNodeView from './tree-node-view';
 
 import './tree-view.css';
@@ -247,6 +247,7 @@ class TreeView extends React.Component {
     hideMenu();
 
     let menuList = this.getMenuList(node);
+    if (!menuList.length) return;
 
     let showMenuConfig = {
       id: 'tree-node-contextmenu',
@@ -260,47 +261,11 @@ class TreeView extends React.Component {
   };
 
   getMenuList = (node) => {
-    let menuList = [];
-
-    let { NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE, OPEN_VIA_CLIENT } = TextTranslation;
-
+    const { NEW_FOLDER, NEW_FILE } = TextTranslation;
     if (!node) {
       return [NEW_FOLDER, NEW_FILE];
     }
-
-    if (node.object.type === 'dir') {
-      menuList = [NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE];
-    } else {
-      menuList = [RENAME, DELETE, COPY, MOVE, OPEN_VIA_CLIENT];
-    }
-
-    const { userPerm } = this.props;
-    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
-    if (!isCustomPermission) {
-      return menuList;
-    }
-
-    menuList = [];
-
-    const { create: canCreate, modify: canModify, delete: canDelete, copy: canCopy } = customPermission.permission;
-    if (!node) {
-      canCreate && menuList.push(NEW_FOLDER, NEW_FILE);
-      return menuList;
-    }
-
-    if (node.object.type === 'dir') {
-      canCreate && menuList.push(NEW_FOLDER, NEW_FILE);
-    }
-
-    canCopy && menuList.push(COPY);
-    canModify && menuList.push(MOVE, RENAME);
-    canDelete && menuList.push(DELETE);
-
-    if (node.object.type !== 'dir') {
-      menuList.push(OPEN_VIA_CLIENT);
-    }
-
-    return menuList;
+    return getTreeNodeMenuList(node, this.props.userPerm, this.props.currentRepoInfo);
   };
 
   onShowMenu = () => {
@@ -324,6 +289,7 @@ class TreeView extends React.Component {
       >
         <TreeNodeView
           userPerm={this.props.userPerm}
+          currentRepoInfo={this.props.currentRepoInfo}
           node={this.props.treeData.root}
           currentPath={this.props.currentPath}
           leftIndent={LEFT_INDENT}

@@ -13,8 +13,9 @@ try:
 except ImportError:
     html = None
 from seaserv import seafile_api
+from django.conf import settings
 from django.urls import reverse
-from django.http import HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.shortcuts import render, get_object_or_404, redirect
@@ -131,6 +132,9 @@ def format_markdown_file_content(slug, repo_id, file_path, token, file_response)
 def slug(request, slug, file_path="home.md"):
     """Show wiki page.
     """
+    if not settings.ENABLE_WIKI:
+        raise Http404
+
     # get wiki object or 404
     wiki = get_object_or_404(Wiki, slug=slug)
     file_path = "/" + file_path

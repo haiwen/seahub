@@ -3,6 +3,7 @@ import os
 import stat
 import logging
 import json
+import string
 
 import dateutil.parser
 from dateutil.relativedelta import relativedelta
@@ -13,6 +14,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from django.utils import timezone
+from django.utils.crypto import get_random_string
 from django.utils.timezone import get_current_timezone
 from django.utils.translation import gettext as _
 
@@ -82,6 +84,17 @@ def _user_pass_folder_permissions(request, repo_id):
                 return False
 
     return True
+
+
+def generate_share_link_password():
+    """Generate a share link password with a cryptographically secure RNG.
+
+    Do not use the ``random`` module here: its process-wide Mersenne Twister
+    state can be reconstructed from enough observed output, which would make
+    passwords generated later in the same process predictable.
+    """
+    characters = string.ascii_letters + string.digits + string.punctuation
+    return get_random_string(8, characters)
 
 
 class MultiShareLinks(APIView):
@@ -499,17 +512,9 @@ class MultiShareLinksBatch(APIView):
         # create share link
         org_id = request.user.org.org_id if is_org_context(request) else None
 
-        def generate_password():
-            import random
-            import string
-            password_length = 8
-            characters = string.ascii_letters + string.digits + string.punctuation
-            password = ''.join(random.choices(characters, k=password_length))
-            return password
-
         created_share_links = []
         for i in range(share_link_num):
-            password = generate_password() if auto_generate_password else None
+            password = generate_share_link_password() if auto_generate_password else None
             if s_type == 'f':
                 fs = FileShare.objects.create_file_link(username, repo_id, path,
                                                         password, expire_date,
