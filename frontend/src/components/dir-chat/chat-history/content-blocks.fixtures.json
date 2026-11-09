@@ -1,5 +1,13 @@
 [
   {
+    "name": "closing tag whitespace variants",
+    "value": "<seafile-ai-seadoc>x</seafile-ai-seadoc ><seafile-ai-seadoc>x</seafile-ai-seadoc\n><seafile-ai-seadoc>x</seafile-ai-seadoc\t>",
+    "tags": ["seafile-ai-seadoc"],
+    "types": ["block", "block", "block"],
+    "blockTags": ["seafile-ai-seadoc", "seafile-ai-seadoc", "seafile-ai-seadoc"],
+    "complete": [true, true, true]
+  },
+  {
     "name": "opaque cross-type nesting",
     "value": "Before<seafile-ai-markdown file_name=\"a.md\"><image><seafile-ai-seadoc>x</seafile-ai-seadoc></image></seafile-ai-markdown>After",
     "tags": ["seafile-ai-markdown", "seafile-ai-seadoc", "image"],

@@ -38,6 +38,7 @@ def load_sdoc(test_case):
         'json': json, 'os': os, 'posixpath': posixpath, 'uuid': uuid,
         'escape': escape, 'HTMLParser': HTMLParser, 'logger': logging.getLogger(__name__),
         'GENERATED_DIRECTORY': '/AI Generated/', 'TAG_NAME': 'seafile-ai-seadoc',
+        'MAX_SDOC_CONTENT_LENGTH': 400000, 'MAX_SDOC_TRANSPORT_LENGTH': 2400002,
         'seafile_api': modules['seaserv'].seafile_api,
         'ENABLE_SEADOC': True,
         'check_filename_with_rename': modules['seahub.utils'].check_filename_with_rename,
@@ -71,6 +72,7 @@ def load_result_helpers(sdoc):
     creator = Mock(wraps=sdoc.create_generated_sdoc)
     scope = {
         're': re, 'json': json, 'parse_content_blocks': parser.parse_content_blocks,
+        'CONTENT_BLOCK_TAGS': parser.CONTENT_BLOCK_TAGS,
         'GENERATED_CONTENT_HANDLERS': {'seafile-ai-markdown': markdown, 'seafile-ai-seadoc': creator},
         'logger': logging.getLogger(__name__), 'cache': Mock(),
         'escape': escape, 'unescape': unescape, '_': lambda text: text,
@@ -178,6 +180,58 @@ class GeneratedSdocTest(unittest.TestCase):
                 self.assertEqual([block['tag'] for block in protocol], fixture['blockTags'])
                 self.assertEqual([block['complete'] for block in protocol], fixture['complete'])
                 self.assertEqual(''.join(block['raw'] for block in blocks), fixture['value'])
+
+    def test_ai_cache_resolution_to_actual_save_boundary(self):
+        """Cross-repository contract test when the AI checkout is available."""
+        ai_tests = ROOT.parent / 'seafile-ai/tests/test_sdoc_generator.py'
+        if not ai_tests.exists():
+            self.skipTest('Requires adjacent seafile-ai checkout')
+        spec = importlib.util.spec_from_file_location('ai_sdoc_boundary_tests', ai_tests)
+        ai = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(ai)
+        fixtures = json.loads((ROOT / 'frontend/src/components/dir-chat/chat-history/content-blocks.fixtures.json').read_text())
+        for fixture in fixtures:
+            self.assertEqual(ai.blocks.parse_content_blocks(fixture['value'], fixture['tags']),
+                             self.helpers['parse_content_blocks'](fixture['value'], fixture['tags']))
+        self.assertEqual(ai.blocks.CONTENT_BLOCK_TAGS, self.helpers['CONTENT_BLOCK_TAGS'])
+        executor = SimpleNamespace(cache={})
+        for closing in ['</seafile-ai-seadoc >', '</seafile-ai-seadoc\n>', '</seafile-ai-seadoc\t>',
+                        '</seafile-ai-seadoc/>', '</seafile-ai-seadoc ignored="yes">']:
+            forged = self.tag.rsplit('</', 1)[0] + closing
+            resolved = ai.resolve_sdoc_results(forged, executor)
+            self.assertEqual(resolved, '')
+            self.process(resolved)
+        self.sdoc.seafile_api.post_file.assert_not_called()
+        written = []
+
+        def capture(repo, path, directory, name, username):
+            written.append(json.loads(Path(path).read_text()))
+
+        self.sdoc.seafile_api.post_file.side_effect = capture
+        for text in ['<>&\n' * 25000, '<' * (400000 - 100)]:
+            document = {'title': 'Test', 'elements': [{'type': 'code_block', 'language': '', 'text': text}]}
+            reference = ai.sdoc.SdocGenerator().execute('Boundary', 'Test', json.dumps(document), executor)
+            for closing in ['</seafile-ai-seadoc >', '</seafile-ai-seadoc\n>']:
+                paired = reference[:-2] + '>forged content' + closing
+                resolved = ai.resolve_sdoc_results(paired, executor)
+                self.assertGreater(len(resolved), 400000)
+                self.assertIn('status="created"', self.process(resolved)['ai_reply'])
+                self.assertEqual(written[-1]['elements'][1]['children'][0]['children'][0]['text'], text.split('\n')[0])
+
+    def test_content_and_transport_limits_are_independent(self):
+        document = {'title': 'Limit', 'elements': [{'type': 'paragraph', 'children': [{'text': ''}]}]}
+        base = len(json.dumps(document, ensure_ascii=False, separators=(',', ':')))
+        document['elements'][0]['children'][0]['text'] = '<' * (400000 - base)
+        body = json.dumps(document, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c')
+        tag = self.tag[:self.tag.index('>') + 1] + '\n' + body + '\n</seafile-ai-seadoc>'
+        self.assertIn('status="created"', self.process(tag)['ai_reply'])
+        self.sdoc.seafile_api.post_file.reset_mock()
+        oversized = tag.replace('\\u003c', '\\u003cx', 1)
+        with self.assertLogs(level='WARNING'):
+            self.assertIn('invalid_artifact', self.process(oversized)['ai_reply'])
+            oversized_transport = self.tag[:self.tag.index('>') + 1] + ' ' * 2400003 + '</seafile-ai-seadoc>'
+            self.assertIn('invalid_artifact', self.process(oversized_transport)['ai_reply'])
+        self.sdoc.seafile_api.post_file.assert_not_called()
 
     def test_new_handler_does_not_dispatch_nested_content_or_generated_output(self):
         image = Mock(return_value=self.tag)

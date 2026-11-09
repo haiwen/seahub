@@ -19,7 +19,7 @@ from django.db.models.functions import Coalesce
 from django.db.models import Sum, Value
 from seaserv import ccnet_api, get_org_id_by_repo_id, seafile_api
 
-from seahub.ai.content_blocks import parse_content_blocks
+from seahub.ai.content_blocks import CONTENT_BLOCK_TAGS, parse_content_blocks
 from seahub.settings import ENABLE_AI_CHAT, ENABLE_METADATA_MANAGEMENT, ENABLE_SEADOC, ENABLE_SEAFILE_AI, LLM_MODELS, SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL
 from seahub.base.accounts import User
 from seahub.tags.models import FileUUIDMap
@@ -39,6 +39,9 @@ AI_REPLY_TIMEOUT = 180
 GENERATED_MARKDOWN_DIR = '/AI Generated/'
 GENERATED_DIRECTORY = '/AI Generated/'
 TAG_NAME = 'seafile-ai-seadoc'
+MAX_SDOC_CONTENT_LENGTH = 400000
+# Unicode escapes expand each character at most sixfold, plus body newlines.
+MAX_SDOC_TRANSPORT_LENGTH = MAX_SDOC_CONTENT_LENGTH * 6 + 2
 
 AI_SCENARIO_IMAGE_CAPTION = 'image-caption'
 AI_SCENARIO_SUMMARY = 'summary'
@@ -520,9 +523,12 @@ def create_generated_sdoc(block, repo_id, username, can_upload=True, request=Non
 
         # Do not duplicate AI's content schema here. Bound parsing and only compile known fields.
         content = block['content']
-        if len(content) > 400000:
+        if len(content) > MAX_SDOC_TRANSPORT_LENGTH:
             raise ValueError('SDoc content too large')
-        document = compile_sdoc(json.loads(content), username)
+        decoded = json.loads(content)
+        if len(json.dumps(decoded, ensure_ascii=False, allow_nan=False, separators=(',', ':'))) > MAX_SDOC_CONTENT_LENGTH:
+            raise ValueError('SDoc content too large')
+        document = compile_sdoc(decoded, username)
         directory_exists = seafile_api.get_dir_id_by_path(repo_id, GENERATED_DIRECTORY) is not None
         if not _can_create(request, repo_id, GENERATED_DIRECTORY if directory_exists else '/'):
             return result_tag(**metadata, status='failed', error_code='permission_denied')
@@ -599,7 +605,7 @@ def process_generated_content_result(ai_result, repo_id, username, can_upload=Tr
     if not isinstance(ai_reply, str):
         return ai_result
     # Include saved metadata blocks so their bodies are protected as well.
-    tags = set(GENERATED_CONTENT_HANDLERS) | {'seafile-ai-markdown-link', 'markdown-readonly-tips'}
+    tags = set(GENERATED_CONTENT_HANDLERS) | CONTENT_BLOCK_TAGS
     blocks = parse_content_blocks(ai_reply, tags)
     has_markdown = any(block.get('tag') == 'seafile-ai-markdown' and block['complete'] and
                        not block['self_closing'] for block in blocks)

@@ -6,6 +6,11 @@ fed back into this scanner. The frontend scanner follows the same contract.
 """
 import re
 
+CONTENT_BLOCK_TAGS = frozenset({
+    'seafile-ai-seadoc', 'seafile-ai-markdown', 'seafile-ai-markdown-link',
+    'markdown-readonly-tips', 'seafile-ai-file',
+})
+
 
 TOKEN_RE = re.compile(
     r'(?P<code>(?P<fence>`{3,}|~{3,})[\s\S]*?(?:(?P=fence)|$)|'
