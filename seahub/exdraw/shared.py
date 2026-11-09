@@ -1,6 +1,6 @@
 """Read-only whiteboard gateway for sdoc share links.
 
-Targets are restricted by the share creator's permissions, not by sdoc JSON.
+Targets must also be referenced by the current shared sdoc.
 """
 import json
 import logging
@@ -14,7 +14,6 @@ import requests
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, JsonResponse, StreamingHttpResponse
-from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.cache import never_cache
 from seaserv import seafile_api
@@ -101,7 +100,7 @@ def authorize_share(request, share_token, sdoc_uuid, file_uuid):
     if not check_share_link_common(request, share)[0]:
         raise PermissionDenied
 
-    unused, parent_repo, parent_path, unused_id = uuid_resource(sdoc_uuid, SEADOC)
+    parent_mapping, parent_repo, parent_path, unused_id = uuid_resource(sdoc_uuid, SEADOC)
     shared_repo = seafile_api.get_repo(share.repo_id)
     if not shared_repo or shared_repo.encrypted or shared_repo.org_id != parent_repo.org_id:
         raise PermissionDenied
@@ -124,10 +123,11 @@ def authorize_share(request, share_token, sdoc_uuid, file_uuid):
     if repo.org_id != parent_repo.org_id:
         raise PermissionDenied
     creator_can_read(repo, path, share.username)
-    return share, mapping, repo, path, file_id
+    server_read(share, mapping, parent_mapping, operation='verify_reference')
+    return share, mapping, repo, path, file_id, parent_mapping
 
 
-def server_read(share, mapping):
+def server_read(share, mapping, parent_mapping, operation='read_scene'):
     key = settings.EXCALIDRAW_PRIVATE_KEY
     if not key:
         raise RuntimeError('Whiteboard signing key is not configured')
@@ -136,22 +136,27 @@ def server_read(share, mapping):
         'iss': 'seahub', 'aud': 'sdoc-server-shared-exdraw',
         'purpose': 'shared-exdraw-read', 'share_id': share.pk,
         'shared_by': share.username, 'file_uuid': str(mapping.uuid),
-        'filename': mapping.filename, 'permission': 'r', 'operation': 'read_scene',
+        'filename': mapping.filename, 'permission': 'r', 'operation': operation,
+        'sdoc_uuid': str(parent_mapping.uuid), 'sdoc_filename': parent_mapping.filename,
+        'service_url': get_service_url().rstrip('/'),
         'iat': now, 'exp': now + 60,
     }
     token = jwt.encode(payload, key, algorithm='HS256')
-    url = '%s/api/internal/v1/shared-exdraw/%s/scene/' % (
-        settings.EXCALIDRAW_SERVER_URL.rstrip('/'), mapping.uuid)
+    endpoint = 'reference' if operation == 'verify_reference' else 'scene'
+    url = '%s/api/internal/v1/shared-exdraw/%s/%s/' % (
+        settings.EXCALIDRAW_SERVER_URL.rstrip('/'), mapping.uuid, endpoint)
     response = requests.get(url, headers={'Authorization': 'Bearer ' + token},
                             timeout=30, allow_redirects=False)
     try:
-        if response.status_code == 404:
-            raise Http404
+        if response.status_code in (403, 404):
+            raise PermissionDenied
         if response.status_code != 200:
             raise RuntimeError('Shared whiteboard upstream rejected request')
         data = response.json()
         if not isinstance(data, dict):
             raise ValueError('Invalid scene response')
+        if operation == 'verify_reference' and data.get('referenced') is not True:
+            raise PermissionDenied
         return data
     finally:
         response.close()
@@ -262,19 +267,9 @@ def image_stream(repo, path, file_id, content_type, username):
 @never_cache
 def shared_whiteboard(request, share_token, sdoc_uuid, file_uuid, action):
     try:
-        share, mapping, repo, path, file_id = authorize_share(request, share_token, sdoc_uuid, file_uuid)
-        base = reverse('shared_sdoc_whiteboard', kwargs={
-            'share_token': share_token, 'sdoc_uuid': sdoc_uuid, 'file_uuid': file_uuid, 'action': 'scene',
-        })
-        if action == 'preview':
-            response = render(request, 'shared_file_view_react.html', {
-                'repo': repo, 'file_name': mapping.filename, 'file_size': 0,
-                'filetype': EXCALIDRAW, 'fileext': 'exdraw', 'file_uuid': str(mapping.uuid),
-                'file_perm': 'r', 'permissions': {'can_edit': False, 'can_download': False},
-                'shared_exdraw_scene_url': base,
-            })
-        elif action == 'scene':
-            scene = server_read(share, mapping)
+        share, mapping, repo, path, file_id, parent_mapping = authorize_share(request, share_token, sdoc_uuid, file_uuid)
+        if action == 'scene':
+            scene = server_read(share, mapping, parent_mapping)
             if not isinstance(scene.get('elements'), list):
                 raise ValueError('Invalid scene')
             images = {}
@@ -306,7 +301,7 @@ def shared_whiteboard(request, share_token, sdoc_uuid, file_uuid, action):
             if bool(filename) == bool(image_path):
                 raise PermissionDenied
             selector = {'filename': filename} if filename else {'path': normalized_path(image_path)}
-            scene = server_read(share, mapping)
+            scene = server_read(share, mapping, parent_mapping)
             if not isinstance(scene.get('elements'), list):
                 raise ValueError('Invalid scene')
             descriptor = referenced_image(scene, selector)

@@ -20,6 +20,7 @@ import re
 
 from django.conf import settings
 from django.core.cache import cache
+from django.core.exceptions import PermissionDenied
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
 from django.urls import reverse
@@ -28,6 +29,8 @@ from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render
 from django.utils.translation import get_language, gettext as _
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.cache import never_cache
+from django.views.decorators.http import require_safe
 from django.template.defaultfilters import filesizeformat
 
 from seaserv import seafile_api, ccnet_api
@@ -72,6 +75,7 @@ from seahub.group.utils import is_group_member
 from seahub.seadoc.utils import get_seadoc_file_uuid, \
         gen_seadoc_access_token, is_seadoc_revision, gen_share_seadoc_access_token
 from seahub.exdraw.utils import get_exdraw_file_uuid, gen_exdraw_access_token, gen_share_exdraw_access_token
+from seahub.exdraw.shared import authorize_share
 from seahub.seadoc.models import SeadocRevision
 
 import seahub.settings as settings
@@ -469,6 +473,36 @@ def can_edit_file(file_name, file_size, repo):
         return True, ''
 
     return False, 'File edit unsupported'
+
+
+@require_safe
+@never_cache
+def view_shared_sdoc_whiteboard(request, share_token, sdoc_uuid, file_uuid):
+    """HTML shell for a whiteboard embedded in an authorized sdoc share."""
+    try:
+        share, mapping, repo, path, file_id, parent_mapping = authorize_share(
+            request, share_token, sdoc_uuid, file_uuid)
+        scene_url = reverse('shared_sdoc_whiteboard', kwargs={
+            'share_token': share_token, 'sdoc_uuid': sdoc_uuid, 'file_uuid': file_uuid,
+        })
+        response = render(request, 'shared_file_view_react.html', {
+            'repo': repo, 'file_name': mapping.filename, 'file_size': 0,
+            'filetype': EXCALIDRAW, 'fileext': 'exdraw', 'file_uuid': str(mapping.uuid),
+            'file_perm': 'r', 'permissions': {'can_edit': False, 'can_download': False},
+            'shared_exdraw_scene_url': scene_url,
+        })
+    except (PermissionDenied, Http404):
+        response = render_error(request, _('Permission denied'))
+        response.status_code = 403
+    except Exception:
+        # Upstream errors may contain credentials; do not include exception text.
+        logger.error('Shared sdoc whiteboard preview failed')
+        response = render_error(request, _('Unable to view file'))
+        response.status_code = 502
+    response['Cache-Control'] = 'private, no-store'
+    response['X-Content-Type-Options'] = 'nosniff'
+    response['Referrer-Policy'] = 'no-referrer'
+    return response
 
 
 @login_required

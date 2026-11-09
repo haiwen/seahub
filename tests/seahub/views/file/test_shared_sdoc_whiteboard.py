@@ -6,11 +6,13 @@ import jwt
 from django.core.exceptions import PermissionDenied
 from django.test import RequestFactory, SimpleTestCase, override_settings
 from django.http import JsonResponse
+from django.urls import resolve, reverse
 from rest_framework.test import APIRequestFactory
 
 from seahub.exdraw import shared
 from seahub.exdraw.apis import SharedSdocWhiteboard, SharedSdocWhiteboardImage
 from seahub.auth.models import AnonymousUser
+from seahub.views import file as file_views
 
 
 PARENT = 'aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee'
@@ -26,6 +28,7 @@ class SharedWhiteboardAuthorizationTest(SimpleTestCase):
             pk=1, token='abcd', username='creator@example.com', repo_id=REPO,
             path='/docs/document.sdoc', s_type='f', is_expired=lambda: False)
         self.mapping = SimpleNamespace(uuid=BOARD, filename='board.exdraw')
+        self.parent_mapping = SimpleNamespace(uuid=PARENT, filename='document.sdoc')
         self.request = SimpleNamespace(user=SimpleNamespace(username='', is_authenticated=False), session={})
         self.patches = {}
         for name in ('FileShare', 'check_share_link_access_by_scope', 'check_share_link_common',
@@ -37,10 +40,13 @@ class SharedWhiteboardAuthorizationTest(SimpleTestCase):
         self.patches['check_share_link_access_by_scope'].return_value = True
         self.patches['check_share_link_common'].return_value = (True, '')
         self.patches['uuid_resource'].side_effect = [
-            (None, self.repo, '/docs/document.sdoc', 'parent-id'),
+            (self.parent_mapping, self.repo, '/docs/document.sdoc', 'parent-id'),
             (self.mapping, self.repo, '/boards/board.exdraw', 'board-id'),
         ]
         self.patches['seafile_api'].get_repo.return_value = self.repo
+        view_authorize_patch = patch.object(file_views, 'authorize_share', side_effect=lambda *args: shared.authorize_share(*args))
+        view_authorize_patch.start()
+        self.addCleanup(view_authorize_patch.stop)
 
     def authorize(self):
         return shared.authorize_share(self.request, 'abcd', PARENT, BOARD)
@@ -49,7 +55,36 @@ class SharedWhiteboardAuthorizationTest(SimpleTestCase):
         self.authorize()
         self.patches['creator_can_read'].assert_any_call(
             self.repo, '/boards/board.exdraw', 'creator@example.com')
-        self.patches['server_read'].assert_not_called()
+        self.patches['server_read'].assert_called_once_with(
+            self.share, self.mapping, self.parent_mapping, operation='verify_reference')
+
+    def test_missing_parent_reference_denies_even_a_creator_readable_target(self):
+        self.patches['server_read'].side_effect = PermissionDenied
+        with self.assertRaises(PermissionDenied):
+            self.authorize()
+
+    @patch.object(file_views, 'render')
+    @patch.object(file_views, 'render_error', side_effect=lambda request, message: JsonResponse({'error': message}))
+    @patch.object(shared, 'image_stream')
+    def test_all_gateway_actions_deny_missing_parent_reference(self, stream, render_error, render):
+        self.patches['server_read'].side_effect = PermissionDenied
+        for action in ('preview', 'scene', 'image'):
+            with self.subTest(action=action):
+                self.patches['uuid_resource'].side_effect = [
+                    (self.parent_mapping, self.repo, '/docs/document.sdoc', 'parent-id'),
+                    (self.mapping, self.repo, '/boards/board.exdraw', 'board-id'),
+                ]
+                request = RequestFactory().get('/whiteboard/', {'filename': 'photo.png'})
+                request.user = self.request.user
+                request.session = {}
+                if action == 'preview':
+                    response = file_views.view_shared_sdoc_whiteboard(request, 'abcd', PARENT, BOARD)
+                else:
+                    response = shared.shared_whiteboard(request, 'abcd', PARENT, BOARD, action)
+                self.assertEqual(response.status_code, 403)
+                self.assertEqual(self.patches['server_read'].call_args.kwargs['operation'], 'verify_reference')
+        stream.assert_not_called()
+        render.assert_not_called()
 
     def test_missing_or_expired_share_stops_before_target_resolution(self):
         self.share.is_expired = lambda: True
@@ -108,16 +143,32 @@ class SharedWhiteboardResourceTest(SimpleTestCase):
         get.return_value = Mock(status_code=200)
         get.return_value.json.return_value = {'elements': []}
         share = SimpleNamespace(pk=1, username='creator@example.com')
-        shared.server_read(share, self.mapping)
+        parent = SimpleNamespace(uuid=PARENT, filename='document.sdoc')
+        shared.server_read(share, self.mapping, parent)
         options = get.call_args.kwargs
         token = options['headers']['Authorization'].split()[1]
         payload = jwt.decode(token, 'existing-jwt-test-key-at-least-32-bytes', algorithms=['HS256'],
                              audience='sdoc-server-shared-exdraw', issuer='seahub')
         self.assertEqual(payload['file_uuid'], BOARD)
+        self.assertEqual(payload['sdoc_uuid'], PARENT)
+        self.assertEqual(payload['sdoc_filename'], 'document.sdoc')
         self.assertEqual(payload['permission'], 'r')
         self.assertEqual(payload['operation'], 'read_scene')
         self.assertEqual(payload['exp'] - payload['iat'], 60)
         self.assertFalse(options['allow_redirects'])
+
+    @override_settings(EXCALIDRAW_PRIVATE_KEY='existing-jwt-test-key-at-least-32-bytes', EXCALIDRAW_SERVER_URL='http://sdoc.test')
+    @patch.object(shared.requests, 'get')
+    def test_reference_service_denial_or_invalid_evidence_fails_closed(self, get):
+        share = SimpleNamespace(pk=1, username='creator@example.com')
+        parent = SimpleNamespace(uuid=PARENT, filename='document.sdoc')
+        for code, body in ((403, {}), (404, {}), (200, {}), (200, {'referenced': False})):
+            with self.subTest(code=code, body=body):
+                get.return_value = Mock(status_code=code)
+                get.return_value.json.return_value = body
+                with self.assertRaises(PermissionDenied):
+                    shared.server_read(share, self.mapping, parent, operation='verify_reference')
+        self.assertTrue(get.call_args.args[0].endswith('/reference/'))
 
     def test_image_lookup_uses_filename_without_an_element_id(self):
         scene = {'elements': [
@@ -224,10 +275,15 @@ class SharedWhiteboardGatewayTest(SimpleTestCase):
     def setUp(self):
         self.request = RequestFactory().get('/whiteboard/')
         self.context = (SimpleNamespace(username='owner'), SimpleNamespace(uuid=BOARD, filename='board.exdraw'),
-                        SimpleNamespace(repo_id=REPO), '/board.exdraw', 'id')
+                        SimpleNamespace(repo_id=REPO), '/board.exdraw', 'id',
+                        SimpleNamespace(uuid=PARENT, filename='document.sdoc'))
         self.text_patch = patch('seahub.utils.get_conf_text_ext', return_value=[])
         self.text_patch.start()
         self.addCleanup(self.text_patch.stop)
+        # Both the HTML view and API helper use the same authorization service.
+        authorize_patch = patch.object(file_views, 'authorize_share', side_effect=lambda *args: shared.authorize_share(*args))
+        authorize_patch.start()
+        self.addCleanup(authorize_patch.stop)
 
     @patch.object(shared, 'server_read')
     @patch.object(shared, 'authorize_share', side_effect=PermissionDenied)
@@ -236,16 +292,42 @@ class SharedWhiteboardGatewayTest(SimpleTestCase):
         self.assertEqual(response.status_code, 403)
         server.assert_not_called()
 
-    @patch.object(shared, 'render')
+    @patch.object(file_views, 'render')
     @patch.object(shared, 'authorize_share')
     def test_preview_shell_has_only_a_gateway_url(self, authorize, render):
         authorize.return_value = self.context
         render.return_value = JsonResponse({})
-        response = shared.shared_whiteboard(self.request, 'abcd', PARENT, BOARD, 'preview')
+        response = file_views.view_shared_sdoc_whiteboard(self.request, 'abcd', PARENT, BOARD)
         self.assertEqual(response.status_code, 200)
         data = render.call_args.args[2]
         self.assertIn('/share-links/abcd/seadoc/' + PARENT, data['shared_exdraw_scene_url'])
         self.assertNotIn('excalidraw_access_token', data)
+
+    def test_share_preview_route_precedes_generic_smart_link(self):
+        url = reverse('shared_sdoc_whiteboard_preview', kwargs={
+            'share_token': 'abcd', 'sdoc_uuid': PARENT, 'file_uuid': BOARD,
+        })
+        self.assertIn('/smart-link/%s/share/abcd/sdoc/%s/' % (BOARD, PARENT), url)
+        self.assertNotIn('/api/v2.1/', url)
+        match = resolve(url)
+        self.assertEqual(match.func, file_views.view_shared_sdoc_whiteboard)
+        self.assertEqual(match.kwargs['sdoc_uuid'], PARENT)
+
+    @patch.object(file_views, 'authorize_share')
+    def test_preview_rejects_write_methods_before_authorization(self, authorize):
+        response = file_views.view_shared_sdoc_whiteboard(RequestFactory().post('/preview/'), 'abcd', PARENT, BOARD)
+        self.assertEqual(response.status_code, 405)
+        authorize.assert_not_called()
+
+    @patch.object(file_views, 'render_error')
+    @patch.object(file_views, 'authorize_share', side_effect=PermissionDenied)
+    def test_preview_permission_error_returns_html(self, authorize, render_error):
+        from django.http import HttpResponse
+        render_error.return_value = HttpResponse('<html>Permission denied</html>')
+        response = file_views.view_shared_sdoc_whiteboard(self.request, 'abcd', PARENT, BOARD)
+        self.assertEqual(response.status_code, 403)
+        self.assertTrue(response['Content-Type'].startswith('text/html'))
+        self.assertIn('no-store', response['Cache-Control'])
 
     @patch.object(shared, 'server_read')
     @patch.object(shared, 'authorize_share')
@@ -275,7 +357,7 @@ class SharedWhiteboardGatewayTest(SimpleTestCase):
         response = shared.shared_whiteboard(request, 'abcd', PARENT, BOARD, 'image')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(resource.call_args.args[0], {'type': 'image', 'filename': 'photo.png'})
-        server.assert_called_once_with(self.context[0], self.context[1])
+        server.assert_called_once_with(self.context[0], self.context[1], self.context[5])
 
     @patch.object(shared, 'image_stream')
     @patch.object(shared, 'image_resource')
@@ -375,7 +457,7 @@ class SharedWhiteboardAPIClassTest(SimpleTestCase):
     def test_scene_class_preserves_anonymous_share_session(self, gateway):
         gateway.return_value = JsonResponse({'scene': {}})
         response = SharedSdocWhiteboard.as_view()(
-            self.request(), share_token='abcd', sdoc_uuid=PARENT, file_uuid=BOARD, action='scene')
+            self.request(), share_token='abcd', sdoc_uuid=PARENT, file_uuid=BOARD)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(gateway.call_args.args[0].session['visited_fs_abcd'])
         self.assertEqual(gateway.call_args.args[1:], ('abcd', PARENT, BOARD, 'scene'))
@@ -394,6 +476,6 @@ class SharedWhiteboardAPIClassTest(SimpleTestCase):
     @patch('seahub.exdraw.apis.shared_whiteboard')
     def test_write_methods_are_not_exposed(self, gateway):
         response = SharedSdocWhiteboard.as_view()(
-            self.request('post'), share_token='abcd', sdoc_uuid=PARENT, file_uuid=BOARD, action='scene')
+            self.request('post'), share_token='abcd', sdoc_uuid=PARENT, file_uuid=BOARD)
         self.assertEqual(response.status_code, 405)
         gateway.assert_not_called()

@@ -20,7 +20,7 @@ from seahub.exdraw.apis import SharedSdocWhiteboard, SharedSdocWhiteboardImage
 from seahub.views.file import view_history_file, view_trash_file,\
     view_snapshot_file, view_shared_file, view_file_via_shared_dir,\
     text_diff, view_raw_file, download_file, view_lib_file, \
-    view_lib_file_via_smart_link, view_media_file_via_share_link, \
+    view_lib_file_via_smart_link, view_shared_sdoc_whiteboard, view_media_file_via_share_link, \
     view_media_file_via_public_wiki, view_sdoc_revision
 from seahub.views.repo import repo_history_view, repo_snapshot, view_shared_dir, \
     view_shared_upload_link, view_lib_as_wiki
@@ -279,10 +279,11 @@ urlpatterns = [
     re_path(r'^lib/(?P<repo_id>[-0-9a-f]{36})/file(?P<path>.*)$', view_lib_file, name='view_lib_file'),
     re_path(r'^lib/(?P<repo_id>[-0-9a-f]{36})/revisions/(?P<revision_id>\d+)/$', view_sdoc_revision, name='view_sdoc_revision'),
     re_path(r'^wiki/lib/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.*)$', view_lib_as_wiki, name='view_lib_as_wiki'),
+    re_path(r'^smart-link/(?P<file_uuid>[-0-9a-f]{36})/share/(?P<share_token>[a-f0-9]+)/sdoc/(?P<sdoc_uuid>[-0-9a-f]{36})/$', view_shared_sdoc_whiteboard, name='shared_sdoc_whiteboard_preview'),
     re_path(r'^smart-link/(?P<dirent_uuid>[-0-9a-f]{36})/(?P<dirent_name>.*)$', view_lib_file_via_smart_link, name="view_lib_file_via_smart_link"),
 
     ### share/upload link ###
-    re_path(r'^api/v2.1/share-links/(?P<share_token>[a-f0-9]+)/seadoc/(?P<sdoc_uuid>[-0-9a-f]{36})/whiteboards/(?P<file_uuid>[-0-9a-f]{36})/(?P<action>preview|scene)/$', SharedSdocWhiteboard.as_view(), name='shared_sdoc_whiteboard'),
+    re_path(r'^api/v2.1/share-links/(?P<share_token>[a-f0-9]+)/seadoc/(?P<sdoc_uuid>[-0-9a-f]{36})/whiteboards/(?P<file_uuid>[-0-9a-f]{36})/scene/$', SharedSdocWhiteboard.as_view(), name='shared_sdoc_whiteboard'),
     re_path(r'^api/v2.1/share-links/(?P<share_token>[a-f0-9]+)/seadoc/(?P<sdoc_uuid>[-0-9a-f]{36})/whiteboards/(?P<file_uuid>[-0-9a-f]{36})/images/$', SharedSdocWhiteboardImage.as_view(), name='shared_sdoc_whiteboard_image'),
     re_path(r'^f/(?P<token>[a-f0-9]+)/$', view_shared_file, name='view_shared_file'),
     re_path(r'^d/(?P<token>[a-f0-9]+)/$', view_shared_dir, name='view_shared_dir'),

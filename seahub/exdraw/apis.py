@@ -34,15 +34,15 @@ logger = logging.getLogger(__name__)
 
 
 class SharedSdocWhiteboard(APIView):
-    """Read-only preview and scene access through an authenticated sdoc share."""
+    """Read-only scene access through an authenticated sdoc share."""
 
     authentication_classes = (SessionAuthentication,)
     permission_classes = ()
     throttle_classes = (UserRateThrottle,)
     http_method_names = ['get', 'head', 'options']
 
-    def get(self, request, share_token, sdoc_uuid, file_uuid, action):
-        return shared_whiteboard(request, share_token, sdoc_uuid, file_uuid, action)
+    def get(self, request, share_token, sdoc_uuid, file_uuid):
+        return shared_whiteboard(request, share_token, sdoc_uuid, file_uuid, 'scene')
 
 
 class SharedSdocWhiteboardImage(SharedSdocWhiteboard):
