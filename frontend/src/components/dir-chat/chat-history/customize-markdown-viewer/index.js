@@ -9,7 +9,9 @@ import { useDocuments } from '../../hooks';
 import CustomizeDefinition from '../customize-definition';
 import CustomizeLink from '../customize-link';
 import CustomizeLinkReference from '../customize-link-reference';
-import { buildAIReply, normalizeSources } from '../utils';
+import { buildReplyParts } from '../reply-blocks';
+import Seadoc, { copySeadocBlock } from '../seadoc';
+import { normalizeSources } from '../utils';
 
 import './index.css';
 
@@ -31,15 +33,19 @@ const CustomizeMarkdownViewer = forwardRef(({ chatId, message, repoID, isStreami
   const retryCountRef = useRef(0);
   const [viewerKey, setViewerKey] = useState(0);
   const [aiMessageType, setAIMessageType] = useState('rich-text');
-  const { value, sources, mdFiles } = useMemo(() => {
+  const { value, parts, sources, mdFiles } = useMemo(() => {
     const nextSources = normalizeSources(message?.[CHAT_MESSAGE_TYPE.SOURCES] || [], repoID);
     const nextMdFiles = [];
+    const nextParts = buildReplyParts(message?.[CHAT_MESSAGE_TYPE.AI_REPLY] || '', {
+      sources: nextSources, chatId, repoID, mdFiles: nextMdFiles, isStreaming: isStreaming || chatId === 'typing',
+    });
     return {
-      value: buildAIReply(message?.[CHAT_MESSAGE_TYPE.AI_REPLY] || '', nextSources, chatId, nextMdFiles, repoID),
+      value: nextParts.map((part) => part.type === 'text' ? part.value : copySeadocBlock(part.data, repoID)).join('\n\n'),
+      parts: nextParts,
       sources: nextSources,
       mdFiles: nextMdFiles,
     };
-  }, [chatId, message, repoID]);
+  }, [chatId, message, repoID, isStreaming]);
 
   useImperativeHandle(ref, () => ({
     getAIReply: () => value,
@@ -114,23 +120,25 @@ const CustomizeMarkdownViewer = forwardRef(({ chatId, message, repoID, isStreami
       return nodes;
     }
     const valueCount = Array.isArray(nodes) ? nodes.length : 0;
-    if (valueCount === 1 && nodes[0]?.type === 'paragraph') {
+    if (parts.length === 1 && parts[0].type === 'text' && valueCount === 1 && nodes[0]?.type === 'paragraph') {
       setAIMessageType('text');
       return nodes;
     }
     setAIMessageType('rich-text');
     return nodes;
-  }, [isStreaming]);
+  }, [isStreaming, parts]);
 
   if (!value) {
     return null;
   }
 
   return (
-    <div className={classNames('sea-ai-message-reply', aiMessageType)} ref={containerRef}>
-      <MarkdownViewer
-        key={isStreaming ? 'streaming' : viewerKey}
-        value={value}
+    <div className={classNames('sea-ai-message-reply', parts.some((part) => part.type === 'seadoc') ? 'rich-text' : aiMessageType)} ref={containerRef}>
+      {parts.map((part, index) => part.type === 'seadoc' ? (
+        <Seadoc key={`seadoc-${index}`} data={part.data} repoID={repoID} />
+      ) : part.value.trim() && <MarkdownViewer
+        key={`${index}-${isStreaming ? 'streaming' : viewerKey}`}
+        value={part.value}
         isFetching={false}
         isShowLoading={!isStreaming}
         isShowOutline={false}
@@ -138,7 +146,7 @@ const CustomizeMarkdownViewer = forwardRef(({ chatId, message, repoID, isStreami
         options={options}
         beforeRenderCallback={beforeRenderCallback}
         onDefinitionClick={() => {}}
-      />
+      />)}
     </div>
   );
 });

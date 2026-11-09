@@ -8,6 +8,8 @@ import jwt
 import time
 import uuid
 from copy import deepcopy
+from html import escape, unescape
+from html.parser import HTMLParser
 from urllib.parse import urljoin
 
 from django.core.cache import cache
@@ -17,13 +19,14 @@ from django.db.models.functions import Coalesce
 from django.db.models import Sum, Value
 from seaserv import ccnet_api, get_org_id_by_repo_id, seafile_api
 
-from seahub.settings import ENABLE_AI_CHAT, ENABLE_METADATA_MANAGEMENT, ENABLE_SEAFILE_AI, LLM_MODELS, SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL
+from seahub.ai.content_blocks import parse_content_blocks
+from seahub.settings import ENABLE_AI_CHAT, ENABLE_METADATA_MANAGEMENT, ENABLE_SEADOC, ENABLE_SEAFILE_AI, LLM_MODELS, SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL
 from seahub.base.accounts import User
 from seahub.tags.models import FileUUIDMap
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
 from seahub.constants import DEFAULT_USER, PERMISSION_INVISIBLE
 from seahub.share.utils import is_repo_admin
-from seahub.utils import gen_inner_file_upload_url, get_service_url, is_org_context, is_pro_version, mkstemp
+from seahub.utils import check_filename_with_rename, gen_inner_file_upload_url, get_service_url, is_org_context, is_pro_version, is_valid_dirent_name, mkstemp
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.organizations.models import OrgMemberQuota, OrgSettings
@@ -34,15 +37,8 @@ logger = logging.getLogger(__name__)
 
 AI_REPLY_TIMEOUT = 180
 GENERATED_MARKDOWN_DIR = '/AI Generated/'
-MARKDOWN_FILE_RE = re.compile(
-    r'<seafile-ai-markdown(?:\s+file_name=(["\'])([^"\']*?)\1)?\s*>([\s\S]*?)</seafile-ai-markdown>'
-)
-MARKDOWN_LINK_TAG_RE = re.compile(
-    r'\s*<seafile-ai-markdown-link\s+url=(?:["\']).*?(?:["\'])\s*></seafile-ai-markdown-link>\s*'
-)
-MARKDOWN_READONLY_TIPS_RE = re.compile(
-    r'\s*<markdown-readonly-tips>[\s\S]*?</markdown-readonly-tips>\s*'
-)
+GENERATED_DIRECTORY = '/AI Generated/'
+TAG_NAME = 'seafile-ai-seadoc'
 
 AI_SCENARIO_IMAGE_CAPTION = 'image-caption'
 AI_SCENARIO_SUMMARY = 'summary'
@@ -396,52 +392,203 @@ def upload_generated_markdown_file(repo_id, username, file_name, content):
     return safe_file_name, preview_url
 
 
-def rewrite_ai_reply_with_uploaded_markdown_links(ai_reply, repo_id, username, can_upload=True):
-    if not isinstance(ai_reply, str) or '<seafile-ai-markdown' not in ai_reply or not repo_id or not username:
-        return ai_reply
+def _node(kind=None, **fields):
+    result = {'id': str(uuid.uuid4()), **fields}
+    if kind:
+        result['type'] = kind
+    return result
 
-    # Remove any previously generated hidden preview links from the reply body,
-    # then regenerate exactly one link for each current markdown artifact.
-    ai_reply = MARKDOWN_LINK_TAG_RE.sub('\n', ai_reply)
-    ai_reply = MARKDOWN_READONLY_TIPS_RE.sub('\n', ai_reply)
 
-    failed_files = []
-    readonly_files = []
+def _inline(children):
+    result = []
+    for child in children:
+        if child.get('type') == 'link':
+            result.append(_node('link', href=child['href'],
+                                title=''.join(text['text'] for text in child['children']),
+                                children=_inline(child['children'])))
+        else:
+            result.append(_node(**{key: value for key, value in child.items()
+                                   if key in ('text', 'bold', 'italic', 'strikethrough', 'code')}))
+    return result
 
-    def replace_markdown_file(match):
-        file_name = match.group(2) or 'answer.md'
-        content = match.group(3) or ''
+
+def _paragraph(children=None):
+    return _node('paragraph', children=_inline(children if children is not None else [{'text': ''}]))
+
+
+def _compile_block(block):
+    kind = block['type']
+    if kind == 'paragraph':
+        return _paragraph(block['children'])
+    if kind in ('header1', 'header2', 'header3', 'header4', 'header5', 'header6'):
+        return _node(kind, children=_inline(block['children']))
+    if kind == 'blockquote':
+        return _node(kind, children=[_paragraph(block['children'])])
+    if kind == 'check_list_item':
+        return _node(kind, checked=block['checked'], children=_inline(block['children']))
+    if kind in ('ordered_list', 'unordered_list'):
+        return _node(kind, children=[_node('list_item', children=[_paragraph(item['children'])])
+                                     for item in block['items']])
+    if kind == 'code_block':
+        return _node(kind, language=block['language'], style={'white_space': 'nowrap'}, children=[
+            _node('code_line', children=[_node(text=line)]) for line in block['text'].split('\n')
+        ])
+    if kind == 'divider':
+        return _node(kind, children=[_node(text='')])
+    if kind == 'table':
+        width = len(block['rows'][0]['cells'])
+        rows = []
+        for row in block['rows']:
+            rows.append(_node('table_row', style={'min_height': 42}, children=[
+                _node('table_cell',
+                      style={'text_align': 'left', 'align_items': 'center', 'background_color': ''},
+                      inherit_style={'text_align': 'left', 'background_color': ''},
+                      children=_inline(cell['children'])) for cell in row['cells']
+            ]))
+        return _node(kind, columns=[{'width': 336} for _ in range(width)],
+                     ui={'alternate_highlight': False},
+                     style={'gridTemplateColumns': 'repeat(%s, 336px)' % width,
+                            'gridAutoRows': 'minmax(42px, auto)'}, children=rows)
+    raise ValueError('Unsupported SDoc block')
+
+
+def compile_sdoc(document, username):
+    """Add editor metadata to the simplified content validated by seafile-ai."""
+    return {
+        'version': 0,
+        'format_version': 4,
+        'last_modify_user': username,
+        'elements': [
+            _node('title', children=[_node(text=document['title'])]),
+            *[_compile_block(block) for block in document['elements']],
+            _paragraph(),
+        ],
+    }
+
+
+class _TagParser(HTMLParser):
+    def handle_starttag(self, tag, attrs):
+        if tag != TAG_NAME or len(attrs) != len(dict(attrs)):
+            raise ValueError('Invalid SDoc tag')
+        self.attributes = dict(attrs)
+
+
+def result_tag(**metadata):
+    attributes = ' '.join('%s="%s"' % (key, escape(str(value), quote=True))
+                          for key, value in metadata.items())
+    return '<%s %s></%s>' % (TAG_NAME, attributes, TAG_NAME)
+
+
+def _can_create(request, repo_id, directory):
+    from seahub.utils.repo import parse_repo_perm
+    from seahub.views import check_folder_permission
+
+    if request is None:
+        return False
+    permission = check_folder_permission(request, repo_id, directory)
+    return bool(permission and parse_repo_perm(permission).can_create)
+
+
+def create_generated_sdoc(block, repo_id, username, can_upload=True, request=None):
+    """Handle a complete content tag only at the final SSE result boundary."""
+    if block['self_closing']:
+        return block['raw']
+    from seahub.seadoc.utils import get_seadoc_file_uuid
+
+    metadata = {}
+    tmp_file = None
+    try:
+        parser = _TagParser()
+        parser.feed('<%s%s>' % (TAG_NAME, block['attributes']))
+        attributes = parser.attributes
+        if 'status' in attributes:
+            # Already processed results must never create another file.
+            return block['raw']
+        if set(attributes) != {'sdoc_create_uuid', 'file_name', 'description'}:
+            raise ValueError('Invalid SDoc metadata')
+        identifier = str(uuid.UUID(attributes['sdoc_create_uuid']))
+        file_name = attributes['file_name'].strip()
+        if (not file_name.lower().endswith('.sdoc') or file_name.lower() == '.sdoc' or
+                '/' in file_name or '\\' in file_name or any(ord(c) < 32 for c in file_name) or
+                not is_valid_dirent_name(file_name)):
+            raise ValueError('Invalid SDoc filename')
+        metadata = {'sdoc_create_uuid': identifier, 'file_name': file_name, 'description': attributes['description']}
+        if not ENABLE_SEADOC:
+            return result_tag(**metadata, status='failed', error_code='sdoc_not_enabled')
         if not can_upload:
-            safe_file_name = os.path.basename((file_name or '').strip()) or 'answer.md'
-            readonly_files.append(safe_file_name)
-            return match.group(0)
+            return result_tag(**metadata, status='failed', error_code='permission_denied')
 
+        # Do not duplicate AI's content schema here. Bound parsing and only compile known fields.
+        content = block['content']
+        if len(content) > 400000:
+            raise ValueError('SDoc content too large')
+        document = compile_sdoc(json.loads(content), username)
+        directory_exists = seafile_api.get_dir_id_by_path(repo_id, GENERATED_DIRECTORY) is not None
+        if not _can_create(request, repo_id, GENERATED_DIRECTORY if directory_exists else '/'):
+            return result_tag(**metadata, status='failed', error_code='permission_denied')
+        if not directory_exists:
+            try:
+                seafile_api.mkdir_with_parents(repo_id, '/', GENERATED_DIRECTORY.strip('/'), username)
+            except Exception:
+                if seafile_api.get_dir_id_by_path(repo_id, GENERATED_DIRECTORY) is None:
+                    raise
+        if not _can_create(request, repo_id, GENERATED_DIRECTORY):
+            return result_tag(**metadata, status='failed', error_code='permission_denied')
+        file_name = check_filename_with_rename(repo_id, GENERATED_DIRECTORY, file_name)
+        fd, tmp_file = mkstemp()
+        with os.fdopen(fd, 'w', encoding='utf-8') as file_obj:
+            json.dump(document, file_obj, ensure_ascii=False, allow_nan=False)
+        seafile_api.post_file(repo_id, tmp_file, GENERATED_DIRECTORY, file_name, username)
+        path = posixpath.join(GENERATED_DIRECTORY, file_name)
         try:
-            safe_file_name, preview_url = upload_generated_markdown_file(repo_id, username, file_name, content)
-        except Exception as error:
-            safe_file_name = os.path.basename((file_name or '').strip()) or 'answer.md'
-            failed_files.append(safe_file_name)
-            logger.warning('Failed to upload generated markdown file %s: %s', safe_file_name, error)
-            return match.group(0)
-
-        preview_tag = f'<seafile-ai-markdown-link url="{preview_url}"></seafile-ai-markdown-link>'
-        return f'{preview_tag}\n\n{match.group(0)}'
-
-    next_ai_reply = MARKDOWN_FILE_RE.sub(replace_markdown_file, ai_reply)
-    if readonly_files:
-        readonly_message = _('Due to your read-only permission for this library, the document cannot be uploaded to this library.')
-        next_ai_reply = f'\n\n{next_ai_reply}\n\n<markdown-readonly-tips>{readonly_message}</markdown-readonly-tips>'
-    if failed_files:
-        failed_files_text = ', '.join(failed_files)
-        failure_message = (
-            f'Failed to upload the generated Markdown document(s) to {GENERATED_MARKDOWN_DIR}: '
-            f'{failed_files_text}.'
-        )
-        next_ai_reply = f'{next_ai_reply}\n\n{failure_message}'
-    return next_ai_reply
+            doc_uuid = get_seadoc_file_uuid(seafile_api.get_repo(repo_id), path)
+        except Exception:
+            # The write succeeded; keep the file and its usable path instead of retrying it.
+            logger.exception('Could not obtain UUID for generated SDoc %s', path)
+            doc_uuid = ''
+        return result_tag(status='created', sdoc_create_uuid=identifier, file_name=file_name, description=metadata['description'],
+                          path=path, doc_uuid=doc_uuid)
+    except (ValueError, TypeError, KeyError, IndexError, AttributeError, RecursionError):
+        logger.warning('Invalid generated SDoc content', exc_info=True)
+        return result_tag(**metadata, status='failed', error_code='invalid_artifact')
+    except Exception:
+        logger.exception('Failed to save generated SDoc')
+        return result_tag(**metadata, status='failed', error_code='create_failed')
+    finally:
+        if tmp_file:
+            try:
+                os.remove(tmp_file)
+            except OSError:
+                logger.warning('Failed to remove generated SDoc temporary file', exc_info=True)
 
 
-def process_generated_markdown_result(ai_result, repo_id, username, can_upload=True):
+
+def process_markdown_block(block, repo_id, username, can_upload=True, request=None):
+    if block['self_closing'] or not repo_id or not username:
+        return block['raw']
+    # Parse only the opening tag, never the artifact body.
+    attributes = {name: unescape(value) for name, _, value in re.findall(
+        r'([\w-]+)\s*=\s*(["\'])(.*?)\2', block['attributes'], re.DOTALL)}
+    file_name = attributes.get('file_name') or 'answer.md'
+    if not can_upload:
+        message = _('Due to your read-only permission for this library, the document cannot be uploaded to this library.')
+        return f'{block["raw"]}\n\n<markdown-readonly-tips>{message}</markdown-readonly-tips>'
+    try:
+        preview_url = upload_generated_markdown_file(repo_id, username, file_name, block['content'])[1]
+    except Exception as error:
+        safe_name = os.path.basename(file_name.strip()) or 'answer.md'
+        logger.warning('Failed to upload generated markdown file %s: %s', safe_name, error)
+        return f'{block["raw"]}\n\nFailed to upload the generated Markdown document(s) to {GENERATED_MARKDOWN_DIR}: {safe_name}.'
+    return f'<seafile-ai-markdown-link url="{escape(preview_url, quote=True)}"></seafile-ai-markdown-link>\n\n{block["raw"]}'
+
+
+GENERATED_CONTENT_HANDLERS = {
+    'seafile-ai-markdown': process_markdown_block,
+    'seafile-ai-seadoc': create_generated_sdoc,
+}
+
+
+def process_generated_content_result(ai_result, repo_id, username, can_upload=True, request=None):
     if not isinstance(ai_result, dict):
         return ai_result
 
@@ -449,7 +596,27 @@ def process_generated_markdown_result(ai_result, repo_id, username, can_upload=T
     if ai_reply is None:
         ai_reply = ai_result.get('answer')
 
-    next_ai_reply = rewrite_ai_reply_with_uploaded_markdown_links(ai_reply, repo_id, username, can_upload=can_upload)
+    if not isinstance(ai_reply, str):
+        return ai_result
+    # Include saved metadata blocks so their bodies are protected as well.
+    tags = set(GENERATED_CONTENT_HANDLERS) | {'seafile-ai-markdown-link', 'markdown-readonly-tips'}
+    blocks = parse_content_blocks(ai_reply, tags)
+    has_markdown = any(block.get('tag') == 'seafile-ai-markdown' and block['complete'] and
+                       not block['self_closing'] for block in blocks)
+    processed = {}
+    output = []
+    for block in blocks:
+        if has_markdown and block.get('complete') and block.get('tag') in {'seafile-ai-markdown-link', 'markdown-readonly-tips'}:
+            continue
+        handler = GENERATED_CONTENT_HANDLERS.get(block.get('tag'))
+        if not handler or not block['complete']:
+            output.append(block['raw'])
+            continue
+        key = (block['tag'], block['raw'])
+        if key not in processed:
+            processed[key] = handler(block, repo_id, username, can_upload=can_upload, request=request)
+        output.append(processed[key])
+    next_ai_reply = ''.join(output)
     if next_ai_reply == ai_reply:
         return ai_result
 
@@ -509,7 +676,7 @@ def record_message_to_db(ai_result, session_uuid, message_id, query, attachments
     return ai_result
 
 
-def process_stream_ai_reply(chat_task_id, ai_response, session_uuid, message_id, query, attachments, repo_id, username, can_upload=True):
+def process_stream_ai_reply(chat_task_id, ai_response, session_uuid, message_id, query, attachments, repo_id, username, can_upload=True, request=None):
     has_recorded_result = False
     has_generator_exit = False
     error_msg = None
@@ -522,8 +689,10 @@ def process_stream_ai_reply(chat_task_id, ai_response, session_uuid, message_id,
                 line_str = f'data: {line_str}'
             content = line_str[len('data: '):]
             if content.startswith('{"results": ') and content.endswith('}'):
+                if has_recorded_result:
+                    continue
                 results = json.loads(content)['results']
-                results = process_generated_markdown_result(results, repo_id, username, can_upload=can_upload)
+                results = process_generated_content_result(results, repo_id, username, can_upload=can_upload, request=request)
                 item = 'data: %s\n\n' % json.dumps({
                     'results': record_message_to_db(results, session_uuid, message_id, query, attachments),
                 })

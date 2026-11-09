@@ -1,0 +1,50 @@
+[
+  {
+    "name": "opaque cross-type nesting",
+    "value": "Before<seafile-ai-markdown file_name=\"a.md\"><image><seafile-ai-seadoc>x</seafile-ai-seadoc></image></seafile-ai-markdown>After",
+    "tags": ["seafile-ai-markdown", "seafile-ai-seadoc", "image"],
+    "types": ["text", "block", "text"],
+    "blockTags": ["seafile-ai-markdown"],
+    "complete": [true]
+  },
+  {
+    "name": "same-type nesting with quoted delimiters",
+    "value": "<image title=\"a > b\"><image src='x' /><image>inner</image></image>After",
+    "tags": ["image"],
+    "types": ["block", "text"],
+    "blockTags": ["image"],
+    "complete": [true]
+  },
+  {
+    "name": "code regions and unknown HTML",
+    "value": "<div>`<image>x</image>`\n````\n```\n<image>x</image>\n````</div><image />",
+    "tags": ["image"],
+    "types": ["text", "code", "text", "code", "text", "block"],
+    "blockTags": ["image"],
+    "complete": [true]
+  },
+  {
+    "name": "unfinished outer block contains a complete child",
+    "value": "Before<image><seafile-ai-seadoc>x</seafile-ai-seadoc>",
+    "tags": ["image", "seafile-ai-seadoc"],
+    "types": ["text", "block"],
+    "blockTags": ["image"],
+    "complete": [false]
+  },
+  {
+    "name": "unfinished fence protects tags",
+    "value": "Before\n~~~\n<image>x</image>",
+    "tags": ["image"],
+    "types": ["text", "code"],
+    "blockTags": [],
+    "complete": []
+  },
+  {
+    "name": "streaming partial tag name",
+    "value": "Before<seafile-ai-sea",
+    "tags": ["seafile-ai-seadoc"],
+    "types": ["text", "block"],
+    "blockTags": ["seafile-ai-sea"],
+    "complete": [false]
+  }
+]
