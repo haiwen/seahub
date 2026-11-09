@@ -74,11 +74,11 @@ class SharedWhiteboardAuthorizationTest(SimpleTestCase):
                     (self.parent_mapping, self.repo, '/docs/document.sdoc', 'parent-id'),
                     (self.mapping, self.repo, '/boards/board.exdraw', 'board-id'),
                 ]
-                request = RequestFactory().get('/whiteboard/', {'filename': 'photo.png'})
+                request = RequestFactory().get('/whiteboard/', {'filename': 'photo.png', 'sdoc_uuid': PARENT})
                 request.user = self.request.user
                 request.session = {}
                 if action == 'preview':
-                    response = file_views.view_shared_sdoc_whiteboard(request, 'abcd', PARENT, BOARD)
+                    response = file_views.view_shared_sdoc_whiteboard(request, 'abcd', BOARD)
                 else:
                     response = shared.shared_whiteboard(request, 'abcd', PARENT, BOARD, action)
                 self.assertEqual(response.status_code, 403)
@@ -273,7 +273,7 @@ class SharedWhiteboardPolicyTest(SimpleTestCase):
 
 class SharedWhiteboardGatewayTest(SimpleTestCase):
     def setUp(self):
-        self.request = RequestFactory().get('/whiteboard/')
+        self.request = RequestFactory().get('/whiteboard/', {'sdoc_uuid': PARENT})
         self.context = (SimpleNamespace(username='owner'), SimpleNamespace(uuid=BOARD, filename='board.exdraw'),
                         SimpleNamespace(repo_id=REPO), '/board.exdraw', 'id',
                         SimpleNamespace(uuid=PARENT, filename='document.sdoc'))
@@ -297,26 +297,37 @@ class SharedWhiteboardGatewayTest(SimpleTestCase):
     def test_preview_shell_has_only_a_gateway_url(self, authorize, render):
         authorize.return_value = self.context
         render.return_value = JsonResponse({})
-        response = file_views.view_shared_sdoc_whiteboard(self.request, 'abcd', PARENT, BOARD)
+        response = file_views.view_shared_sdoc_whiteboard(self.request, 'abcd', BOARD)
         self.assertEqual(response.status_code, 200)
         data = render.call_args.args[2]
         self.assertIn('/share-links/abcd/seadoc/' + PARENT, data['shared_exdraw_scene_url'])
         self.assertIn('/exdraw/' + BOARD + '/scene/', data['shared_exdraw_scene_url'])
         self.assertNotIn('excalidraw_access_token', data)
+        authorize.assert_called_once_with(self.request, 'abcd', PARENT, BOARD)
+
+    @patch.object(file_views, 'render_error', side_effect=lambda request, message: JsonResponse({'error': message}))
+    @patch.object(file_views, 'authorize_share')
+    def test_preview_rejects_missing_or_invalid_parent_query_before_authorization(self, authorize, render_error):
+        for params in ({}, {'sdoc_uuid': 'not-a-uuid'}):
+            with self.subTest(params=params):
+                request = RequestFactory().get('/preview/', params)
+                response = file_views.view_shared_sdoc_whiteboard(request, 'abcd', BOARD)
+                self.assertEqual(response.status_code, 403)
+        authorize.assert_not_called()
 
     def test_share_preview_route_precedes_generic_smart_link(self):
         url = reverse('shared_sdoc_whiteboard_preview', kwargs={
-            'share_token': 'abcd', 'sdoc_uuid': PARENT, 'file_uuid': BOARD,
+            'share_token': 'abcd', 'file_uuid': BOARD,
         })
-        self.assertIn('/smart-link/%s/share/abcd/sdoc/%s/' % (BOARD, PARENT), url)
+        self.assertTrue(url.endswith('/smart-link/%s/share/abcd/' % BOARD))
         self.assertNotIn('/api/v2.1/', url)
         match = resolve(url)
         self.assertEqual(match.func, file_views.view_shared_sdoc_whiteboard)
-        self.assertEqual(match.kwargs['sdoc_uuid'], PARENT)
+        self.assertNotIn('sdoc_uuid', match.kwargs)
 
     @patch.object(file_views, 'authorize_share')
     def test_preview_rejects_write_methods_before_authorization(self, authorize):
-        response = file_views.view_shared_sdoc_whiteboard(RequestFactory().post('/preview/'), 'abcd', PARENT, BOARD)
+        response = file_views.view_shared_sdoc_whiteboard(RequestFactory().post('/preview/'), 'abcd', BOARD)
         self.assertEqual(response.status_code, 405)
         authorize.assert_not_called()
 
@@ -325,7 +336,7 @@ class SharedWhiteboardGatewayTest(SimpleTestCase):
     def test_preview_permission_error_returns_html(self, authorize, render_error):
         from django.http import HttpResponse
         render_error.return_value = HttpResponse('<html>Permission denied</html>')
-        response = file_views.view_shared_sdoc_whiteboard(self.request, 'abcd', PARENT, BOARD)
+        response = file_views.view_shared_sdoc_whiteboard(self.request, 'abcd', BOARD)
         self.assertEqual(response.status_code, 403)
         self.assertTrue(response['Content-Type'].startswith('text/html'))
         self.assertIn('no-store', response['Cache-Control'])

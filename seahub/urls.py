@@ -279,7 +279,7 @@ urlpatterns = [
     re_path(r'^lib/(?P<repo_id>[-0-9a-f]{36})/file(?P<path>.*)$', view_lib_file, name='view_lib_file'),
     re_path(r'^lib/(?P<repo_id>[-0-9a-f]{36})/revisions/(?P<revision_id>\d+)/$', view_sdoc_revision, name='view_sdoc_revision'),
     re_path(r'^wiki/lib/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.*)$', view_lib_as_wiki, name='view_lib_as_wiki'),
-    re_path(r'^smart-link/(?P<file_uuid>[-0-9a-f]{36})/share/(?P<share_token>[a-f0-9]+)/sdoc/(?P<sdoc_uuid>[-0-9a-f]{36})/$', view_shared_sdoc_whiteboard, name='shared_sdoc_whiteboard_preview'),
+    re_path(r'^smart-link/(?P<file_uuid>[-0-9a-f]{36})/share/(?P<share_token>[a-f0-9]+)/$', view_shared_sdoc_whiteboard, name='shared_sdoc_whiteboard_preview'),
     re_path(r'^smart-link/(?P<dirent_uuid>[-0-9a-f]{36})/(?P<dirent_name>.*)$', view_lib_file_via_smart_link, name="view_lib_file_via_smart_link"),
 
     ### share/upload link ###

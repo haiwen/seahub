@@ -75,7 +75,7 @@ from seahub.group.utils import is_group_member
 from seahub.seadoc.utils import get_seadoc_file_uuid, \
         gen_seadoc_access_token, is_seadoc_revision, gen_share_seadoc_access_token
 from seahub.exdraw.utils import get_exdraw_file_uuid, gen_exdraw_access_token, gen_share_exdraw_access_token
-from seahub.exdraw.shared import authorize_share
+from seahub.exdraw.shared import authorize_share, canonical_uuid
 from seahub.seadoc.models import SeadocRevision
 
 import seahub.settings as settings
@@ -477,9 +477,10 @@ def can_edit_file(file_name, file_size, repo):
 
 @require_safe
 @never_cache
-def view_shared_sdoc_whiteboard(request, share_token, sdoc_uuid, file_uuid):
+def view_shared_sdoc_whiteboard(request, share_token, file_uuid):
     """HTML shell for a whiteboard embedded in an authorized sdoc share."""
     try:
+        sdoc_uuid = canonical_uuid(request.GET.get('sdoc_uuid'))
         share, mapping, repo, path, file_id, parent_mapping = authorize_share(
             request, share_token, sdoc_uuid, file_uuid)
         scene_url = reverse('shared_sdoc_whiteboard', kwargs={
