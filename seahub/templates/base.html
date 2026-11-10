@@ -69,7 +69,7 @@
         </main>
 
         {% if messages %}
-        <ul class="messages hide">
+        <ul class="messages hide" role="status">
             {% for message in messages %}
             <li class="{{ message.tags }}">
                 {% if 'safe' in message.tags %}
