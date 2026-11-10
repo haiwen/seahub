@@ -966,6 +966,15 @@ textarea:-moz-placeholder {
   text-decoration: none;
 }
 
+#lang-context {
+  padding: 0;
+  border: 0;
+  color: #E16C0A;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
 #lang-context .lang-context-icon {
   display: inline-block;
   width: 12px;
