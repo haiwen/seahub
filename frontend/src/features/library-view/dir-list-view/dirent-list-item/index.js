@@ -678,7 +678,7 @@ class DirentListItem extends React.Component {
                   ? <a className="sf-link text-truncate" onClick={this.onItemClick}>{dirent.name}</a>
                   : <a className="text-truncate" href={this.getDirentHref()} onClick={this.onItemClick}>{dirent.name}</a>
                 }
-                {dirent.starred &&
+                {!dirent.write_protected && dirent.starred &&
                 <OpIcon
                   id={`star-icon-${dirent.id}`}
                   className="star-icon ml-2 flex-shrink-0"
@@ -696,24 +696,26 @@ class DirentListItem extends React.Component {
           </div>
 
           {/* Operations */}
-          <div className="dirent-mobile-ops">
-            <MobileItemMenu>
-              {this.props.getDirentItemMenuList(dirent, true)
-                .filter(item => item != 'Divider' && item.key != TextTranslation.OPEN_WITH.key && item.key !== TextTranslation.MORE.key)
-                .map((item, index) => {
-                  return (
-                    <DropdownItem
-                      className="mobile-menu-item"
-                      key={index}
-                      data-op={item.key}
-                      onClick={this.onMobileMenuItemClick}
-                    >
-                      {item.value}
-                    </DropdownItem>
-                  );
-                })}
-            </MobileItemMenu>
-          </div>
+          {!dirent.write_protected && (
+            <div className="dirent-mobile-ops">
+              <MobileItemMenu>
+                {this.props.getDirentItemMenuList(dirent, true)
+                  .filter(item => item != 'Divider' && item.key != TextTranslation.OPEN_WITH.key && item.key !== TextTranslation.MORE.key)
+                  .map((item, index) => {
+                    return (
+                      <DropdownItem
+                        className="mobile-menu-item"
+                        key={index}
+                        data-op={item.key}
+                        onClick={this.onMobileMenuItemClick}
+                      >
+                        {item.value}
+                      </DropdownItem>
+                    );
+                  })}
+              </MobileItemMenu>
+            </div>
+          )}
         </div>
       );
     }
@@ -761,7 +763,7 @@ class DirentListItem extends React.Component {
 
         {/* Star */}
         <div className="dirent-operation dirent-operation-star">
-          {dirent.starred !== undefined &&
+          {!dirent.write_protected && dirent.starred !== undefined &&
             <OpIcon
               id={`star-icon-${dirent.id}`}
               className="star-icon"
@@ -812,7 +814,7 @@ class DirentListItem extends React.Component {
                   <a href={this.getDirentHref()} onClick={this.onItemClick}>{dirent.name}</a>
                 }
               </span>
-              {this.state.isOperationShow && (
+              {!dirent.write_protected && this.state.isOperationShow && (
                 <CustomDropdown
                   target={`item-dropdown-${dirent.id}`}
                   items={this.getItemMenuList(dirent, true)}

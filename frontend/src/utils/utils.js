@@ -538,7 +538,7 @@ export const Utils = {
     let list = [];
     const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, PERMISSION, STAR, UNSTAR } = TextTranslation;
     if (dirent.write_protected) {
-      return [dirent.starred ? UNSTAR : STAR];
+      return [];
     }
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);

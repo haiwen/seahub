@@ -10,10 +10,10 @@ const folder = { type: 'dir', name: 'folder', permission: 'rw' };
 const protectedFolder = { ...folder, write_protected: true };
 const keys = (items) => items.filter(item => item !== 'Divider').map(item => item.key);
 
-test('protected navigation folders only expose personal starring', () => {
-  expect(keys(getDirentItemMenuList(repoInfo, protectedFolder))).toEqual([TextTranslation.STAR.key]);
+test('protected navigation folders expose no operations', () => {
+  expect(keys(getDirentItemMenuList(repoInfo, protectedFolder))).toEqual([]);
   expect(keys(getDirentItemMenuList(repoInfo, { ...protectedFolder, starred: true })))
-    .toEqual([TextTranslation.UNSTAR.key]);
+    .toEqual([]);
   expect(Utils.canDeleteFile(protectedFolder)).toBe(false);
   expect(Utils.canDownloadFile(protectedFolder)).toBe(false);
 });
@@ -25,7 +25,7 @@ test('mixed selections cannot operate on protected navigation folders', () => {
 test('single protected selection uses the protected item menu', () => {
   const getItemMenuList = item => getDirentItemMenuList(repoInfo, item);
   expect(keys(getBatchMenuList(repoInfo, 'rw', [protectedFolder], getItemMenuList)))
-    .toEqual([TextTranslation.STAR.key]);
+    .toEqual([]);
 });
 
 test('ordinary writable folders retain their operations', () => {
