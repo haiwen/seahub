@@ -1,5 +1,6 @@
 import logging
 import json
+from django.utils.translation import gettext as _
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
@@ -36,6 +37,15 @@ class SeahubIOStatus(APIView):
             resp = event_archive_status(task_id)
         else:
             resp = event_export_status(task_id)
+        if task_type == 'import' and resp.status_code == 400:
+            try:
+                error_data = resp.json()
+            except (ValueError, AttributeError):
+                error_data = {}
+            if error_data.get('error_code') == 'docx_content_too_large':
+                return api_error(400, _(
+                    'The Word document contains too much uncompressed content to convert. '
+                    'Please split it into smaller documents and try again.'))
         if resp.status_code == 500:
             logger.error('query export or import or archive status error: %s, %s' % (task_id, resp.content))
             return api_error(500, 'Internal Server Error')
