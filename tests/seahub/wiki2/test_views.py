@@ -74,7 +74,8 @@ class PublishedWikiMetadataTest(SimpleTestCase):
             modifier='owner@example.com',
             mtime=self.config_mtime if path == '_Internal/Wiki/index.json' else 100)
         self.start_patch('get_seadoc_file_uuid').return_value = 'doc-uuid'
-        self.start_patch('gen_file_get_url').return_value = 'https://files.example.com/doc'
+        self.file_token = self.start_patch('convert_file_token')
+        self.file_token.return_value = 'file-grant'
         self.export = self.start_patch('sdoc_export_to_html')
         self.export.return_value = SimpleNamespace(ok=True, content=b'<p>Document</p>')
         self.start_patch('render').side_effect = self.render_page
@@ -137,6 +138,17 @@ class PublishedWikiMetadataTest(SimpleTestCase):
             for page_id in (None, 'XXXX'):
                 with self.subTest(ssr=ssr, page_id=page_id):
                     self.assert_metadata(self.get_page(page_id), 'Install', page_id)
+
+    def test_ssr_uses_readonly_file_grant(self):
+        self.publish.enable_server_render = True
+        self.api.get_file_id_by_path.return_value = 'file-id'
+        response = self.get_page('BBBB')
+        self.assertEqual(response.template_name, 'wiki/wiki_publish_ssr.html')
+        self.file_token.assert_called_once_with('repo-id', 'file-id', 'upgrade.sdoc', '', 'doc-uuid')
+        self.export.assert_called_once_with('/upgrade.sdoc', '', 'doc-uuid', 'file-grant',
+                                             'sdoc', 'html', 'manual',
+                                             {'AAAA': 'Install', 'BBBB': 'Upgrade'})
+        self.api.get_fileserver_access_token.assert_not_called()
 
     def test_metadata_after_authentication_middleware_sets_lazy_user(self):
         # AuthenticationMiddleware installs this descriptor on the request class.

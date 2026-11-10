@@ -35,7 +35,7 @@ from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocHistoryName, SeadocCommentReply
 from seahub.base.models import FileComment
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, OFFICE_TEMPLATE_ROOT
-from seahub.api2.endpoints.utils import convert_file, sdoc_convert_to_docx
+from seahub.api2.endpoints.utils import convert_file, sdoc_convert_to_docx, convert_file_token
 from seahub.seadoc.utils import get_seadoc_file_uuid
 from seahub.exdraw.utils import get_exdraw_file_uuid
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
@@ -611,31 +611,19 @@ class FileView(APIView):
             new_filename = check_filename_or_rename(repo_id, parent_dir, new_filename)
             new_file_path = posixpath.join(parent_dir, new_filename)
 
-            download_token = seafile_api.get_fileserver_access_token(repo_id,
-                                                                     file_id,
-                                                                     'download',
-                                                                     username)
-            download_url = gen_file_get_url(download_token, filename)
-
-            obj_id = json.dumps({'parent_dir': parent_dir})
-            upload_token = seafile_api.get_fileserver_access_token(repo_id,
-                                                                   obj_id,
-                                                                   'upload-link',
-                                                                   username,
-                                                                   use_onetime=True)
-
-            upload_url = gen_file_upload_url(upload_token, 'upload-api')
-
             if extension == '.sdoc':
                 doc_uuid = get_seadoc_file_uuid(repo, path)
             else:
                 doc_uuid = get_seadoc_file_uuid(repo, new_file_path)
 
+            file_token = convert_file_token(
+                repo_id, file_id, filename, username, doc_uuid, new_file_path)
+
             if dst_type != 'docx':
                 # md, docx file convert to sdoc
                 try:
                     resp = convert_file(path, username, doc_uuid,
-                                        download_url, upload_url,
+                                        file_token,
                                         src_type, dst_type)
                 except Exception as e:
                     logger.error(e)
@@ -643,6 +631,10 @@ class FileView(APIView):
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
                 if resp.status_code == 400:
                     error_msg = json.loads(resp.text).get('error_msg', 'File is invalid')
+                    if error_msg == 'DOCX uncompressed content is too large to convert.':
+                        error_msg = _(
+                            'The Word document contains too much uncompressed content to convert. '
+                            'Please split it into smaller documents and try again.')
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
                 if resp.status_code != 200:
                     logger.error('convert file error status: %s body: %s',
@@ -653,7 +645,7 @@ class FileView(APIView):
                 # sdoc file convert to docx
                 try:
                     resp = sdoc_convert_to_docx(path, username, doc_uuid,
-                                                download_url, upload_url,
+                                                file_token,
                                                 src_type, dst_type)
                 except Exception as e:
                     logger.error(e)

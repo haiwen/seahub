@@ -163,7 +163,9 @@ class SidePanel extends PureComponent {
       this.setState({
         isShowImportPageDialog: false
       });
-      toaster.danger(gettext('Failed to import page'));
+      const errorMessage = Utils.getErrorMsg(err);
+      toaster.danger(errorMessage && errorMessage !== gettext('Error')
+        ? errorMessage : gettext('Failed to import page'));
     });
   };
 

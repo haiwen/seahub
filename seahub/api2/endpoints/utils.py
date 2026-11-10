@@ -234,14 +234,24 @@ def convert_file_gen_headers():
     return {"Authorization": "Token %s" % token}
 
 
-def convert_file(path, username, doc_uuid, download_url, upload_url, src_type, dst_type):
+def convert_file_token(repo_id, file_id, filename, username, doc_uuid='', output_path=None):
+    payload = {
+        'aud': 'seadoc-converter-file', 'exp': int(time.time()) + 300,
+        'repo_id': repo_id, 'file_id': file_id, 'filename': filename,
+        'username': username, 'doc_uuid': str(doc_uuid),
+    }
+    if output_path:
+        payload['output_path'] = output_path
+    return jwt.encode(payload, SEADOC_PRIVATE_KEY, algorithm='HS256')
+
+
+def convert_file(path, username, doc_uuid, file_token, src_type, dst_type):
     headers = convert_file_gen_headers()
     params = {
         'path': path,
         'username': username,
         'doc_uuid': doc_uuid,
-        'download_url': download_url,
-        'upload_url': upload_url,
+        'file_token': file_token,
         'src_type': src_type,
         'dst_type': dst_type,
     }
@@ -251,16 +261,14 @@ def convert_file(path, username, doc_uuid, download_url, upload_url, src_type, d
     return resp
 
 
-def sdoc_convert_to_docx(path, username, doc_uuid, download_url,
-                         upload_url, src_type, dst_type):
+def sdoc_convert_to_docx(path, username, doc_uuid, file_token, src_type, dst_type):
 
     headers = convert_file_gen_headers()
     params = {
         'path': path,
         'username': username,
         'doc_uuid': doc_uuid,
-        'download_url': download_url,
-        'upload_url': upload_url,
+        'file_token': file_token,
         'src_type': src_type,
         'dst_type': dst_type,
     }
@@ -270,7 +278,7 @@ def sdoc_convert_to_docx(path, username, doc_uuid, download_url,
     return resp
 
 
-def sdoc_export_to_docx(path, username, doc_uuid, download_url,
+def sdoc_export_to_docx(path, username, doc_uuid, file_token,
                         src_type, dst_type):
 
     headers = convert_file_gen_headers()
@@ -278,7 +286,7 @@ def sdoc_export_to_docx(path, username, doc_uuid, download_url,
         'path': path,
         'username': username,
         'doc_uuid': doc_uuid,
-        'download_url': download_url,
+        'file_token': file_token,
         'src_type': src_type,
         'dst_type': dst_type,
     }
@@ -288,13 +296,13 @@ def sdoc_export_to_docx(path, username, doc_uuid, download_url,
     return resp
 
 
-def sdoc_export_to_md(path, doc_uuid, download_url,
+def sdoc_export_to_md(path, doc_uuid, file_token,
                       src_type, dst_type):
     headers = convert_file_gen_headers()
     params = {
         'path': path,
         'doc_uuid': doc_uuid,
-        'download_url': download_url,
+        'file_token': file_token,
         'src_type': src_type,
         'dst_type': dst_type,
     }
@@ -304,7 +312,7 @@ def sdoc_export_to_md(path, doc_uuid, download_url,
     return resp
 
 
-def sdoc_export_to_html(path, username, doc_uuid, download_url,
+def sdoc_export_to_html(path, username, doc_uuid, file_token,
                         src_type, dst_type, publish_url, page_id_name_dict):
 
     headers = convert_file_gen_headers()
@@ -312,7 +320,7 @@ def sdoc_export_to_html(path, username, doc_uuid, download_url,
         'path': path,
         'username': username,
         'doc_uuid': doc_uuid,
-        'download_url': download_url,
+        'file_token': file_token,
         'src_type': src_type,
         'dst_type': dst_type,
         'publish_url': publish_url,
