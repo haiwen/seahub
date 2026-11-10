@@ -17,21 +17,62 @@ CONTENT_BLOCK_TAGS = frozenset({
 CONTAINER_PREFIX = r'[ \t]*(?:(?:>[ \t]?|(?:[-+*]|\d{1,9}[.)])[ \t]+)[ \t]*)*'
 TOKEN_RE = re.compile(
     r'(?P<fence>^' + CONTAINER_PREFIX + r'(?:`{3,}(?!`)[^`\r\n]*|~{3,}[^\r\n]*)(?:\r?\n|$))|'
+    r'(?P<indented>^[ \t]*(?:>[ \t]?[ \t]*)*(?=[^\r\n]*\S)[^\r\n]*(?:\r?\n|$))|'
     r'(?P<ticks>`+)|<(?P<closing>/)?(?P<tag>[A-Za-z][\w:-]*)(?=[\s/>]|$)',
     re.MULTILINE,
 )
 
+INLINE_TOKEN_RE = re.compile(r'(?P<ticks>`+)|<(?P<closing>/)?(?P<tag>[A-Za-z][\w:-]*)(?=[\s/>]|$)')
+
+
+def line_layout(line):
+    """Expand tabs at four-column stops before removing quote prefixes."""
+    line = line.expandtabs(4).rstrip('\r\n')
+    depth = 0
+    while True:
+        quote = re.match(r' {0,3}> ?', line)
+        if not quote:
+            break
+        line = line[quote.end():]
+        depth += 1
+    indent = len(line) - len(line.lstrip(' '))
+    item = re.match(r' {0,3}(?:[-+*]|\d{1,9}[.)])( +)', line)
+    return depth, indent, item.end() if item else None, line
+
+
+def list_base(value, start, depth):
+    base = 0
+    for line in value[:start].splitlines():
+        quote_depth, indent, item, text = line_layout(line)
+        if quote_depth != depth:
+            base = 0
+        elif item is not None:
+            base = item
+        elif text.strip() and indent < base:
+            base = 0
+    return base
+
 
 def code_end(value, token):
     """Line-delimited fences and exact-length backtick spans, not substrings."""
-    if token.group('fence'):
+    if token.re is TOKEN_RE and (token.group('fence') or token.group('indented')):
+        depth, indent, item, text = line_layout(token.group(0))
+        base = item if item is not None else list_base(value, token.start(), depth)
+        relative = indent - base if item is None else 0
+        if relative >= 4:
+            # Protect indented lines (also conservatively in paragraph contexts).
+            return token.end()
+        if not token.group('fence'):
+            return None
         marker = re.match(CONTAINER_PREFIX + r'(`+|~+)', token.group(0)).group(1)
-        prefix = token.group(0).split(marker, 1)[0]
-        closing_prefix = r'[ \t]*' + r'>[ \t]*' * prefix.count('>')
-        closing = re.compile(r'^' + closing_prefix + re.escape(marker[0]) + '{%d,}' % len(marker) +
-                             r'[ \t]*(?:\r?\n|$)', re.MULTILINE)
-        match = closing.search(value, token.end())
-        return match.end() if match else len(value)
+        offset = token.end()
+        for line in value[offset:].splitlines(keepends=True):
+            quote_depth, closing_indent, closing_item, closing_text = line_layout(line)
+            if (quote_depth == depth and closing_item is None and 0 <= closing_indent - base <= 3 and
+                    re.fullmatch(re.escape(marker[0]) + '{%d,}[ ]*' % len(marker), closing_text.lstrip(' '))):
+                return offset + len(line)
+            offset += len(line)
+        return len(value)
     for closing in re.finditer(r'`+', value[token.end():]):
         if len(closing.group(0)) == len(token.group('ticks')):
             return token.end() + closing.end()
@@ -60,7 +101,19 @@ def parse_content_blocks(value, tags):
         token = TOKEN_RE.search(value, position)
         if token is None:
             break
-        if token.group('fence') or token.group('ticks'):
+        if token.group('fence') or token.group('indented'):
+            end = code_end(value, token)
+            if end is None:
+                inline = INLINE_TOKEN_RE.search(value, token.start(), token.end())
+                if inline is None:
+                    position = token.end()
+                    continue
+                token = inline
+        else:
+            end = None
+        if end is not None:
+            block = {'type': 'code', 'raw': value[token.start():end]}
+        elif token.group('ticks'):
             end = code_end(value, token)
             if end is None:
                 position = token.end()

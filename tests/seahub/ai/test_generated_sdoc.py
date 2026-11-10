@@ -224,6 +224,19 @@ class GeneratedSdocTest(unittest.TestCase):
         self.sdoc.seafile_api.post_file.assert_not_called()
         written = []
 
+        reference = ai.sdoc.SdocGenerator().execute('Example', 'Example', json.dumps(self.document), executor)
+        for example in [
+            '    ' + reference + '\n',
+            '\t' + reference + '\n',
+            '```\n    ```\n' + reference + '\n```\n',
+            '```\n\t```\n' + reference + '\n```\n',
+            '- Example\n  ```\n      ```\n  ' + reference + '\n  ```\n',
+        ]:
+            answer, _ = ai.helpers['get_answer_and_sources'](executor, example)
+            self.assertEqual(answer.strip(), example.strip())
+            self.process(answer)
+        self.sdoc.seafile_api.post_file.assert_not_called()
+
         def capture(repo, path, directory, name, username):
             written.append(json.loads(Path(path).read_text()))
 
@@ -277,6 +290,12 @@ class GeneratedSdocTest(unittest.TestCase):
 
     def test_fenced_examples_never_write_and_real_following_requests_do(self):
         examples = [
+            '    ' + self.tag + '\n',
+            '\t' + self.tag + '\n',
+            '```\n    ```\n' + self.tag + '\n```\n',
+            '```\n\t```\n' + self.tag + '\n```\n',
+            '- Example\n  ```\n      ```\n  ' + self.tag + '\n  ```\n',
+            '> ```\n>     ```\n> ' + self.tag + '\n> ```\n',
             '> ```js\n> const marker = "```";\n> ' + self.tag + '\n> ```\n',
             '- Example\n  ```js\n  const marker = "```";\n  ' + self.tag + '\n  ```\n',
             '> 1. ~~~~js\n>    ~~~~suffix\n>    ' + self.tag + '\n>    ~~~~~\n',

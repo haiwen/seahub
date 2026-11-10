@@ -3,19 +3,59 @@
 // Conservative protocol protection includes list continuations/mixed containers;
 // it deliberately does not claim to implement the renderer's full Markdown grammar.
 const CONTAINER_PREFIX = '[ \\t]*(?:(?:>[ \\t]?|(?:[-+*]|\\d{1,9}[.)])[ \\t]+)[ \\t]*)*';
-const TOKEN = new RegExp(`(?<fence>^${CONTAINER_PREFIX}(?:\u0060{3,}(?!\u0060)[^\u0060\\r\\n]*|~{3,}[^\\r\\n]*)(?:\\r?\\n|$))|(?<ticks>\u0060+)|<(?<closing>/)?(?<tag>[A-Za-z][\\w:-]*)(?=[\\s/>]|$)`, 'gm');
+const TOKEN = new RegExp(`(?<fence>^${CONTAINER_PREFIX}(?:\u0060{3,}(?!\u0060)[^\u0060\\r\\n]*|~{3,}[^\\r\\n]*)(?:\\r?\\n|$))|(?<indented>^[ \\t]*(?:>[ \\t]?[ \\t]*)*(?=[^\\r\\n]*\\S)[^\\r\\n]*(?:\\r?\\n|$))|(?<ticks>\u0060+)|<(?<closing>/)?(?<tag>[A-Za-z][\\w:-]*)(?=[\\s/>]|$)`, 'gm');
+const INLINE_TOKEN = /(?<ticks>`+)|<(?<closing>\/)?(?<tag>[A-Za-z][\w:-]*)(?=[\s/>]|$)/g;
+
+const lineLayout = (raw) => {
+  let column = 0;
+  let line = Array.from(raw).map((char) => {
+    const width = char === '\t' ? 4 - column % 4 : 1;
+    column += width;
+    return char === '\t' ? ' '.repeat(width) : char;
+  }).join('').replace(/[\r\n]+$/, '');
+  let depth = 0;
+  let quote;
+  while ((quote = line.match(/^ {0,3}> ?/))) {
+    line = line.slice(quote[0].length);
+    depth += 1;
+  }
+  const indent = line.match(/^ */)[0].length;
+  const item = line.match(/^ {0,3}(?:[-+*]|\d{1,9}[.)])( +)/);
+  return { depth, indent, item: item ? item[0].length : null, text: line };
+};
+
+const listBase = (value, start, depth) => {
+  let base = 0;
+  value.slice(0, start).replace(/\r?\n$/, '').split(/\r?\n/).forEach((line) => {
+    const layout = lineLayout(line);
+    if (layout.depth !== depth) base = 0;
+    else if (layout.item !== null) base = layout.item;
+    else if (layout.text.trim() && layout.indent < base) base = 0;
+  });
+  return base;
+};
 
 const codeEnd = (value, token) => {
   const start = token.index + token[0].length;
-  if (token.groups.fence) {
+  if (token.groups.fence || token.groups.indented) {
+    const layout = lineLayout(token[0]);
+    const base = layout.item ?? listBase(value, token.index, layout.depth);
+    const relative = layout.item === null ? layout.indent - base : 0;
+    if (relative >= 4) return start;
+    if (!token.groups.fence) return null;
     const marker = token[0].match(new RegExp(`^${CONTAINER_PREFIX}(\u0060+|~+)`))[1];
-    const prefix = token[0].split(marker)[0];
-    const quoteDepth = (prefix.match(/>/g) || []).length;
-    const closingPrefix = '[ \\t]*' + '>[ \\t]*'.repeat(quoteDepth);
-    const closing = new RegExp(`^${closingPrefix}${marker[0]}{${marker.length},}[ \\t]*(?:\\r?\\n|$)`, 'gm');
-    closing.lastIndex = start;
-    const match = closing.exec(value);
-    return match ? closing.lastIndex : value.length;
+    const closing = new RegExp(`^${marker[0]}{${marker.length},}[ ]*$`);
+    let offset = start;
+    const lines = value.slice(start).match(/[^\n]*\n|[^\n]+$/g) || [];
+    for (const line of lines) {
+      const candidate = lineLayout(line);
+      const relativeIndent = candidate.indent - base;
+      if (candidate.depth === layout.depth && candidate.item === null && relativeIndent >= 0 && relativeIndent <= 3 && closing.test(candidate.text.trimStart())) {
+        return offset + line.length;
+      }
+      offset += line.length;
+    }
+    return value.length;
   }
   const ticks = /`+/g;
   ticks.lastIndex = start;
@@ -49,26 +89,42 @@ export const parseContentBlocks = (value = '', tags = []) => {
   let textStart = 0;
   while (position < value.length) {
     tokenRe.lastIndex = position;
-    const token = tokenRe.exec(value);
+    let token = tokenRe.exec(value);
     if (!token) break;
     let end;
     let block;
-    if (token.groups.fence || token.groups.ticks) {
+    if (token.groups.fence || token.groups.indented) {
       end = codeEnd(value, token);
       if (end === null) {
-        position = tokenRe.lastIndex;
+        const inlineRe = new RegExp(INLINE_TOKEN.source, 'g');
+        inlineRe.lastIndex = token.index;
+        const inline = inlineRe.exec(value);
+        if (!inline || inline.index >= tokenRe.lastIndex) {
+          position = tokenRe.lastIndex;
+          continue;
+        }
+        token = inline;
+      }
+    } else end = null;
+    if (end !== null) {
+      block = { type: 'code', raw: value.slice(token.index, end) };
+    } else if (token.groups.ticks) {
+      end = codeEnd(value, token);
+      if (end === null) {
+        position = token.index + token[0].length;
         continue;
       }
       block = { type: 'code', raw: value.slice(token.index, end) };
     } else {
       const tag = token.groups.tag;
-      end = tagEnd(value, tokenRe.lastIndex);
+      const tokenEnd = token.index + token[0].length;
+      end = tagEnd(value, tokenEnd);
       const partialTag = end === null && tags.some((name) => name.startsWith(tag));
       if ((!registered.has(tag) && !partialTag) || token.groups.closing) {
         position = end ?? value.length;
         continue;
       }
-      const attributes = end === null ? '' : value.slice(tokenRe.lastIndex, end - 1);
+      const attributes = end === null ? '' : value.slice(tokenEnd, end - 1);
       const selfClosing = end !== null && attributes.trimEnd().endsWith('/');
       const contentStart = end;
       let contentEnd = end;

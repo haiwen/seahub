@@ -1,5 +1,45 @@
 [
   {
+    "name": "four space indented protocol is code",
+    "value": "    <image />\n<image />",
+    "tags": ["image"],
+    "types": ["code", "block"],
+    "blockTags": ["image"],
+    "complete": [true]
+  },
+  {
+    "name": "four columns cannot close a fence",
+    "value": "```\n    ```\n<image />\n\t```\n<image />\n```\n<image />",
+    "tags": ["image"],
+    "types": ["code", "block"],
+    "blockTags": ["image"],
+    "complete": [true]
+  },
+  {
+    "name": "list relative indentation rejects pseudo closers",
+    "value": "- Example\n  ```\n      ```\n  <image />\n  ```\n<image />",
+    "tags": ["image"],
+    "types": ["text", "code", "block"],
+    "blockTags": ["image"],
+    "complete": [true]
+  },
+  {
+    "name": "quote tab pseudo closer is four relative columns",
+    "value": "> ```\n> \t  ```\n> <image />\n> ```\n<image />",
+    "tags": ["image"],
+    "types": ["code", "block"],
+    "blockTags": ["image"],
+    "complete": [true]
+  },
+  {
+    "name": "three relative columns still close a list fence",
+    "value": "- ```\n  <image />\n     ```\n<image />",
+    "tags": ["image"],
+    "types": ["code", "block"],
+    "blockTags": ["image"],
+    "complete": [true]
+  },
+  {
     "name": "blockquote fence protects inline false closers",
     "value": "> ```js\n> const marker = \"```\";\n> <image>x</image>\n> ```\n<image />",
     "tags": ["image"],
