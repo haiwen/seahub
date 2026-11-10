@@ -64,7 +64,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr, datetime_to_isoformat_timestr
 from seahub.base.models import FileComment
-from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_INVISIBLE
+from seahub.constants import PERMISSION_READ_WRITE
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
 from seahub.file_participants.models import FileParticipant
 from seahub.base.accounts import User
@@ -2687,7 +2687,7 @@ class SeadocDirView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if not check_folder_permission(request, repo_id, path):
+        if not check_folder_permission(request, repo_id, path, allow_navigation=True):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -2702,12 +2702,10 @@ class SeadocDirView(APIView):
         uuid_map_queryset = FileUUIDMap.objects.get_fileuuidmaps_by_parent_path(repo_id, path)
         dir_list, file_list = [], []
         for dirent in dirs:
-            if dirent.permission == PERMISSION_INVISIBLE:
-                continue
-
             entry = {}
             if stat.S_ISDIR(dirent.mode):
                 dtype = "dir"
+                entry["write_protected"] = bool(getattr(dirent, 'write_protected', False))
             else:
                 dtype = "file"
                 filetype, fileext = get_file_type_and_ext(dirent.obj_name)

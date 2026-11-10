@@ -118,13 +118,15 @@ def get_system_default_repo_id():
     return _default_repo_id
 
 
-def check_folder_permission(request, repo_id, path):
+def check_folder_permission(request, repo_id, path, allow_navigation=False):
     """Check repo/folder/file access permission of a user.
 
     Arguments:
     - `request`:
     - `repo_id`:
     - `path`:
+    - `allow_navigation`: preserve invisible permission for directory listings;
+      list_dir_with_perm filters inaccessible contents.
     """
     username = request.user.username
     if not username:
@@ -134,8 +136,10 @@ def check_folder_permission(request, repo_id, path):
     except SearpcError as e:
         logger.warning(e)
         return None
-    if not permission or permission == PERMISSION_INVISIBLE:
+    if not permission:
         return None
+    if permission == PERMISSION_INVISIBLE:
+        return permission if allow_navigation else None
 
     # A read-only repository makes every existing permission read-only; it
     # must not grant access to users who have no permission for the repository.

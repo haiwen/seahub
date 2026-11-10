@@ -114,7 +114,7 @@ def convert_repo_path_when_can_not_view_folder(request, repo_id, path):
             return HttpResponse(json.dumps({'error': err_msg}),
                                 status=403, content_type=content_type)
 
-    user_perm = check_folder_permission(request, repo_id, path)
+    user_perm = check_folder_permission(request, repo_id, path, allow_navigation=True)
     if not user_perm:
         err_msg = _('Permission denied.')
         return HttpResponse(json.dumps({'error': err_msg}),
@@ -152,7 +152,7 @@ def list_lib_dir(request, repo_id):
                             status=404, content_type=content_type)
 
     # perm for current dir
-    user_perm = check_folder_permission(request, repo_id, path)
+    user_perm = check_folder_permission(request, repo_id, path, allow_navigation=True)
     if not user_perm:
         return convert_repo_path_when_can_not_view_folder(request, repo_id, path)
 
@@ -232,6 +232,7 @@ def list_lib_dir(request, repo_id):
         d_['last_update'] = translate_seahub_time(d.last_modified)
         d_['p_dpath'] = posixpath.join(path, d.obj_name)
         d_['perm'] = d.permission # perm for sub dir in current dir
+        d_['write_protected'] = bool(getattr(d, 'write_protected', False))
         dirent_list.append(d_)
 
     size = int(request.GET.get('thumbnail_size', THUMBNAIL_DEFAULT_SIZE))

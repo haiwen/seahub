@@ -48,6 +48,10 @@ class TreeView extends React.Component {
   }
 
   onNodeDragStart = (e, node) => {
+    if (node.object.write_protected) {
+      e.preventDefault();
+      return;
+    }
     if (Utils.isIEBrowser()) {
       return false;
     }
@@ -99,6 +103,7 @@ class TreeView extends React.Component {
   };
 
   onNodeDrop = (e, node) => {
+    if (node?.object.write_protected) return;
     if (Utils.isIEBrowser() || !this.canDrop) {
       return false;
     }

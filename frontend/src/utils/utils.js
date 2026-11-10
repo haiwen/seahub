@@ -537,6 +537,9 @@ export const Utils = {
 
     let list = [];
     const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, PERMISSION, STAR, UNSTAR } = TextTranslation;
+    if (dirent.write_protected) {
+      return [dirent.starred ? UNSTAR : STAR];
+    }
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
 
@@ -611,12 +614,14 @@ export const Utils = {
   },
 
   canDownloadFile: function (dirent) {
+    if (dirent.write_protected) return false;
     const { permission } = dirent;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
     return (permission == 'rw' || permission == 'r') || (isCustomPermission && customPermission.permission.download);
   },
 
   canDeleteFile: function (dirent) {
+    if (dirent.write_protected) return false;
     const { permission } = dirent;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
     const perm = (permission == 'rw' || permission == 'cloud-edit') || (isCustomPermission && customPermission.permission.delete);

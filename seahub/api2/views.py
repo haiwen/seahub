@@ -2263,12 +2263,10 @@ def _collect_dir_file_recursively(username, repo_id, path, all_dirs):
 
     for dirent in dirs:
 
-        if dirent.permission == PERMISSION_INVISIBLE:
-            continue
-
         entry = {}
         if stat.S_ISDIR(dirent.mode):
             entry["type"] = 'dir'
+            entry["write_protected"] = bool(getattr(dirent, 'write_protected', False))
         else:
             entry["type"] = 'file'
             entry['modifier_email'] = dirent.modifier
@@ -2334,9 +2332,6 @@ def get_recursive_file_list(username, repo_id, path, all_files, order_by=None, d
         if len(all_files) >= RECURSIVE_FILE_LIST_MAX_COUNT:
             break
 
-        if dirent.permission == PERMISSION_INVISIBLE:
-            continue
-
         if path == '/' and dirent.obj_name in ('_Internal', 'images'):
             continue
 
@@ -2389,12 +2384,10 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
     dir_list, file_list = [], []
     for dirent in dirs:
 
-        if dirent.permission == PERMISSION_INVISIBLE:
-            continue
-
         entry = {}
         if stat.S_ISDIR(dirent.mode):
             dtype = "dir"
+            entry["write_protected"] = bool(getattr(dirent, 'write_protected', False))
         else:
             dtype = "file"
             entry['modifier_email'] = dirent.modifier
@@ -3864,8 +3857,10 @@ class DirView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        permission = check_folder_permission(request, repo_id, path)
-        if parse_repo_perm(permission).can_download is False and \
+        permission = check_folder_permission(request, repo_id, path, allow_navigation=True)
+        if not permission:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if permission != PERMISSION_INVISIBLE and parse_repo_perm(permission).can_download is False and \
            not is_web_request(request):
             # preview only repo and this request does not came from web brower
             error_msg = 'Permission denied.'

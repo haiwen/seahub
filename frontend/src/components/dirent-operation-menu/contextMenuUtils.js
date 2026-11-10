@@ -142,6 +142,9 @@ export const getBatchMenuList = (repoInfo, userPerm, selectedDirents, getItemMen
   }
 
   let batchOptions = [];
+  if (selectedDirents.some(dirent => dirent.write_protected)) {
+    return batchOptions;
+  }
   canDownload && batchOptions.push(TextTranslation.DOWNLOAD);
   canDelete && batchOptions.push(TextTranslation.DELETE);
   canModify && batchOptions.push(TextTranslation.MOVE);

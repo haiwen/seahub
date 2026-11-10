@@ -420,6 +420,10 @@ class DirentListItem extends React.Component {
   };
 
   onItemDragStart = (e) => {
+    if (this.props.dirent.write_protected || this.props.selectedDirentList.some(item => item.write_protected)) {
+      e.preventDefault();
+      return;
+    }
     if (Utils.isIEBrowser() || !this.state.canDrag) {
       return false;
     }
@@ -450,6 +454,7 @@ class DirentListItem extends React.Component {
   };
 
   onItemDragEnter = (e) => {
+    if (this.props.dirent.write_protected) return;
     if (Utils.isIEBrowser() || !this.state.canDrag) {
       return false;
     }
@@ -460,6 +465,7 @@ class DirentListItem extends React.Component {
   };
 
   onItemDragOver = (e) => {
+    if (this.props.dirent.write_protected) return;
     if (Utils.isIEBrowser() || !this.state.canDrag) {
       return false;
     }
@@ -490,6 +496,7 @@ class DirentListItem extends React.Component {
   };
 
   onItemDragDrop = (e) => {
+    if (this.props.dirent.write_protected) return;
     if (Utils.isIEBrowser() || !this.state.canDrag) {
       return false;
     }
@@ -720,7 +727,7 @@ class DirentListItem extends React.Component {
           { 'hover': isOperationShow },
         )}
         style={gridStyle || undefined}
-        draggable={canDrag}
+        draggable={canDrag && !dirent.write_protected}
         onFocus={this.onMouseEnter}
         onMouseEnter={this.onMouseEnter}
         onMouseOver={this.onMouseOver}
