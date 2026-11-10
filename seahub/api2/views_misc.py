@@ -54,6 +54,11 @@ class ServerInfoView(APIView):
         enable_wiki = getattr(settings, 'ENABLE_WIKI', False)
         if enable_wiki:
             features.append('wiki')
+        
+        enable_office_web_app = getattr(settings, 'ENABLE_OFFICE_WEB_APP', False)
+        office_server_type = getattr(settings, 'OFFICE_SERVER_TYPE', '')
+        if enable_office_web_app and office_server_type.lower() == 'collaboraoffice':
+            features.append('collabora')
 
         info['features'] = features
         return info
