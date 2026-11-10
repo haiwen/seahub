@@ -605,15 +605,16 @@ class MetadataRecord(APIView):
                 error_msg = 'Record not found'
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        username = request.user.username
-        org_id = request.user.org.org_id if is_org_context(request) else None
-        repo_id_to_invisible_paths = get_invisible_repos_info_by_username(username, org_id)
-        results = [
-            r for r in query_result.get('results', [])
-            if not is_invisible_path(repo_id_to_invisible_paths, repo_id,
-                                    posixpath.join(r.get('_parent_dir', ''), r.get('_name', '')))
-        ]
-        if not results:
+        path_permissions = {}
+        visible_records = []
+        for record in query_result.get('results', []):
+            fullpath = posixpath.join(record['_parent_dir'], record['_name']).rstrip('/') or '/'
+            if fullpath not in path_permissions:
+                path_permissions[fullpath] = check_folder_permission(request, repo_id, fullpath)
+            if path_permissions[fullpath]:
+                visible_records.append(record)
+        query_result['results'] = visible_records
+        if not query_result['results']:
             error_msg = 'Record not found'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
