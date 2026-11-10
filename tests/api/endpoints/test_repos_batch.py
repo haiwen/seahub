@@ -1,6 +1,7 @@
 import os
 import json
 import posixpath
+from unittest.mock import patch
 from seaserv import seafile_api, ccnet_api
 from django.urls import reverse
 from tests.common.utils import randstring
@@ -450,6 +451,29 @@ class ReposAsyncBatchCopyItemView(BaseTestCase):
         self.remove_repo(self.src_repo_id)
         self.remove_repo(self.dst_repo_id)
 
+
+    def test_copy_returns_error_when_rpc_returns_none(self):
+        # seafile_api.copy_file returns None e.g. when a source dirent is gone;
+        # the view must answer with an error instead of raising AttributeError.
+        self.login_as(self.user)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents": [self.file_name],
+
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": '/',
+        }
+
+        with patch('seahub.api2.endpoints.repos_batch.seafile_api.copy_file',
+                   return_value=None):
+            resp = self.client.post(self.url, json.dumps(data),
+                    'application/json')
+        self.assertEqual(500, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert 'error_msg' in json_resp
+
     def test_can_copy(self):
 
         self.login_as(self.user)
@@ -729,6 +753,29 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
     def tearDown(self):
         self.remove_repo(self.src_repo_id)
         self.remove_repo(self.dst_repo_id)
+
+
+    def test_move_returns_error_when_rpc_returns_none(self):
+        # seafile_api.move_file returns None e.g. when a source dirent is gone;
+        # the view must answer with an error instead of raising AttributeError.
+        self.login_as(self.user)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents": [self.file_name],
+
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": '/',
+        }
+
+        with patch('seahub.api2.endpoints.repos_batch.seafile_api.move_file',
+                   return_value=None):
+            resp = self.client.post(self.url, json.dumps(data),
+                    'application/json')
+        self.assertEqual(500, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert 'error_msg' in json_resp
 
     def test_can_move(self):
 
