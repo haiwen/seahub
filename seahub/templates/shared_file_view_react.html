@@ -124,6 +124,7 @@ body {
         shareLinkUsername: '{{ share_link_username }}',
       {% endif %}
       {% if filetype == 'Excalidraw' %}
+        sharedExdrawSceneUrl: '{{ shared_exdraw_scene_url|escapejs }}',
         docPath: '{{ path|escapejs }}',
         docName: '{{ file_name|escapejs }}',
         docUuid: '{{ file_uuid }}',

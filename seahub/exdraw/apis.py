@@ -14,6 +14,7 @@ from rest_framework.permissions import IsAuthenticated
 from seaserv import seafile_api
 
 from seahub.exdraw.settings import MIMETYPE_FILE_TYPE_MAPPING, FILE_TYPE_MIMETYPE_MAPPING
+from seahub.exdraw.shared import shared_whiteboard
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.views import check_folder_permission
 from seahub.api2.authentication import TokenAuthentication
@@ -30,6 +31,25 @@ from seahub.tags.models import FileUUIDMap
 
 
 logger = logging.getLogger(__name__)
+
+
+class SharedSdocWhiteboard(APIView):
+    """Read-only scene access through an authenticated sdoc share."""
+
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = ()
+    throttle_classes = (UserRateThrottle,)
+    http_method_names = ['get', 'head', 'options']
+
+    def get(self, request, share_token, sdoc_uuid, file_uuid):
+        return shared_whiteboard(request, share_token, sdoc_uuid, file_uuid, 'scene')
+
+
+class SharedSdocWhiteboardImage(SharedSdocWhiteboard):
+    """Apply the same share authorization to uploaded and library images."""
+
+    def get(self, request, share_token, sdoc_uuid, file_uuid):
+        return shared_whiteboard(request, share_token, sdoc_uuid, file_uuid, 'image')
 
 
 class ExdrawAccessToken(APIView):
@@ -343,6 +363,9 @@ class ExdrawDownloadImage(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, file_uuid, filename):
+
+        if filename != os.path.basename(filename):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid image filename')
 
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
