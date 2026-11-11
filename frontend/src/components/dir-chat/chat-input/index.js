@@ -47,6 +47,7 @@ const ChatInput = forwardRef(({
   }, [attachments, clearAttachments, selectedModel, sendMessage, value]);
 
   const handleKeyDown = useCallback((event) => {
+    if (event.nativeEvent?.isComposing || event.keyCode === 229) return;
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       handleSend(event);
