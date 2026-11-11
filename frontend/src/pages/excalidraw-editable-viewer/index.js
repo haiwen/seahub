@@ -97,7 +97,7 @@ function ExcalidrawEdiableViewer() {
         </div>
       </div>
       <div className="exdraw-editable-viewer-content">
-        <SimpleEditor isSharedView={true} />
+        <SimpleEditor />
       </div>
     </div>
   );
