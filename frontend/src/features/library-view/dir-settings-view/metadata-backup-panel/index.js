@@ -8,7 +8,7 @@ import toaster from '@/components/toast';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 
-import './metadata-backup-panel.css';
+import './index.css';
 
 const POLL_INTERVAL = 1000;
 
@@ -25,11 +25,20 @@ const MetadataBackupPanel = ({ repoID, enableMetadata }) => {
   const [taskID, setTaskID] = useState(null);
   const inputRef = useRef(null);
   const timerRef = useRef(null);
+  const isMountedRef = useRef(false);
 
-  useEffect(() => () => clearTimeout(timerRef.current), []);
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+      clearTimeout(timerRef.current);
+    };
+  }, []);
 
   const pollTask = (id, expectedStatus, onComplete) => {
+    if (!isMountedRef.current) return;
     metadataAPI.getMetadataBackupTask(repoID, id).then(response => {
+      if (!isMountedRef.current) return;
       const task = response.data;
       if (task.status === 'error') {
         setOperation(null);
@@ -42,6 +51,7 @@ const MetadataBackupPanel = ({ repoID, enableMetadata }) => {
       }
       timerRef.current = setTimeout(() => pollTask(id, expectedStatus, onComplete), POLL_INTERVAL);
     }).catch(error => {
+      if (!isMountedRef.current) return;
       setOperation(null);
       toaster.danger(Utils.getErrorMsg(error));
     });
@@ -50,9 +60,11 @@ const MetadataBackupPanel = ({ repoID, enableMetadata }) => {
   const exportBackup = () => {
     setOperation('export');
     metadataAPI.exportMetadataBackup(repoID).then(response => {
+      if (!isMountedRef.current) return;
       const id = response.data.task_id;
       pollTask(id, 'success', () => {
         metadataAPI.downloadMetadataBackup(repoID, id).then(download => {
+          if (!isMountedRef.current) return;
           const url = window.URL.createObjectURL(download.data);
           const link = document.createElement('a');
           link.href = url;
@@ -64,11 +76,13 @@ const MetadataBackupPanel = ({ repoID, enableMetadata }) => {
           setOperation(null);
           toaster.success(gettext('Metadata backup exported.'));
         }).catch(error => {
+          if (!isMountedRef.current) return;
           setOperation(null);
           toaster.danger(Utils.getErrorMsg(error));
         });
       });
     }).catch(error => {
+      if (!isMountedRef.current) return;
       setOperation(null);
       toaster.danger(Utils.getErrorMsg(error));
     });
@@ -80,6 +94,7 @@ const MetadataBackupPanel = ({ repoID, enableMetadata }) => {
     if (!file) return;
     setOperation('preview');
     metadataAPI.importMetadataBackup(repoID, file).then(response => {
+      if (!isMountedRef.current) return;
       const id = response.data.task_id;
       pollTask(id, 'ready', task => {
         setTaskID(id);
@@ -87,6 +102,7 @@ const MetadataBackupPanel = ({ repoID, enableMetadata }) => {
         setOperation(null);
       });
     }).catch(error => {
+      if (!isMountedRef.current) return;
       setOperation(null);
       toaster.danger(Utils.getErrorMsg(error));
     });
@@ -96,6 +112,7 @@ const MetadataBackupPanel = ({ repoID, enableMetadata }) => {
     setPreview(null);
     setOperation('restore');
     metadataAPI.restoreMetadataBackup(repoID, taskID).then(() => {
+      if (!isMountedRef.current) return;
       pollTask(taskID, 'success', () => {
         setOperation(null);
         setTaskID(null);
@@ -103,6 +120,7 @@ const MetadataBackupPanel = ({ repoID, enableMetadata }) => {
         window.location.reload();
       });
     }).catch(error => {
+      if (!isMountedRef.current) return;
       setOperation(null);
       toaster.danger(Utils.getErrorMsg(error));
     });
@@ -111,18 +129,18 @@ const MetadataBackupPanel = ({ repoID, enableMetadata }) => {
   const busy = operation !== null;
 
   return (
-    <div className="library-setting-item">
+    <div className="library-setting-item metadata-backup-panel">
       <h3 className="library-setting-item-heading">{gettext('Backup and restore')}</h3>
       <p className="setting-tip mb-3">
         {gettext('Export metadata to an Excel backup, or restore metadata from a backup exported by Seafile.')}
       </p>
       <div className="d-flex align-items-center">
-        <Button color="secondary" disabled={busy || !enableMetadata} onClick={exportBackup}>
-          {operation === 'export' && <Loading className="mr-2" />}
+        <Button className="metadata-backup-panel__button d-inline-flex align-items-center" color="secondary" disabled={busy || !enableMetadata} onClick={exportBackup}>
+          {operation === 'export' && <Loading className="metadata-backup-panel__loading" />}
           {gettext('Export backup')}
         </Button>
-        <Button className="ml-2" color="secondary" disabled={busy || !enableMetadata} onClick={() => inputRef.current.click()}>
-          {(operation === 'preview' || operation === 'restore') && <Loading className="mr-2" />}
+        <Button className="metadata-backup-panel__button d-inline-flex align-items-center ml-2" color="secondary" disabled={busy || !enableMetadata} onClick={() => inputRef.current.click()}>
+          {(operation === 'preview' || operation === 'restore') && <Loading className="metadata-backup-panel__loading" />}
           {gettext('Import backup')}
         </Button>
         <input ref={inputRef} type="file" accept=".xlsx" className="d-none" onChange={selectBackup} />
