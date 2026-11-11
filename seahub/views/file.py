@@ -58,6 +58,7 @@ from seahub.utils import render_error, is_org_context, \
     normalize_cache_key, gen_file_get_url_by_sharelink, gen_file_get_url_new
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.markdown import markdown_contains_image
+from seahub.utils.document_assets import get_share_upload_access
 from seahub.utils.file_types import (IMAGE, PDF, SVG, AUDIO,
                                      MARKDOWN, TEXT, VIDEO, SEADOC, EXCALIDRAW)
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
@@ -1393,7 +1394,9 @@ def view_shared_file(request, fileshare):
         else:
             name = username
             username = str(time.time())
-            ret_dict['seadoc_access_token'] = gen_share_seadoc_access_token(file_uuid, filename, username, name, permission=seadoc_perm)
+            ret_dict['seadoc_access_token'] = gen_share_seadoc_access_token(
+                file_uuid, filename, username, name, permission=seadoc_perm,
+                share_access=get_share_upload_access(request, fileshare, path))
 
         ret_dict['share_link_username'] = username
 
@@ -1417,7 +1420,9 @@ def view_shared_file(request, fileshare):
         if not can_edit:
             ret_dict['excalidraw_access_token'] = gen_exdraw_access_token(file_uuid, filename, username, permission=exdraw_perm)
         else:
-            ret_dict['excalidraw_access_token'] = gen_share_exdraw_access_token(file_uuid, filename, username, name, permission=exdraw_perm)
+            ret_dict['excalidraw_access_token'] = gen_share_exdraw_access_token(
+                file_uuid, filename, username, name, permission=exdraw_perm,
+                share_access=get_share_upload_access(request, fileshare, path))
 
         ret_dict['name'] = name
         ret_dict['share_link_username'] = username
@@ -1678,7 +1683,9 @@ def view_file_via_shared_dir(request, fileshare):
         ret_dict['can_edit_file'] = can_edit
         seadoc_perm = 'rw' if can_edit else 'r'
         ret_dict['file_perm'] = seadoc_perm
-        ret_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, filename, username, permission=seadoc_perm)
+        ret_dict['seadoc_access_token'] = gen_seadoc_access_token(
+            file_uuid, filename, username, permission=seadoc_perm,
+            share_access=get_share_upload_access(request, fileshare, real_path))
 
         send_file_access_msg(request, repo, real_path, 'web')
         request.session['seadoc_share_session'] = {

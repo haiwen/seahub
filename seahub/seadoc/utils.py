@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 ZSDOC = 'sdoczip'
 
 
-def gen_seadoc_access_token(file_uuid, filename, username, permission='rw', default_title=None):
+def gen_seadoc_access_token(file_uuid, filename, username, permission='rw', default_title=None, share_access=None):
     name = email2nickname(username)
     url, is_default, date_uploaded = api_avatar_url(username)
     if default_title is None:
@@ -43,6 +43,7 @@ def gen_seadoc_access_token(file_uuid, filename, username, permission='rw', defa
         'avatar_url': url,
         'permission': permission,
         'default_title': default_title,
+        'share_access': share_access,
         'exp': int(time.time()) + 86400 * 3,  # 3 days
     },
         SEADOC_PRIVATE_KEY,
@@ -50,7 +51,7 @@ def gen_seadoc_access_token(file_uuid, filename, username, permission='rw', defa
     )
     return access_token
 
-def gen_share_seadoc_access_token(file_uuid, filename, username, name, permission='rw', default_title=None,):
+def gen_share_seadoc_access_token(file_uuid, filename, username, name, permission='rw', default_title=None, share_access=None):
     url, is_default, date_uploaded = api_avatar_url(username)
     if default_title is None:
         default_title = filename
@@ -62,6 +63,7 @@ def gen_share_seadoc_access_token(file_uuid, filename, username, name, permissio
         'avatar_url': url,
         'permission': permission,
         'default_title': default_title,
+        'share_access': share_access,
         'exp': int(time.time()) + 86400 * 3,  # 3 days
     },
         SEADOC_PRIVATE_KEY,

@@ -1,5 +1,5 @@
 from html.parser import HTMLParser
-from urllib.parse import unquote, urlsplit
+from urllib.parse import parse_qs, unquote, urlsplit
 
 import markdown
 
@@ -19,12 +19,14 @@ def markdown_contains_image(file_content, image_url):
     parser = MarkdownImageParser()
     parser.feed(markdown.markdown(file_content, extensions=['extra']))
     expected_url = urlsplit(image_url)
-    expected_url = expected_url._replace(path=unquote(expected_url.path))
+    expected_url = expected_url._replace(path=unquote(expected_url.path), query='', fragment='')
     for src in parser.image_urls:
         try:
             parsed_url = urlsplit(src)
         except ValueError:
             continue
-        if parsed_url._replace(path=unquote(parsed_url.path)) == expected_url:
+        if parse_qs(parsed_url.query).get('raw') != ['1']:
+            continue
+        if parsed_url._replace(path=unquote(parsed_url.path), query='', fragment='') == expected_url:
             return True
     return False

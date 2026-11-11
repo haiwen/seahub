@@ -26,7 +26,7 @@ class SeadocAssetSecurityTest(unittest.TestCase):
     def test_download_rejects_paths_and_wrong_types_before_lookup(self):
         with patch.object(apis, 'FileUUIDMap') as maps:
             for cls, filenames in [
-                (apis.SeadocDownloadImage, ['/private/a.png', '../a.png', 'secret.txt', 'a.mp4']),
+                (apis.SeadocDownloadImage, ['/private/a.png', '../a.png', 'secret.txt', '../a.mp4']),
                 (apis.SeadocDownloadVideo, ['/private/a.mp4', '../a.mp4', 'secret.txt', 'a.png']),
             ]:
                 for filename in filenames:
@@ -42,6 +42,7 @@ class SeadocAssetSecurityTest(unittest.TestCase):
                 patch.object(apis, 'latest_entry') as metadata:
             publish.objects.filter.return_value.first.return_value = None
             for cls, filename in [(apis.SeadocDownloadImage, 'a.png'),
+                                  (apis.SeadocDownloadImage, 'a.mp4'),
                                   (apis.SeadocDownloadVideo, 'a.mp4')]:
                 self.assertEqual(cls().get(self.request, 'doc', filename).status_code, 403)
             metadata.assert_not_called()
@@ -54,6 +55,7 @@ class SeadocAssetSecurityTest(unittest.TestCase):
                 patch.object(apis, 'get_seadoc_asset_download_link') as download:
             publish.objects.filter.return_value.first.return_value = None
             for cls, filename in [(apis.SeadocDownloadImage, 'a.png'),
+                                  (apis.SeadocDownloadImage, 'a.mp4'),
                                   (apis.SeadocDownloadVideo, 'a.mp4')]:
                 self.assertEqual(cls().get(self.request, 'doc', filename).status_code, 304)
             download.assert_not_called()
@@ -70,8 +72,12 @@ class SeadocAssetSecurityTest(unittest.TestCase):
                 repo_id='repo', parent_path='/', filename='document.sdoc')
             publish.objects.filter.return_value.first.return_value = None
             for cls, filename in [(apis.SeadocDownloadImage, 'a.png'),
+                                  (apis.SeadocDownloadImage, 'a.mp4'),
+                                  (apis.SeadocDownloadImage, 'a.mov'),
                                   (apis.SeadocDownloadVideo, 'a.mp4')]:
                 response = cls().get(self.request, 'doc', filename)
                 self.assertEqual(response.content, b'asset')
                 self.assertEqual(response['Cache-Control'], 'private, max-age=604800')
+                expected_type = {'png': 'image/png', 'mp4': 'video/mp4', 'mov': 'video/quicktime'}
+                self.assertEqual(response['Content-Type'], expected_type[filename.rsplit('.', 1)[-1]])
                 download.assert_called_with('repo', '/images/sdoc/doc/', filename, 'user')

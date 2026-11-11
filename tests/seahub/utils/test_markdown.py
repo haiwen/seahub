@@ -45,11 +45,22 @@ class MarkdownContainsImageTest(unittest.TestCase):
             with self.subTest(content=content):
                 self.assertFalse(markdown_contains_image(content, self.image_url))
 
-    def test_suffix_and_query_must_match(self):
-        for suffix in ['&other=1', '#fragment', '0']:
-            with self.subTest(suffix=suffix):
+    def test_extra_query_and_fragment_are_allowed(self):
+        for query in ['raw=1&other=1', 'raw=1#fragment', 'other=1&raw=1', 'raw=1&other=1#fragment']:
+            with self.subTest(query=query):
+                src = self.image_url.split('?')[0] + '?' + query
+                self.assertTrue(markdown_contains_image('![photo](%s)' % src, self.image_url))
+
+    def test_raw_parameter_is_required_and_unambiguous(self):
+        for query in ['', 'raw=0', 'raw=10', 'other=1', 'raw=1&raw=0', 'raw=1&raw=1']:
+            with self.subTest(query=query):
+                src = self.image_url.split('?')[0] + '?' + query
                 self.assertFalse(markdown_contains_image(
-                    '![photo](%s%s)' % (self.image_url, suffix), self.image_url))
+                    '![photo](%s)' % src, self.image_url))
+
+    def test_extra_query_cannot_authorize_another_path(self):
+        src = self.image_url.replace('/images/', '/private/') + '&other=1#fragment'
+        self.assertFalse(markdown_contains_image('![photo](%s)' % src, self.image_url))
 
     def test_malformed_url_is_ignored(self):
         self.assertFalse(markdown_contains_image('![photo](https://[invalid/)', self.image_url))

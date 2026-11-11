@@ -5,6 +5,7 @@ import tempfile
 import uuid
 import stat
 import logging
+import mimetypes
 import requests
 import posixpath
 from urllib.parse import unquote, quote
@@ -54,7 +55,7 @@ from seahub.utils import get_file_type_and_ext, normalize_file_path, \
         get_non_sdoc_file_exts
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
-from seahub.utils.document_assets import is_valid_asset_filename, get_asset_path
+from seahub.utils.document_assets import is_valid_asset_filename, get_asset_path, can_upload_document_asset
 from seahub.utils.repo import parse_repo_perm, get_related_users_by_repo
 from seahub.seadoc.models import SeadocHistoryName, SeadocRevision, SeadocCommentReply, SeadocNotification
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
@@ -431,6 +432,9 @@ class SeadocUploadImage(APIView):
             error_msg = 'seadoc uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        if not can_upload_document_asset(payload, uuid_map, get_seadoc_file_uuid):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         if check_quota(uuid_map.repo_id) < 0:
             error_msg = _("Out of quota.")
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -488,8 +492,11 @@ class SeadocDownloadImage(APIView):
         if not is_valid_asset_filename(filename):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Asset filename invalid.')
         filetype, fileext = get_file_type_and_ext(filename)
-        if filetype != IMAGE:
+        # Existing editors use this endpoint for both image and video assets.
+        if filetype not in (IMAGE, VIDEO):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Asset type not supported.')
+        content_type = mimetypes.guess_type(filename)[0] or (
+            ('video/' if filetype == VIDEO else 'image/') + fileext)
 
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
@@ -521,7 +528,7 @@ class SeadocDownloadImage(APIView):
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
             response = HttpResponse(
-                content=resp.content, content_type='image/' + fileext)
+                content=resp.content, content_type=content_type)
             response['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * 7)
             return response
 
@@ -566,6 +573,9 @@ class SeadocUploadVideo(APIView):
         if not uuid_map:
             error_msg = 'seadoc uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_upload_document_asset(payload, uuid_map, get_seadoc_file_uuid):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         if check_quota(uuid_map.repo_id) < 0:
             error_msg = _("Out of quota.")

@@ -14,7 +14,7 @@ from rest_framework.permissions import IsAuthenticated
 from seaserv import seafile_api
 
 from seahub.exdraw.settings import MIMETYPE_FILE_TYPE_MAPPING, FILE_TYPE_MIMETYPE_MAPPING
-from seahub.utils.document_assets import is_valid_asset_filename, get_asset_path
+from seahub.utils.document_assets import is_valid_asset_filename, get_asset_path, can_upload_document_asset, secure_svg_response
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.views import check_folder_permission
 from seahub.api2.authentication import TokenAuthentication
@@ -246,6 +246,9 @@ class ExdrawUploadImage(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         base64_data = request.data.get('image_data')
+        if not can_upload_document_asset(payload, uuid_map, get_exdraw_file_uuid):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         image_id = request.data.get('image_id')
         if not base64_data:
             error_msg = 'Base64 image data is required.'
@@ -348,5 +351,7 @@ class ExdrawDownloadImage(APIView):
         
         response = HttpResponse(
             content=resp.content, content_type=content_type)
+        if fileext == 'svg':
+            secure_svg_response(response)
         response['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * 7)
         return response
