@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
-import { EventBus } from '@seafile/seafile-sdoc-editor';
+import { EventBus, EXTERNAL_EVENT } from '@seafile/seafile-sdoc-editor';
 import throttle from 'lodash.throttle';
 import SDocServerApi from '@/api/sdoc-server-api';
 import wikiAPI from '@/api/wiki-api';
@@ -51,6 +51,10 @@ class Wiki extends Component {
     };
     this.resizeBarRef = React.createRef();
     this.dragHandlerRef = React.createRef();
+    this.imagePreview = null;
+    this.imagePreviewHistoryId = 0;
+    this.isClosingImagePreview = false;
+    this.pendingWikiPage = null;
   }
 
   componentDidMount() {
@@ -60,6 +64,12 @@ class Wiki extends Component {
     this.unsubscribeOpenWikiPageLink = eventBus.subscribe('open_wiki_page_id_link', ({ page_id }) => {
       this.setCurrentPage(page_id);
     });
+    this.unsubscribeImagePreviewOpened = eventBus.subscribe(EXTERNAL_EVENT.IMAGE_PREVIEWER_OPENED, this.onImagePreviewOpened);
+    this.unsubscribeImagePreviewClosed = eventBus.subscribe(EXTERNAL_EVENT.IMAGE_PREVIEWER_CLOSED, this.onImagePreviewClosed);
+    if (window.history.state?.wikiImagePreviewId) {
+      this.isClosingImagePreview = true;
+      window.history.back();
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -71,11 +81,37 @@ class Wiki extends Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('popstate', this.onPopState);
+    window.removeEventListener('popstate', this.onPopstate);
     this.unsubscribeOpenWikiPageLink && this.unsubscribeOpenWikiPageLink();
+    this.unsubscribeImagePreviewOpened && this.unsubscribeImagePreviewOpened();
+    this.unsubscribeImagePreviewClosed && this.unsubscribeImagePreviewClosed();
+    this.imagePreview = null;
+    this.pendingWikiPage = null;
   }
 
   onPopstate = (e) => {
+    if (this.isClosingImagePreview) {
+      this.isClosingImagePreview = false;
+      if (this.pendingWikiPage) {
+        const { pageId, callback } = this.pendingWikiPage;
+        this.pendingWikiPage = null;
+        this.setCurrentPage(pageId, callback);
+        return;
+      }
+      if (this.imagePreview && (!e.state || e.state.pageId === this.state.currentPageId)) {
+        this.onImagePreviewOpened(this.imagePreview, true);
+        return;
+      }
+    }
+    if (this.imagePreview) {
+      this.closeImagePreviewer();
+      if (!e.state || e.state.pageId === this.state.currentPageId) return;
+    }
+    if (e.state && e.state.wikiImagePreviewId) {
+      // Closed previews cannot be reopened through browser history.
+      window.history.back();
+      return;
+    }
     setTimeout(() => {
       if (e.state) {
         const { pageId } = e.state;
@@ -83,6 +119,43 @@ class Wiki extends Component {
         this.setCurrentPage(pageId, undefined, viaPopstate);
       }
     }, 0);
+  };
+
+  onImagePreviewOpened = ({ editor }, restorePreview = false) => {
+    if (!restorePreview && Utils.isDesktop()) return;
+    this.imagePreview = {
+      editor,
+      pageId: this.state.currentPageId,
+      historyId: ++this.imagePreviewHistoryId,
+    };
+    if (this.isClosingImagePreview) return;
+    window.history.pushState({
+      ...window.history.state,
+      pageId: this.state.currentPageId,
+      path: this.state.path,
+      wikiImagePreviewId: this.imagePreview.historyId,
+    }, '', window.location.href);
+  };
+
+  onImagePreviewClosed = ({ editor }) => {
+    const imagePreview = this.imagePreview;
+    if (!imagePreview || imagePreview.editor !== editor) return;
+    this.imagePreview = null;
+    if (
+      window.history.state?.wikiImagePreviewId === imagePreview.historyId &&
+      this.state.currentPageId === imagePreview.pageId &&
+      !this.isClosingImagePreview
+    ) {
+      this.isClosingImagePreview = true;
+      window.history.back();
+    }
+  };
+
+  closeImagePreviewer = () => {
+    const { editor } = this.imagePreview;
+    this.imagePreview = null;
+    const eventBus = EventBus.getInstance();
+    eventBus.dispatch(EXTERNAL_EVENT.CLOSE_IMAGE_PREVIEWER, { editor });
   };
 
   setNavConfig = (config, wikiRepoId) => {
@@ -275,12 +348,19 @@ class Wiki extends Component {
       callback && callback();
       return;
     }
+    if (this.isClosingImagePreview && !viaPopstate) {
+      this.pendingWikiPage = { pageId, callback };
+      return;
+    }
     const { config } = this.state;
     const { pages } = config;
     const currentPage = PageUtils.getPageById(pages, pageId);
     if (!currentPage) {
       callback && callback();
       return;
+    }
+    if (this.imagePreview) {
+      this.closeImagePreviewer();
     }
     const { path, id, name, docUuid, icon } = currentPage;
     if (path !== this.state.path) {
@@ -300,14 +380,15 @@ class Wiki extends Component {
     if (viaPopstate) {
       return false;
     }
+    const historyMethod = window.history.state?.wikiImagePreviewId ? 'replaceState' : 'pushState';
     const oldUrl = window.location.pathname.substring(siteRoot.length);
     if (oldUrl.includes('wiki/publish')) {
       let customUrl = oldUrl.split('/')[2];
       let newUrl = `${siteRoot}wiki/publish/${customUrl}/${pageId}/`;
-      window.history.pushState({ url: newUrl, path, pageId: pageId }, '', newUrl);
+      window.history[historyMethod]({ url: newUrl, path, pageId: pageId }, '', newUrl);
     } else {
       let newUrl = `${siteRoot}${isWiki2 ? 'wikis/' : 'published/'}${wikiId}/${pageId}/`;
-      window.history.pushState({ url: newUrl, path, pageId: pageId }, '', newUrl);
+      window.history[historyMethod]({ url: newUrl, path, pageId: pageId }, '', newUrl);
     }
   };
 
