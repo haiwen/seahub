@@ -23,142 +23,142 @@ msgstr ""
 
 #: templates/help/base.html:34
 msgid "Side Nav Menu"
-msgstr ""
+msgstr "Bočni navigacijski meni"
 
 #: templates/help/base.html:48 templates/help/base.html:50
 #: templates/help/introduction.html:6
 msgid "Introduction"
-msgstr ""
+msgstr "Uvod"
 
 #: templates/help/base.html:53
 msgid "Managing files and folders"
-msgstr ""
+msgstr "Upravljanje datotekama i fasciklama"
 
 #: templates/help/base.html:55 templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
-msgstr ""
+msgstr "Upravljanje datotekama pomoću biblioteka"
 
 #: templates/help/base.html:56
 msgid "Restoring deleted files"
-msgstr ""
+msgstr "Vraćanje izbrisanih datoteka"
 
 #: templates/help/base.html:57
 msgid "Finding old file versions"
-msgstr ""
+msgstr "Pronalaženje starijih verzija datoteka"
 
 #: templates/help/base.html:58
 #: templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
-msgstr ""
+msgstr "Historija biblioteke i snimci stanja"
 
 #: templates/help/base.html:59
 msgid "Setting history retention period"
-msgstr ""
+msgstr "Postavljanje perioda čuvanja historije"
 
 #: templates/help/base.html:60 templates/help/deleting_a_library.html:5
 msgid "Deleting a library"
-msgstr ""
+msgstr "Brisanje biblioteke"
 
 #: templates/help/base.html:61
 #: templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
-msgstr ""
+msgstr "Pregled datoteka u web aplikaciji"
 
 #: templates/help/base.html:62 templates/help/full_text_file_search.html:5
 msgid "Full text file search"
-msgstr ""
+msgstr "Pretraživanje cijelog teksta datoteka"
 
 #: templates/help/base.html:65
 msgid "Sharing and collaboration"
-msgstr ""
+msgstr "Dijeljenje i saradnja"
 
 #: templates/help/base.html:67 templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
-msgstr ""
+msgstr "Dijeljenje datoteka i fascikli"
 
 #: templates/help/base.html:68 templates/help/groups_managing.html:5
 msgid "Managing groups"
-msgstr ""
+msgstr "Upravljanje grupama"
 
 #: templates/help/base.html:69
 msgid "Locking files"
-msgstr ""
+msgstr "Zaključavanje datoteka"
 
 #: templates/help/base.html:70
 msgid "Folder permission"
-msgstr ""
+msgstr "Dozvole za fascikle"
 
 #: templates/help/base.html:71
 msgid "Departments sharing"
-msgstr ""
+msgstr "Dijeljenje u odjelima"
 
 #: templates/help/base.html:74
 msgid "Wiki and knowledge management"
-msgstr ""
+msgstr "Wiki i upravljanje znanjem"
 
 #: templates/help/base.html:76 templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
-msgstr ""
+msgstr "Upravljanje bibliotekom kao Wiki stranicom"
 
 #: templates/help/base.html:79
 msgid "Desktop client and syncing"
-msgstr ""
+msgstr "Desktop klijent i sinhronizacija"
 
 #: templates/help/base.html:81
 msgid "Install and sync files"
-msgstr ""
+msgstr "Instaliranje i sinhronizacija datoteka"
 
 #: templates/help/base.html:82
 msgid "Syncing existing folders"
-msgstr ""
+msgstr "Sinhronizacija postojećih fascikli"
 
 #: templates/help/base.html:83 templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
-msgstr ""
+msgstr "Selektivna sinhronizacija podfascikli"
 
 #: templates/help/base.html:84 templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
-msgstr ""
+msgstr "Sinhronizacija samo za čitanje"
 
 #: templates/help/base.html:85
 msgid "Unsync and resync libraries"
-msgstr ""
+msgstr "Prekid i ponovna sinhronizacija biblioteka"
 
 #: templates/help/base.html:86 templates/help/sync_interval.html:6
 msgid "Setting sync interval"
-msgstr ""
+msgstr "Postavljanje intervala sinhronizacije"
 
 #: templates/help/base.html:87
 msgid "Proxy settings"
-msgstr ""
+msgstr "Postavke proxyja"
 
 #: templates/help/base.html:88 templates/help/conflicts.html:5
 msgid "File conflicts"
-msgstr ""
+msgstr "Sukobi datoteka"
 
 #: templates/help/base.html:89
 msgid "Excluding files"
-msgstr ""
+msgstr "Izuzimanje datoteka"
 
 #: templates/help/base.html:92
 msgid "Drive client"
-msgstr ""
+msgstr "Drive klijent"
 
 #: templates/help/base.html:94 templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
-msgstr ""
+msgstr "Korištenje Seafile Drive klijenta"
 
 #: templates/help/base.html:95
 msgid "Using drive client 2.0 on Windows"
-msgstr ""
+msgstr "Korištenje Drive klijenta 2.0 u Windowsu"
 
 #: templates/help/base.html:98
 msgid "Security and encryption"
-msgstr ""
+msgstr "Sigurnost i šifriranje"
 
 #: templates/help/base.html:100
 msgid "How to use encrypted libraries"
-msgstr ""
+msgstr "Kako koristiti šifrirane biblioteke"
 
 #: templates/help/conflicts.html:7
 msgid ""
@@ -166,6 +166,10 @@ msgid ""
 "you may add, delete or edit files in the library together. Every change you "
 "make to the library would be automatically synced to others' computers."
 msgstr ""
+"Kada vi i vaši prijatelji sinhronizujete zajedničku biblioteku datoteka na "
+"svoje računare, možete zajedno dodavati, brisati ili uređivati datoteke u "
+"biblioteci. Svaka promjena koju napravite u biblioteci automatski će se "
+"sinhronizovati s računarima ostalih korisnika."
 
 #: templates/help/conflicts.html:9
 msgid ""
@@ -176,36 +180,49 @@ msgid ""
 "author's email address, plus the current time, e.g. test.txt (SFConflict "
 "name@example.com 2015-03-07-11-30-28)."
 msgstr ""
+"Ponekad vi i vaši prijatelji možete istovremeno uređivati istu datoteku. "
+"Vaše promjene mogu biti u sukobu. U tom slučaju Seafile će prvu verziju "
+"sinhronizovanu u oblak ostaviti neizmijenjenu, a drugu verziju preimenovati "
+"u \"datoteku u sukobu\". Naziv datoteke u sukobu završava se adresom e-pošte"
+" njenog autora, a zatim trenutnim vremenom, npr. test.txt (SFConflict "
+"name@example.com 2015-03-07-11-30-28)."
 
 #: templates/help/deleting_a_library.html:6
 msgid ""
 "You can delete a library owned by you. A deleted library can be restored by "
 "you or Seafile server's administrator."
 msgstr ""
+"Možete izbrisati biblioteku koja je u vašem vlasništvu. Izbrisanu biblioteku"
+" možete vratiti vi ili administrator Seafile servera."
 
 #: templates/help/deleting_a_library.html:7
 msgid "After a library is deleted, it has following effects:"
-msgstr ""
+msgstr "Nakon brisanja biblioteke nastupaju sljedeće posljedice:"
 
 #: templates/help/deleting_a_library.html:9
 msgid "Share of the files and folders within this library are all canceled."
-msgstr ""
+msgstr "Dijeljenje datoteka i fascikli unutar ove biblioteke se prekida."
 
 #: templates/help/deleting_a_library.html:10
 msgid ""
 "Desktop clients synced with this library cannot sync with it any more. But "
 "the local files on the client won't be deleted."
 msgstr ""
+"Desktop klijenti sinhronizovani s ovom bibliotekom više se neće moći "
+"sinhronizovati s njom. Međutim, lokalne datoteke na klijentu neće biti "
+"izbrisane."
 
 #: templates/help/departments.html:5
 msgid "Managing and using departments"
-msgstr ""
+msgstr "Upravljanje odjelima i njihovo korištenje"
 
 #: templates/help/departments.html:6
 msgid ""
 "Some organizations consist of complex department hierarchy. There are "
 "usually two common use cases for file management in these organizations:"
 msgstr ""
+"Neke organizacije imaju složenu hijerarhiju odjela. U takvim organizacijama "
+"obično postoje dva česta slučaja upotrebe upravljanja datotekama:"
 
 #: templates/help/departments.html:8
 msgid ""
@@ -213,6 +230,9 @@ msgid ""
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
 msgstr ""
+"Organizacija treba imati zajednički prostor za dijeljenje datoteka. "
+"Hijerarhija fascikli treba odražavati hijerarhiju odjela. Svakom odjelu "
+"dodjeljuje se zasebna fascikla ili prostor."
 
 #: templates/help/departments.html:9
 msgid ""
@@ -220,46 +240,53 @@ msgid ""
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
 msgstr ""
+"Prostor za dijeljenje treba biti u vlasništvu organizacije i njime treba "
+"upravljati organizacija, a ne pojedinačni zaposlenici. Tako vlasništvo nad "
+"datotekama ne mora biti promijenjeno kada zaposlenik napusti organizaciju."
 
 #: templates/help/departments.html:11
 msgid ""
 "The \"Departments\" feature is designed to meet the above two use cases. "
 "We'll introduce this feature from 3 different perspectives:"
 msgstr ""
+"Funkcija \"Odjeli\" namijenjena je ispunjavanju ova dva slučaja upotrebe. "
+"Predstavit ćemo je iz 3 različite perspektive:"
 
 #: templates/help/departments.html:13 templates/help/departments.html:17
 msgid "System admin"
-msgstr ""
+msgstr "Sistemski administrator"
 
 #: templates/help/departments.html:14 templates/help/departments.html:35
 msgid "Department admin"
-msgstr ""
+msgstr "Administrator odjela"
 
 #: templates/help/departments.html:15 templates/help/departments.html:52
 msgid "Department members"
-msgstr ""
+msgstr "Članovi odjela"
 
 #: templates/help/departments.html:18
 msgid "The system admin can:"
-msgstr ""
+msgstr "Sistemski administrator može:"
 
 #: templates/help/departments.html:20 templates/help/departments.html:24
 msgid "Manage department hierarchy and members"
-msgstr ""
+msgstr "Upravljati hijerarhijom odjela i članovima"
 
 #: templates/help/departments.html:21 templates/help/departments.html:29
 msgid "Assign storage quota for departments"
-msgstr ""
+msgstr "Dodijeliti kvotu prostora za pohranu odjelima"
 
 #: templates/help/departments.html:22 templates/help/departments.html:31
 msgid "Create and manage shared libraries in departments"
-msgstr ""
+msgstr "Kreirati i upravljati dijeljenim bibliotekama u odjelima"
 
 #: templates/help/departments.html:25
 msgid ""
 "The system admin can set up the department hierarchy in two ways: manual "
 "setup or import from Active Directory."
 msgstr ""
+"Sistemski administrator može postaviti hijerarhiju odjela na dva načina: "
+"ručnim podešavanjem ili uvozom iz Active Directoryja."
 
 #: templates/help/departments.html:26
 msgid ""
@@ -269,6 +296,11 @@ msgid ""
 "of each member to 'member' or 'admin'. We'll introduce how a department "
 "admin can manage department later."
 msgstr ""
+"Sistemski administrator može kreirati proizvoljan broj odjela najvišeg nivoa"
+" i ispod svakog odjela pododjele na više nivoa. Svaki nivo odjela može se "
+"popuniti članovima. Sistemski administrator može svakom članu dodijeliti "
+"ulogu 'člana' ili 'administratora'. Kasnije ćemo objasniti kako "
+"administrator odjela može upravljati odjelom."
 
 #: templates/help/departments.html:27
 msgid ""
@@ -277,12 +309,18 @@ msgid ""
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
 msgstr ""
+"Sistemski administrator može uvesti i hijerarhiju iz organizacionih jedinica"
+" (OU) u AD-u. Svaka OU jedinica uvest će se kao odjel, a podređene OU "
+"jedinice kao pododjeli. Tokom uvoza mogu se automatski kreirati biblioteke "
+"odjela."
 
 #: templates/help/departments.html:28
 msgid ""
 "System admin can also delete a department after all the sub-departments and "
 "libraries are deleted."
 msgstr ""
+"Sistemski administrator može izbrisati odjel nakon što se izbrišu svi "
+"pododjeli i biblioteke."
 
 #: templates/help/departments.html:30
 msgid ""
@@ -292,6 +330,11 @@ msgid ""
 "cannot exceed the storage quota. <strong>Please note that the quota of sub-"
 "department doesn't depend on the quota of its parent department.</strong>"
 msgstr ""
+"Biblioteke kreirane unutar odjela u vlasništvu su samog odjela, a ne "
+"pojedinačnog korisnika. Zato sistemski administrator može odjelu dodijeliti "
+"kvotu prostora za pohranu. Ukupna veličina svih biblioteka u odjelu ne može "
+"premašiti kvotu. <strong>Napomena: kvota pododjela ne zavisi od kvote "
+"njegovog nadređenog odjela.</strong>"
 
 #: templates/help/departments.html:32
 msgid ""
@@ -299,12 +342,17 @@ msgid ""
 " There is also an option to control whether individual users can share "
 "libraries with a department."
 msgstr ""
+"Biblioteke odjela mogu kreirati sistemski administrator ili administrator "
+"odjela. Dostupna je i opcija za kontrolu mogu li pojedinačni korisnici "
+"dijeliti biblioteke s odjelom."
 
 #: templates/help/departments.html:33
 msgid ""
 "All the above operations can be done in the system admin interface. See the "
 "below screenshot for information."
 msgstr ""
+"Sve navedene radnje mogu se obaviti u interfejsu za sistemsku "
+"administraciju. Više informacija potražite na snimku ekrana u nastavku."
 
 #: templates/help/departments.html:36
 msgid ""
@@ -312,18 +360,22 @@ msgid ""
 "admin to some members of a department. Department admins can perform the "
 "following operations in a department after login to his/her own account."
 msgstr ""
+"Kao što je navedeno iznad, administrator odjela je posebna uloga koju "
+"sistemski administrator dodjeljuje nekim članovima odjela. Nakon prijave na "
+"vlastiti račun, administratori odjela mogu obavljati sljedeće radnje u "
+"odjelu."
 
 #: templates/help/departments.html:38
 msgid "Access to the libraries of the department"
-msgstr ""
+msgstr "Pristup bibliotekama odjela"
 
 #: templates/help/departments.html:39
 msgid "Manage members in his/her department"
-msgstr ""
+msgstr "Upravljanje članovima svog odjela"
 
 #: templates/help/departments.html:40
 msgid "Manage libraries in his/her department"
-msgstr ""
+msgstr "Upravljanje bibliotekama svog odjela"
 
 #: templates/help/departments.html:42
 msgid ""
@@ -332,26 +384,34 @@ msgid ""
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
 msgstr ""
+"Administrator odjela može dodavati ili brisati članove odjela. Kao član "
+"odjela može se dodati bilo koji korisnik registrovan u sistemu. Međutim, ako"
+" su odjeli uvezeni iz AD-a, promjene članstva bit će prepisane pri sljedećoj"
+" sinhronizaciji s AD-om."
 
 #: templates/help/departments.html:44
 msgid ""
 "Department admin can manage the libraries in the department. The supported "
 "operations are:"
 msgstr ""
+"Administrator odjela može upravljati bibliotekama u odjelu. Podržane su "
+"sljedeće radnje:"
 
 #: templates/help/departments.html:46
 msgid "Create or delete library"
-msgstr ""
+msgstr "Kreiranje ili brisanje biblioteke"
 
 #: templates/help/departments.html:47
 msgid "Change library name"
-msgstr ""
+msgstr "Promjena naziva biblioteke"
 
 #: templates/help/departments.html:48
 msgid ""
 "Share a library with users or groups outside of this department. This is "
 "very useful for cross-department collaboration."
 msgstr ""
+"Dijeljenje biblioteke s korisnicima ili grupama izvan ovog odjela. Ovo je "
+"veoma korisno za saradnju između odjela."
 
 #: templates/help/departments.html:49
 #, python-format
@@ -361,6 +421,10 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
 msgstr ""
+"Postavljanje detaljnih dozvola za fascikle u bibliotekama za korisnike ili "
+"pododjele ovog odjela. Funkcioniše kao <a "
+"href=\"%(SITE_ROOT)shelp/folder_permission/\">funkcija dozvola za "
+"fascikle</a>."
 
 #: templates/help/departments.html:53
 msgid ""
@@ -373,16 +437,24 @@ msgid ""
 "access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
 "departments are marked with a \"building\" icon next to its name."
 msgstr ""
+"Običan član odjela može koristiti odjel kao grupu. Svaki odjel se članovima "
+"prikazuje kao grupa. Korisnik može pristupiti bibliotekama odjela kojem "
+"pripada i bibliotekama nadređenih odjela. Na primjer, ako je John u "
+"pododjelu \"EMEA\" odjela \"Sales\", a \"Sales\" je pododjel kompanije "
+"\"ACME\", John može pristupiti grupama \"EMEA\", \"Sales\" i \"ACME\". Grupe"
+" odjela označene su ikonom \"zgrade\" pored naziva."
 
 #: templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
-msgstr ""
+msgstr "Korištenje proxyja u Seafile klijentu"
 
 #: templates/help/desktop_proxy.html:8
 msgid ""
 "Seafile client supports 3 types of proxy servers: HTTP proxy, SOCKS5 proxy "
 "and system proxy settings."
 msgstr ""
+"Seafile klijent podržava 3 vrste proxy servera: HTTP proxy, SOCKS5 proxy i "
+"sistemske postavke proxyja."
 
 #: templates/help/desktop_proxy.html:10
 msgid ""
@@ -392,6 +464,10 @@ msgid ""
 " to auto-detect proxy server information. So you don't have to manually "
 "enter proxy server address."
 msgstr ""
+"Za HTTP proxy i SOCKS5 proxy potrebno je unijeti adresu i port proxy "
+"servera. Ako koristite sistemske postavke proxyja, Seafile klijent ih "
+"preuzima iz operativnog sistema. Operativni sistem može automatski otkriti "
+"podatke o proxy serveru, pa adresu ne morate unositi ručno."
 
 #: templates/help/desktop_proxy.html:12
 msgid ""
@@ -399,10 +475,13 @@ msgid ""
 "area. Choose \"Settings\" in the menu. In the pop-up settings dialog, you "
 "can change proxy settings in the \"Network\" tab."
 msgstr ""
+"Da biste promijenili postavke proxyja, kliknite ikonu Seafile u području za "
+"obavještenja sistema. U meniju odaberite \"Postavke\". U dijalogu postavki "
+"promijenite ih na kartici \"Mreža\"."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "SeaDrive 2.0 za Windows 10"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -411,10 +490,15 @@ msgid ""
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
 msgstr ""
+"SeaDrive 2.0 (i buduće verzije) redizajniran je radi dublje integracije s "
+"operativnim sistemom Windows 10. Podržava Windows 10 verzije 1709 (jesensko "
+"ažuriranje iz 2017.) i novije. Korisnicima Windowsa 10 preporučujemo "
+"nadogradnju na SeaDrive 2.0 radi prirodnijeg iskustva korištenja virtuelnog "
+"diska."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
-msgstr ""
+msgstr "Instaliranje i pristup virtuelnom disku"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:11
 msgid ""
@@ -425,40 +509,56 @@ msgid ""
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
 msgstr ""
+"SeaDrive 2.0 možete preuzeti sa službene Seafile web stranice. Nakon "
+"instalacije i prijave na Seafile račun, SeaDrive će početi preuzimati "
+"biblioteke i spiskove datoteka sa servera, kao u SeaDrive 1.0.x. To može "
+"potrajati, zavisno od broja datoteka na vašem računu. Preuzimanje se odvija "
+"postepeno, pa u međuvremenu već možete pristupiti nekim datotekama na "
+"virtuelnom disku."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
 msgstr ""
+"Da biste pristupili virtuelnom disku, otvorite Windows Explorer. U njegovom "
+"navigacijskom oknu nalazi se stavka \"seadrive\"."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
-msgstr ""
+msgstr "Pristup datotekama na virtuelnom disku"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:17
 msgid ""
 "Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
 "Shared with me, Shared with groups and Shared with all."
 msgstr ""
+"Biblioteke su na virtuelnom disku podijeljene u 4 kategorije: Moje "
+"biblioteke, Dijeljeno sa mnom, Dijeljeno s grupama i Dijeljeno sa svima."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:18
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
 msgstr ""
+"Kao što možete vidjeti, ikone statusa datoteka bolje su integrisane u "
+"Windows Explorer. Ikone se malo razlikuju od onih u verziji 1.0."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
 msgstr ""
+"Datoteke na virtuelnom disku kreiraju se kao \"rezervisana mjesta\" u "
+"lokalnom sistemu datoteka. Mogu biti u jednom od 3 stanja:"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
 msgstr ""
+"<b>Datoteka-rezervisano mjesto</b>: Prazan prikaz datoteke koji se može "
+"otvoriti samo kada postoji mrežna veza."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -468,12 +568,19 @@ msgid ""
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
 msgstr ""
+"<b>Potpuna datoteka</b>: Datoteka je preuzeta i sačuvana lokalno. "
+"Preuzimanje počinje automatski kada se datoteka-rezervisano mjesto prvi put "
+"otvori. Ove datoteke dostupne su svaki put kada pokrenete SeaDrive, bez "
+"obzira na mrežnu vezu. Operativni sistem može ukloniti potpunu datoteku kada"
+" zatreba više prostora na disku."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
 "<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
 "is guaranteed to be available offline."
 msgstr ""
+"<b>Potpuna datoteka zadržana na uređaju</b>: Datoteka je preuzeta i sačuvana"
+" lokalno. Zagarantovano je da će biti dostupna van mreže."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -483,6 +590,11 @@ msgid ""
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
 msgstr ""
+"Možete odrediti koje će se datoteke ili fascikle keširati lokalno. To možete"
+" promijeniti u kontekstnom meniju koji se otvara desnim klikom na datoteku "
+"ili fasciklu. Odaberite \"Uvijek zadrži na ovom uređaju\" ako želite lokalno"
+" zadržati datoteku ili fasciklu, odnosno \"Oslobodi prostor\" ako želite "
+"očistiti njihov keš."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
@@ -490,10 +602,13 @@ msgid ""
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
 msgstr ""
+"U SeaDrive 1.0 keširane datoteke ne ažuriraju se automatski kada se "
+"promijene na serveru. U SeaDrive 2.0 potpune datoteke i datoteke zadržane na"
+" uređaju automatski se sinhronizuju sa serverom."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
-msgstr ""
+msgstr "Preuzimanje datoteka i upravljanje njime"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:31
 msgid ""
@@ -502,6 +617,9 @@ msgid ""
 "download, there will be a progress bar shown up in file explorer and you may"
 " cancel the download."
 msgstr ""
+"Kada otvorite datoteku-rezervisano mjesto, operativni sistem automatski će "
+"početi preuzimati datoteku. Ako preuzimanje potraje, u Exploreru će se "
+"prikazati traka napretka i moći ćete ga otkazati."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -510,15 +628,19 @@ msgid ""
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
 msgstr ""
+"Ponekad pozadinska aplikacija može pokušati preuzeti datoteku s virtuelnog "
+"diska (npr. antivirusni softver). Operativni sistem će vas o tome "
+"obavijestiti, a vi možete otkazati preuzimanje ili spriječiti aplikaciju da "
+"ubuduće automatski preuzima datoteke."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:34
 #: templates/help/using_drive_client.html:79
 msgid "FAQ"
-msgstr ""
+msgstr "Česta pitanja"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
-msgstr ""
+msgstr "Mogu li kreirati, brisati i preimenovati biblioteke?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:36
 msgid ""
@@ -527,10 +649,14 @@ msgid ""
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
 msgstr ""
+"Da. Kada kreirate, izbrišete ili preimenujete fascikle biblioteka na "
+"virtuelnom disku, radnja će se odraziti na serveru. Biblioteke možete "
+"kreirati, brisati i preimenovati samo u kategoriji \"Moje biblioteke\". Iste"
+" radnje u drugim kategorijama bit će zanemarene."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
-msgstr ""
+msgstr "Mogu li kreirati datoteke ili fascikle izvan fascikle biblioteke?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:39
 msgid ""
@@ -538,10 +664,13 @@ msgid ""
 "synced to the server. A new folder under the \"My Libraries\" folder will be"
 " handled as a new library."
 msgstr ""
+"Da. Međutim, datoteke kreirane izvan fascikle biblioteke bit će zanemarene i"
+" NEĆE se sinhronizovati sa serverom. Nova fascikla unutar fascikle \"Moje "
+"biblioteke\" tretirat će se kao nova biblioteka."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
-msgstr ""
+msgstr "Mogu li pristupiti šifriranim bibliotekama?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:42
 msgid ""
@@ -551,10 +680,16 @@ msgid ""
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
 msgstr ""
+"Da. Šifrirane biblioteke se prema zadanim postavkama ne sinhronizuju niti "
+"prikazuju na virtuelnom disku. Morate ručno odabrati koje želite "
+"sinhronizovati i unijeti lozinku. Kliknite desnim tasterom miša na ikonu "
+"SeaDrive u području sistemske trake i odaberite \"Prikaži šifrirane "
+"biblioteke\". U prozoru koji će se pojaviti možete odabrati sinhronizaciju "
+"ili prekid sinhronizacije biblioteke."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
-msgstr ""
+msgstr "Je li kompatibilan sa SeaDrive 1.0?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:45
 msgid ""
@@ -564,10 +699,15 @@ msgid ""
 " be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
 "the files to server or copy them out."
 msgstr ""
+"SeaDrive 2.0 će koristiti postojeće račune i njihove metapodatke (pohranjene"
+" u fascikli C:\\users\\username\\seadrive\\). Međutim, neće koristiti "
+"keširane datoteke iz SeaDrive 1.0. Zato lokalno keširane datoteke iz verzije"
+" 1.0 neće biti dostupne u verziji 2.0. Možete ponovo pokrenuti SeaDrive 1.0 "
+"da biste otpremili datoteke na server ili ih kopirali na drugo mjesto."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
-msgstr ""
+msgstr "Kako da očistim keš?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:48
 msgid ""
@@ -578,10 +718,16 @@ msgid ""
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
 msgstr ""
+"Možete ručno odabrati koje fascikle ili datoteke će se keširati lokalno. Ako"
+" neka fascikla zauzima previše prostora, odaberite \"Oslobodi prostor\" za "
+"nju i sve keširane datoteke u njoj bit će uklonjene. Nema potrebe "
+"postavljati vrijeme čišćenja i ograničenje veličine keša kao u SeaDrive 1.0."
+" Budući da su rezervisana mjesta obične datoteke kreirane na lokalnom disku,"
+" veličinu keša ograničava samo raspoloživi prostor na disku računara."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
-msgstr ""
+msgstr "Kako ukloniti preostale SeaDrive prečice u Windows Exploreru?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -590,18 +736,26 @@ msgid ""
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
 msgstr ""
+"Prečica \"SeaDrive\" u Windows Exploreru neće nestati kada zatvorite "
+"SeaDrive ili promijenite Seafile račune u SeaDriveu. To je očekivano "
+"ponašanje. Ne morate je uklanjati ako kasnije želite ponovo pristupiti "
+"računu."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:52
 msgid ""
 "In some corner cases, the \"SeaDrive\" shortcut will be left-over in Windows"
 " Explorer and you want to remove it."
 msgstr ""
+"U nekim rijetkim slučajevima prečica \"SeaDrive\" ostane u Windows Exploreru"
+" i želite je ukloniti."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
 msgstr ""
+"Te prečice obično možete ukloniti deinstalacijom SeaDrivea i odabirom opcije"
+" \"Ukloni informacije o računu\" u dijalogu s upitom."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -612,10 +766,15 @@ msgid ""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
 msgstr ""
+"Ako deinstalacija ne ukloni prečice, prečicu SeaDrive iz Windows Explorera "
+"možete ukloniti uređivanjem registra. Otvorite putanju "
+"\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\""
+" u uređivaču registra. Uklonite potključeve koji odgovaraju prečici koju "
+"želite ukloniti."
 
 #: templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
-msgstr ""
+msgstr "Kako koristiti šifrirane biblioteke"
 
 #: templates/help/encrypted_libraries.html:8
 msgid ""
@@ -625,10 +784,15 @@ msgid ""
 "stored on the server. So even the server administrator can't access your "
 "file contents."
 msgstr ""
+"Seafile pruža end-to-end šifriranje podataka na strani klijenta. Da biste "
+"koristili ovu funkciju, možete kreirati šifrirane biblioteke. Sadržaj "
+"datoteka u šifriranim bibliotekama šifrira se na strani klijenta. Lozinka za"
+" šifriranje ne pohranjuje se na serveru, pa čak ni administrator servera ne "
+"može pristupiti sadržaju vaših datoteka."
 
 #: templates/help/encrypted_libraries.html:10
 msgid "When creating an encrypted library:"
-msgstr ""
+msgstr "Prilikom kreiranja šifrirane biblioteke:"
 
 #: templates/help/encrypted_libraries.html:12
 msgid ""
@@ -636,6 +800,9 @@ msgid ""
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
 msgstr ""
+"Ako šifriranu biblioteku kreirate u web aplikaciji, lozinka se šalje "
+"serveru. Server je koristi za kreiranje biblioteke, ali je ne pohranjuje u "
+"običnom tekstu."
 
 #: templates/help/encrypted_libraries.html:13
 #, python-format
@@ -644,10 +811,14 @@ msgid ""
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
 msgstr ""
+"Ako šifriranu biblioteku kreirate iz lokalne fascikle pomoću desktop "
+"klijenta (pogledajte <a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">sinhronizaciju datoteka</a>), "
+"lozinka se ne šalje serveru."
 
 #: templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
-msgstr ""
+msgstr "Prilikom pristupa šifriranoj biblioteci:"
 
 #: templates/help/encrypted_libraries.html:19
 msgid ""
@@ -655,6 +826,8 @@ msgid ""
 " will cache the password in encrypted format for 1 hour. It won't store the "
 "password on disk."
 msgstr ""
+"Ako koristite web aplikaciju, morate unijeti lozinku na serveru. Server će "
+"je jedan sat čuvati u šifriranom obliku. Lozinka se neće pohraniti na disk."
 
 #: templates/help/encrypted_libraries.html:20
 msgid ""
@@ -662,22 +835,29 @@ msgid ""
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
 msgstr ""
+"Ako biblioteku sinhronizujete pomoću desktop klijenta, lozinka se ne šalje "
+"serveru. Klijent lokalno dešifrira i šifrira sadržaj datoteka. Ni lozinka u "
+"običnom tekstu ne pohranjuje se na disk klijenta."
 
 #: templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
 msgstr ""
+"iOS klijent podržava šifriranje na strani klijenta od verzije 2.1.6. Android"
+" klijent ga podržava od verzije 2.1.0."
 
 #: templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
 msgstr ""
+"Imajte na umu da šifrirana biblioteka šifrira samo sadržaj datoteka, ali ne "
+"i nazive fascikli i datoteka."
 
 #: templates/help/file_locking.html:5
 msgid "File locking"
-msgstr ""
+msgstr "Zaključavanje datoteka"
 
 #: templates/help/file_locking.html:6
 msgid ""
@@ -687,22 +867,31 @@ msgid ""
 " the file when one person wants to exclusively modify the file. Seafile "
 "Professional Edition supports file locking."
 msgstr ""
+"Kada više osoba sarađuje na datoteci, vjerovatno je da će je više njih "
+"mijenjati otprilike istovremeno. Seafile to dobro rješava datotekama u "
+"sukobu. Ipak, često je praktičnije zaključati datoteku kada je neko želi "
+"uređivati isključivo. Seafile Professional Edition podržava zaključavanje "
+"datoteka."
 
 #: templates/help/file_locking.html:7
 msgid ""
 "File locking works on both the web app and the desktop syncing client. We'll"
 " introduce them one by one."
 msgstr ""
+"Zaključavanje datoteka radi i u web aplikaciji i u desktop klijentu za "
+"sinhronizaciju. Predstavit ćemo ih jedno po jedno."
 
 #: templates/help/file_locking.html:8
 msgid "File locking on the Web App"
-msgstr ""
+msgstr "Zaključavanje datoteka u web aplikaciji"
 
 #: templates/help/file_locking.html:9
 msgid ""
 "To lock a file, you can navigate into the file's folder on the web app, and "
 "click on the \"operations\" drop-down menu."
 msgstr ""
+"Da biste zaključali datoteku, otvorite njenu fasciklu u web aplikaciji i "
+"kliknite na padajući meni \"Radnje\"."
 
 #: templates/help/file_locking.html:11
 msgid ""
@@ -711,28 +900,40 @@ msgid ""
 "file. And you can also unlock a file that's locked by you. But you cannot "
 "unlock files locked by others."
 msgstr ""
+"Nakon zaključavanja datoteke, u uglu njene ikone pojavit će se crveni znak "
+"\"stop\". Kada postavite pokazivač miša na znak, možete vidjeti ko je "
+"zaključao datoteku. Možete otključati datoteku koju ste vi zaključali, ali "
+"ne i datoteke koje su zaključali drugi."
 
 #: templates/help/file_locking.html:13
 msgid "File locking on the desktop client"
-msgstr ""
+msgstr "Zaključavanje datoteka u desktop klijentu"
 
 #: templates/help/file_locking.html:14
 msgid ""
 "After a library is synced to the desktop, you can lock/unlock files in that "
 "library inside File Explorer on Windows or Finder on Mac OS."
 msgstr ""
+"Nakon sinhronizacije biblioteke s desktop računarom, datoteke u toj "
+"biblioteci možete zaključavati i otključavati u Windows Exploreru ili "
+"Finderu na Mac OS-u."
 
 #: templates/help/file_locking.html:15
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
 msgstr ""
+"Da biste zaključali datoteku, kliknite desnim tasterom miša na "
+"sinhronizovanu datoteku i odaberite \"Zaključaj ovu datoteku\" u meniju "
+"\"Seafile\"."
 
 #: templates/help/file_locking.html:17
 msgid ""
 "If a file is locked by you, you can see an orange \"stop sign\" on the file "
 "icon. You can choose to unlock it."
 msgstr ""
+"Ako ste vi zaključali datoteku, na njenoj ikoni vidjet ćete narandžasti znak"
+" \"stop\". Možete odabrati da je otključate."
 
 #: templates/help/file_locking.html:19
 msgid ""
@@ -740,16 +941,21 @@ msgid ""
 "file icon. The file is automatically set to read-only. You cannot modify it "
 "until it's unlocked."
 msgstr ""
+"Ako je datoteku zaključao drugi korisnik, na njenoj ikoni vidjet ćete crveni"
+" znak \"stop\". Datoteka se automatski postavlja samo za čitanje. Ne možete "
+"je mijenjati dok se ne otključa."
 
 #: templates/help/file_locking.html:21
 msgid ""
 "If a library is not synced, you can still use cloud file browser to lock and"
 " unlock files in it."
 msgstr ""
+"Ako biblioteka nije sinhronizovana, datoteke u njoj ipak možete zaključavati"
+" i otključavati pomoću preglednika datoteka u oblaku."
 
 #: templates/help/file_locking.html:22
 msgid "Auto locking office files"
-msgstr ""
+msgstr "Automatsko zaključavanje Office datoteka"
 
 #: templates/help/file_locking.html:23
 msgid ""
@@ -759,18 +965,24 @@ msgid ""
 " propagated to other computers syncing this library. It prevents concurrent "
 "editing the same Office file and is convenient for collaboration."
 msgstr ""
+"Nakon sinhronizacije biblioteke s desktop računarom, Seafile automatski "
+"zaključava Microsoft Office datoteku iz biblioteke kada je otvorite. Kada "
+"zatvorite datoteku, Seafile je automatski otključava. Status zaključavanja "
+"prenosi se na druge računare koji sinhronizuju biblioteku. To sprečava "
+"istovremeno uređivanje iste Office datoteke i olakšava saradnju."
 
 #: templates/help/file_locking.html:24
 msgid "Details about file locking"
-msgstr ""
+msgstr "Detalji o zaključavanju datoteka"
 
 #: templates/help/file_locking.html:25
 msgid "There are a few useful tips about how file locking works:"
-msgstr ""
+msgstr "Evo nekoliko korisnih napomena o načinu rada zaključavanja datoteka:"
 
 #: templates/help/file_locking.html:27
 msgid "A locked file can only be unlocked by the user who locked it."
 msgstr ""
+"Zaključanu datoteku može otključati samo korisnik koji ju je zaključao."
 
 #: templates/help/file_locking.html:28
 msgid ""
@@ -779,16 +991,22 @@ msgid ""
 "locked file. The purpose of file locking is mainly to prevent concurrent "
 "editing."
 msgstr ""
+"Drugi korisnici ne mogu mijenjati, premještati, preimenovati ni brisati "
+"zaključanu datoteku. Međutim, mogu premještati, brisati ili preimenovati "
+"nadređenu fasciklu zaključane datoteke. Svrha zaključavanja datoteka "
+"prvenstveno je sprečavanje istovremenog uređivanja."
 
 #: templates/help/file_locking.html:29
 msgid ""
 "When a locked file's parent folder is renamed or moved inside the same "
 "library, it remains locked after the operation."
 msgstr ""
+"Kada se nadređena fascikla zaključane datoteke preimenuje ili premjesti "
+"unutar iste biblioteke, datoteka ostaje zaključana i nakon te radnje."
 
 #: templates/help/finding_older_version_files.html:6
 msgid "Finding older version of files"
-msgstr ""
+msgstr "Pronalaženje starijih verzija datoteka"
 
 #: templates/help/finding_older_version_files.html:7
 msgid ""
@@ -797,10 +1015,14 @@ msgid ""
 "a configurable period. When you want to access an older version of a file, "
 "the file history feature becomes very handy."
 msgstr ""
+"Seafile prati historiju izmjena svih datoteka. Svaki put kada se datoteka "
+"izmijeni, kreira se nova verzija, dok se stara čuva tokom podesivog perioda."
+" Kada želite pristupiti starijoj verziji datoteke, funkcija historije "
+"datoteka veoma je korisna."
 
 #: templates/help/finding_older_version_files.html:8
 msgid "To list all the versions of a file:"
-msgstr ""
+msgstr "Da biste prikazali sve verzije datoteke:"
 
 #: templates/help/finding_older_version_files.html:10
 msgid ""
@@ -808,16 +1030,21 @@ msgid ""
 "cursor onto the row of that file. An operation menu will appear. You can "
 "click the \"History\" button in that menu."
 msgstr ""
+"U Seafile web aplikaciji otvorite fasciklu koja sadrži datoteku. Postavite "
+"pokazivač na red te datoteke. Pojavit će se meni radnji. U njemu kliknite "
+"dugme \"Historija\"."
 
 #: templates/help/finding_older_version_files.html:11
 msgid ""
 "A list of all versions of that file will be displayed in time order, from "
 "newer to older. The list also contains the file's rename history."
 msgstr ""
+"Prikazat će se spisak svih verzija datoteke, hronološki od najnovije do "
+"najstarije. Spisak sadrži i historiju preimenovanja datoteke."
 
 #: templates/help/finding_older_version_files.html:12
 msgid "You can download, restore, view any version of the file."
-msgstr ""
+msgstr "Možete preuzeti, vratiti ili pregledati bilo koju verziju datoteke."
 
 #: templates/help/finding_older_version_files.html:14
 #, python-format
@@ -826,10 +1053,13 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Možete podesiti period čuvanja verzija datoteka: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">postavljanje perioda "
+"čuvanja historije</a>."
 
 #: templates/help/folder_permission.html:6
 msgid "Use folder permission for fine-grained access control"
-msgstr ""
+msgstr "Korištenje dozvola za fascikle za detaljnu kontrolu pristupa"
 
 #: templates/help/folder_permission.html:8
 #, python-format
@@ -840,6 +1070,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
 " Here are some use cases:"
 msgstr ""
+"Za dijeljene biblioteke ili fascikle možete postaviti dozvole za njihove "
+"podfascikle za pojedinačne osobe ili grupe. Dostupne dozvole iste su kao one"
+" opisane u odjeljku <a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">dijeljenje "
+"biblioteka</a>. Evo nekoliko primjera upotrebe:"
 
 #: templates/help/folder_permission.html:10
 msgid ""
@@ -847,6 +1082,9 @@ msgid ""
 "want to allow a specific member of the group to modify files in one sub-"
 "folder. You can grant write permission of this sub-folder to this person."
 msgstr ""
+"Biblioteku ste podijelili s grupom uz dozvolu \"samo za čitanje\". Želite i "
+"određenom članu grupe omogućiti izmjenu datoteka u jednoj podfascikli. Toj "
+"osobi možete dodijeliti dozvolu za pisanje u toj podfascikli."
 
 #: templates/help/folder_permission.html:11
 msgid ""
@@ -855,6 +1093,10 @@ msgid ""
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
+"Biblioteku ste podijelili s 3 grupe. U biblioteci se nalaze 3 podfascikle, "
+"po jedna u koju svaka grupa može otpremati datoteke. Međutim, ne želite da "
+"korisnici mijenjaju datoteke koje ne pripadaju njihovoj grupi. Dozvolu za "
+"pisanje u podfascikli možete dodijeliti samo njenoj grupi."
 
 #: templates/help/folder_permission.html:13
 msgid ""
@@ -863,17 +1105,24 @@ msgid ""
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr ""
+"Dozvole za fascikle primjenjuju se samo na biblioteke i fascikle koje "
+"dijelite s drugima. Da bi se dozvole za podfascikle pravilno primijenile, "
+"prvo morate podijeliti nadređenu biblioteku ili fasciklu; u suprotnom "
+"dozvola za fasciklu neće imati učinka."
 
 #: templates/help/folder_permission.html:14
 msgid ""
 "One important design goal of folder permission is to support hierarchical "
 "permissions:"
 msgstr ""
+"Jedan od važnih ciljeva dizajna dozvola za fascikle jeste podrška "
+"hijerarhijskim dozvolama:"
 
 #: templates/help/folder_permission.html:16
 msgid ""
 "Sub-folders automatically inherit folder permissions from its parent folder."
 msgstr ""
+"Podfascikle automatski nasljeđuju dozvole za fascikle od nadređene fascikle."
 
 #: templates/help/folder_permission.html:17
 msgid ""
@@ -883,10 +1132,15 @@ msgid ""
 "\"meeting files/today\" for user A. Then user A's permission to \"meeting "
 "files/today\" is \"read only\"."
 msgstr ""
+"Dozvole postavljene za podfascikle imaju prednost nad dozvolama postavljenim"
+" za nadređenu fasciklu. Na primjer, korisniku A dodijelite dozvolu \"čitanje"
+" i pisanje\" za fasciklu \"meeting files\", a dozvolu \"samo za čitanje\" za"
+" podfasciklu \"meeting files/today\". Tada korisnik A za fasciklu \"meeting "
+"files/today\" ima dozvolu \"samo za čitanje\"."
 
 #: templates/help/folder_permission.html:19
 msgid "Basic usage"
-msgstr ""
+msgstr "Osnovno korištenje"
 
 #: templates/help/folder_permission.html:20
 msgid ""
@@ -895,6 +1149,10 @@ msgid ""
 "\"permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions on this folder."
 msgstr ""
+"Samo vlasnik biblioteke može postavljati dozvole za njene podfascikle. U "
+"interfejsu za pregled datoteka kliknite dugme \"više radnji\", pa u "
+"padajućem meniju odaberite \"dozvola\". U prozoru koji će se pojaviti možete"
+" pregledati i postaviti dozvole za ovu fasciklu."
 
 #: templates/help/folder_permission.html:21
 msgid ""
@@ -903,6 +1161,10 @@ msgid ""
 "Permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions in this library."
 msgstr ""
+"Da biste vidjeli sve dozvole za fascikle postavljene u biblioteci, postavite"
+" pokazivač miša na biblioteku. Kliknite dugme \"više radnji\" i u padajućem "
+"meniju odaberite \"Dozvola za fasciklu\". U prozoru koji će se pojaviti "
+"možete pregledati i postaviti dozvole za fascikle u biblioteci."
 
 #: templates/help/folder_permission.html:22
 msgid ""
@@ -910,16 +1172,21 @@ msgid ""
 "next to \"read only\" sub-folders. When the user navigate into that sub-"
 "folder, he/she won't be able to add/modify/delete files."
 msgstr ""
+"Kada drugi korisnici otvore fasciklu, pored podfascikli sa dozvolom \"samo "
+"za čitanje\" prikazat će se mala ikona \"oka\". Kada korisnik otvori tu "
+"podfasciklu, neće moći dodavati, mijenjati ni brisati datoteke."
 
 #: templates/help/folder_permission.html:24
 msgid ""
 "If a \"read only\" folder is synced to PC with the Seafile desktop App, "
 "changes under a \"read only\" folder won't be uploaded to the cloud."
 msgstr ""
+"Ako se fascikla \"samo za čitanje\" sinhronizuje s računarom pomoću Seafile "
+"desktop aplikacije, promjene u njoj neće se otpremati u oblak."
 
 #: templates/help/folder_permission.html:25
 msgid "Advanced: priority between different permissions"
-msgstr ""
+msgstr "Napredno: prioritet između različitih dozvola"
 
 #: templates/help/folder_permission.html:27
 msgid ""
@@ -929,6 +1196,11 @@ msgid ""
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
 msgstr ""
+"Dozvole za fascikle imaju veći prioritet od dozvole postavljene pri "
+"dijeljenju. Na primjer, biblioteku podijelite s korisnikom A uz dozvolu "
+"\"čitanje i pisanje\", a podfascikli te biblioteke dodijelite dozvolu \"samo"
+" za čitanje\". Tada korisnik A ima pristup podfascikli samo za čitanje, dok "
+"za sve ostale podfascikle i datoteke ima pristup za čitanje i pisanje."
 
 #: templates/help/folder_permission.html:28
 msgid ""
@@ -937,16 +1209,21 @@ msgid ""
 "if the system matches a permission specific to the user, it'll ignore all "
 "permissions set for the groups the user belongs to."
 msgstr ""
+"Dozvole za fasciklu postavljene za određenog korisnika imaju prednost nad "
+"dozvolama postavljenim za grupu. To znači da će sistem, prilikom provjere "
+"dozvole za fasciklu, zanemariti sve dozvole za grupe kojima korisnik pripada"
+" ako pronađe dozvolu određenu za tog korisnika."
 
 #: templates/help/folder_permission.html:29
 msgid ""
 "Permissions on sub-folders have higher priority than those on parent "
 "folders."
 msgstr ""
+"Dozvole za podfascikle imaju prednost nad dozvolama za nadređene fascikle."
 
 #: templates/help/folder_permission.html:31
 msgid "Here is a more complex example:"
-msgstr ""
+msgstr "Evo složenijeg primjera:"
 
 #: templates/help/folder_permission.html:32
 msgid ""
@@ -958,6 +1235,13 @@ msgid ""
 "first matched for folder \"A/B\" and user \"John\", which is inherited from "
 "its parent \"A\"."
 msgstr ""
+"Pretpostavimo da struktura fascikli izgleda ovako: \"A/B\", a korisnik "
+"\"John\" pripada grupi \"Staff\". Ako Johnu dodijelite dozvolu \"samo za "
+"čitanje\" za fasciklu A, a grupi \"Staff\" dozvolu \"čitanje i pisanje\" za "
+"fasciklu \"A/B\", John će za fasciklu \"A/B\" i dalje imati samo dozvolu "
+"\"samo za čitanje\". Prema pravilu 2, za fasciklu \"A/B\" i korisnika "
+"\"John\" prvo se primjenjuje dozvola \"samo za čitanje\", naslijeđena od "
+"nadređene fascikle \"A\"."
 
 #: templates/help/full_text_file_search.html:6
 msgid ""
@@ -965,46 +1249,49 @@ msgid ""
 "as well as the content of certain files, in the Seafile web app. Currently "
 "Seafile can search the contents of the following types of files:"
 msgstr ""
+"Ako koristite Pro Edition Server, u Seafile web aplikaciji možete "
+"pretraživati nazive datoteka i fascikli, kao i sadržaj određenih datoteka. "
+"Trenutno Seafile može pretraživati sadržaj sljedećih vrsta datoteka:"
 
 #: templates/help/full_text_file_search.html:8
 #: templates/help/viewing_files_within_web_app.html:8
 msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Word: .doc, .docx (samo Pro Edition Server)"
 
 #: templates/help/full_text_file_search.html:9
 #: templates/help/viewing_files_within_web_app.html:9
 msgid "Microsoft Office PowerPoint: .ppt, .pptx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office PowerPoint: .ppt, .pptx (samo Pro Edition Server)"
 
 #: templates/help/full_text_file_search.html:10
 #: templates/help/viewing_files_within_web_app.html:10
 msgid "Microsoft Office Excel: .xls, .xlsx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Excel: .xls, .xlsx (samo Pro Edition Server)"
 
 #: templates/help/full_text_file_search.html:11
 #: templates/help/viewing_files_within_web_app.html:11
 msgid "LibreOffice files"
-msgstr ""
+msgstr "LibreOffice datoteke"
 
 #: templates/help/full_text_file_search.html:12
 #: templates/help/viewing_files_within_web_app.html:12
 msgid "PDF files"
-msgstr ""
+msgstr "PDF datoteke"
 
 #: templates/help/full_text_file_search.html:13
 #: templates/help/viewing_files_within_web_app.html:14
 msgid "Markdown files: .md"
-msgstr ""
+msgstr "Markdown datoteke: .md"
 
 #: templates/help/full_text_file_search.html:14
 #: templates/help/viewing_files_within_web_app.html:15
 msgid "Various source code files"
-msgstr ""
+msgstr "Razne datoteke izvornog koda"
 
 #: templates/help/full_text_file_search.html:15
 #: templates/help/viewing_files_within_web_app.html:16
 msgid "Text files: .txt, .log"
-msgstr ""
+msgstr "Tekstualne datoteke: .txt, .log"
 
 #: templates/help/full_text_file_search.html:17
 msgid ""
@@ -1012,34 +1299,45 @@ msgid ""
 "text search feature. In that case, you can only search file and folder "
 "names."
 msgstr ""
+"Imajte na umu da administrator vašeg Seafile sistema možda nije omogućio "
+"funkciju pretraživanja cijelog teksta. U tom slučaju možete pretraživati "
+"samo nazive datoteka i fascikli."
 
 #: templates/help/groups_managing.html:6
 msgid ""
 "Creating a group is a convenient way to share files with many people. In "
 "Seafile, you can create and manage a group easily."
 msgstr ""
+"Kreiranje grupe praktičan je način za dijeljenje datoteka s mnogo ljudi. U "
+"Seafileu možete jednostavno kreirati grupu i upravljati njom."
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr ""
+msgstr "Grupe u Seafileu funkcionišu ovako:"
 
 #: templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
 msgstr ""
+"Svaka grupa ima vlasnika. Vlasnik je prema zadanim postavkama osoba koja je "
+"kreirala grupu i može prenijeti vlasništvo nad grupom na drugog člana."
 
 #: templates/help/groups_managing.html:10
 msgid ""
 "Each group can have multiple admins. The group owner and group admins can "
 "add more group admins."
 msgstr ""
+"Svaka grupa može imati više administratora. Vlasnik grupe i administratori "
+"mogu dodavati nove administratore grupe."
 
 #: templates/help/groups_managing.html:11
 msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
 msgstr ""
+"Administrator grupe može dodavati ili uklanjati članove grupe, a može i "
+"prekinuti dijeljenje biblioteke u grupi."
 
 #: templates/help/groups_managing.html:13
 msgid ""
@@ -1047,6 +1345,9 @@ msgid ""
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared with this group."
 msgstr ""
+"Kliknite karticu \"Dijeljeno s grupama\" u lijevom oknu da biste vidjeli sve"
+" grupe čiji ste član. Otvorite bilo koju grupu da biste vidjeli biblioteke "
+"koje su podijeljene s njom."
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1054,6 +1355,9 @@ msgid ""
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
 msgstr ""
+"Da biste kreirali novu grupu, kliknite karticu \"Dijeljeno s grupama\" u "
+"lijevom oknu, a zatim kliknite \"Sve grupe\". Na toj stranici kliknite dugme"
+" \"Nova grupa\"."
 
 #: templates/help/groups_managing.html:15
 #, python-format
@@ -1061,10 +1365,14 @@ msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders with a group."
 msgstr ""
+"Pogledajte <a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">dijeljenje datoteka i "
+"fascikli</a> da biste saznali kako dijeliti biblioteke ili fascikle s "
+"grupom."
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
-msgstr ""
+msgstr "Izuzimanje datoteka i fascikli iz sinhronizacije"
 
 #: templates/help/ignore.html:8
 msgid ""
@@ -1074,14 +1382,19 @@ msgid ""
 "should not sync. Each line in a ignore.txt file specifies a pattern. The "
 "following pattern format are supported."
 msgstr ""
+"Ponekad ne želite sinhronizovati neke datoteke ili fascikle unutar "
+"biblioteke. Da biste to uradili, kreirajte datoteku seafile-ignore.txt u "
+"korijenskoj fascikli biblioteke. Ova posebna datoteka navodi datoteke i "
+"fascikle koje Seafile ne treba sinhronizovati. Svaki red u datoteci "
+"ignore.txt određuje obrazac. Podržani su sljedeći formati obrazaca."
 
 #: templates/help/ignore.html:10
 msgid "A blank line matches no files."
-msgstr ""
+msgstr "Prazan red ne odgovara nijednoj datoteci."
 
 #: templates/help/ignore.html:11
 msgid "A line starting with # serves as a comment."
-msgstr ""
+msgstr "Red koji počinje znakom # predstavlja komentar."
 
 #: templates/help/ignore.html:12
 msgid ""
@@ -1091,6 +1404,11 @@ msgid ""
 "the paths under a folder. For instance, \"foo/*.html\" matches "
 "\"foo/a.html\" and \"foo/templates/b.html\"."
 msgstr ""
+"Seafile podržava zamjenske znakove u obrascu. Na primjer, \"foo/*\" odgovara"
+" putanjama \"foo/1\" i \"foo/hello\". \"foo/?\" odgovara putanji \"foo/1\", "
+"ali ne i \"foo/hello\". Znak * rekurzivno odgovara svim putanjama ispod "
+"fascikle. Naprimjer, \"foo/*.html\" odgovara putanjama \"foo/a.html\" i "
+"\"foo/templates/b.html\"."
 
 #: templates/help/ignore.html:13
 msgid ""
@@ -1098,6 +1416,9 @@ msgid ""
 "words, \"foo/\" will match a folder \"foo\" and paths underneath it, but "
 "will not match a regular file or a symbolic link \"foo\"."
 msgstr ""
+"Ako se obrazac završava kosom crtom, odgovara samo fascikli. Drugim "
+"riječima, \"foo/\" odgovara fascikli \"foo\" i putanjama unutar nje, ali ne "
+"odgovara običnoj datoteci ni simboličkoj vezi \"foo\"."
 
 #: templates/help/ignore.html:14
 msgid ""
@@ -1106,14 +1427,18 @@ msgid ""
 "symbolic link; while \"foo/\" and \"foo*\" match a folder and paths under "
 "it."
 msgstr ""
+"Ako se obrazac ne završava kosom crtom ni zamjenskim znakom, neće odgovarati"
+" fascikli. Na primjer, \"foo\" može odgovarati samo običnoj datoteci \"foo\""
+" ili simboličkoj vezi, dok \"foo/\" i \"foo*\" odgovaraju fascikli i "
+"putanjama unutar nje."
 
 #: templates/help/ignore.html:18
 msgid "Example"
-msgstr ""
+msgstr "Primjer"
 
 #: templates/help/ignore.html:36
 msgid "Notes"
-msgstr ""
+msgstr "Napomene"
 
 #: templates/help/ignore.html:38
 msgid ""
@@ -1121,12 +1446,17 @@ msgid ""
 "client side. You can still create a file from seahub web interface that's "
 "excluded on the client. In this case,"
 msgstr ""
+"Datoteka seafile-ignore.txt kontroliše samo koje se datoteke izuzimaju na "
+"strani klijenta. I dalje možete kreirati datoteku putem Seahub web "
+"interfejsa koja je izuzeta na klijentu. U tom slučaju:"
 
 #: templates/help/ignore.html:40
 msgid ""
 "The created file will still be synced back to clients. But any later local "
 "changes to those files will be ignored."
 msgstr ""
+"Kreirana datoteka i dalje će se sinhronizovati s klijentima. Međutim, sve "
+"kasnije lokalne promjene tih datoteka bit će zanemarene."
 
 #: templates/help/ignore.html:41
 msgid ""
@@ -1134,6 +1464,9 @@ msgid ""
 "to clients; If the file on the client is also modified, a conflict file will"
 " be generated on the client."
 msgstr ""
+"Ako se datoteka izmijeni u Seahubu, nova verzija također će se "
+"sinhronizovati s klijentima. Ako se izmijeni i datoteka na klijentu, na "
+"klijentu će se kreirati datoteka u sukobu."
 
 #: templates/help/ignore.html:45
 msgid ""
@@ -1141,58 +1474,67 @@ msgid ""
 "already synced, and some time later you add it to the ignore list, its "
 "existing versions won't be removed."
 msgstr ""
+"seafile-ignore.txt izuzima samo datoteke koje još nisu sinhronizovane. Ako "
+"je datoteka već sinhronizovana, pa je kasnije dodate na spisak izuzetih, "
+"njene postojeće verzije neće biti uklonjene."
 
 #: templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr ""
+msgstr "Instaliranje Seafile klijenta"
 
 #: templates/help/install_sync.html:8
 msgid ""
 "After downloading Seafile client program, you have 3 steps left to get it up"
 " and running."
 msgstr ""
+"Nakon preuzimanja Seafile klijenta preostaju 3 koraka da biste ga pokrenuli."
 
 #: templates/help/install_sync.html:10
 msgid "1. Select a disk partition to store local Seafile data"
-msgstr ""
+msgstr "1. Odaberite particiju diska za pohranu lokalnih Seafile podataka"
 
 #: templates/help/install_sync.html:11
 msgid "Selecting a folder to store Seafile data"
-msgstr ""
+msgstr "Odabir fascikle za pohranu Seafile podataka"
 
 #: templates/help/install_sync.html:13
 msgid "2. Add an account"
-msgstr ""
+msgstr "2. Dodajte račun"
 
 #: templates/help/install_sync.html:14
 msgid "Add an account on your private Seafile server or our public server."
 msgstr ""
+"Dodajte račun na svom privatnom Seafile serveru ili na našem javnom serveru."
 
 #: templates/help/install_sync.html:18
 msgid "3. Sync a library"
-msgstr ""
+msgstr "3. Sinhronizujte biblioteku"
 
 #: templates/help/install_sync.html:20
 msgid "Click the \"Sync this library\" button to sync it with a local folder."
 msgstr ""
+"Kliknite dugme \"Sinhronizuj ovu biblioteku\" da biste je sinhronizovali s "
+"lokalnom fasciklom."
 
 #: templates/help/install_sync.html:21
 msgid ""
 "Then you add some files into the library. They will be automatically synced "
 "with cloud platform."
 msgstr ""
+"Zatim dodajte nekoliko datoteka u biblioteku. One će se automatski "
+"sinhronizovati s platformom u oblaku."
 
 #: templates/help/install_sync.html:26
 msgid "4. (Optional) Create a library"
-msgstr ""
+msgstr "4. (Opcionalno) Kreirajte biblioteku"
 
 #: templates/help/install_sync.html:28
 msgid "You can also create a library from a local folder."
-msgstr ""
+msgstr "Biblioteku možete kreirati i iz lokalne fascikle."
 
 #: templates/help/install_sync.html:34
 msgid "5. Browse files on the cloud"
-msgstr ""
+msgstr "5. Pregledajte datoteke u oblaku"
 
 #: templates/help/install_sync.html:35
 msgid ""
@@ -1200,12 +1542,18 @@ msgid ""
 "syncing them. Seafile client comes with a \"cloud file browser\" to meet "
 "this need. Click an unsynced library will open the cloud file browser."
 msgstr ""
+"Ponekad želite direktno mijenjati datoteke u oblaku bez njihove "
+"sinhronizacije. Seafile klijent ima \"preglednik datoteka u oblaku\" za tu "
+"namjenu. Klikom na nesinhronizovanu biblioteku otvara se preglednik datoteka"
+" u oblaku."
 
 #: templates/help/introduction.html:8
 msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
 msgstr ""
+"Seafile je platforma za hosting poslovnih datoteka visoke pouzdanosti i "
+"performansi."
 
 #: templates/help/introduction.html:9
 #, python-format
@@ -1216,6 +1564,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
 msgstr ""
+"Seafile sadrži web interfejs za upravljanje datotekama i njihovo dijeljenje."
+" Ima dvije vrste desktop klijenata: <a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">klijent za sinhronizaciju "
+"datoteka</a> i <a href=\"%(SITE_ROOT)shelp/using_drive_client\">Drive "
+"klijent</a>. Dostupni su i mobilni klijenti za Android i iOS."
 
 #: templates/help/introduction.html:10
 msgid ""
@@ -1223,6 +1576,8 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
 msgstr ""
+"Klijente možete preuzeti na <a href=\"https://www.seafile.com/en/download/\""
+" target=\"_blank\">Seafile web stranici</a>."
 
 #: templates/help/introduction.html:11
 msgid ""
@@ -1230,6 +1585,9 @@ msgid ""
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
 msgstr ""
+"Ako ovaj priručnik ne sadrži informacije koje su vam potrebne, pomoć možete "
+"potražiti na našem forumu: <a href=\"https://forum.seafile.com\" "
+"target=\"_blank\">https://forum.seafile.com</a>."
 
 #: templates/help/libraries_managing.html:6
 msgid ""
@@ -1239,18 +1597,27 @@ msgid ""
 "library works mostly like a top level folder. But it also has some special "
 "properties:"
 msgstr ""
+"Seafile koristi \"biblioteke\" za organizovanje datoteka. Biblioteka je "
+"kontejner najvišeg nivoa za skup datoteka i fascikli. Možete kreirati "
+"biblioteku za svaki projekat na kojem radite ili za svaku vrstu dokumenta "
+"koju želite sačuvati u Seafileu. Biblioteka uglavnom funkcioniše kao "
+"fascikla najvišeg nivoa, ali ima i neka posebna svojstva:"
 
 #: templates/help/libraries_managing.html:8
 msgid ""
 "Each library keeps its own file modification history. There is no global "
 "file modification history across all libraries."
 msgstr ""
+"Svaka biblioteka ima vlastitu historiju izmjena datoteka. Ne postoji "
+"jedinstvena historija izmjena koja obuhvata sve biblioteke."
 
 #: templates/help/libraries_managing.html:9
 msgid ""
 "Each library can be synced to desktop clients separately. You can choose "
 "which libraries to be synced."
 msgstr ""
+"Svaka biblioteka može se zasebno sinhronizovati s desktop klijentima. Možete"
+" odabrati koje biblioteke želite sinhronizovati."
 
 #: templates/help/libraries_managing.html:11
 msgid ""
@@ -1259,12 +1626,18 @@ msgid ""
 "can also create more libraries. Here is what it looks like when you've "
 "created a few libraries."
 msgstr ""
+"Kada se prvi put prijavite u Seafile web aplikaciju, Seafile automatski "
+"kreira zadanu biblioteku pod nazivom \"Moja biblioteka\". Možete kreirati i "
+"dodatne biblioteke. Ovako izgleda kada kreirate nekoliko biblioteka."
 
 #: templates/help/libraries_managing.html:13
 msgid ""
 "You can navigate into a library and manage your files and folders. You can "
 "upload, download, rename, move, copy and delete files."
 msgstr ""
+"Možete otvoriti biblioteku i upravljati njenim datotekama i fasciklama. "
+"Datoteke možete otpremati, preuzimati, preimenovati, premještati, kopirati i"
+" brisati."
 
 #: templates/help/libraries_managing.html:15
 #, python-format
@@ -1273,6 +1646,9 @@ msgid ""
 "desktop client</a>, you can do any file operations inside the local library "
 "folder. The operations will be uploaded to the server. "
 msgstr ""
+"Nakon <a href=\"%(SITE_ROOT)shelp/install_sync/\">sinhronizacije biblioteke "
+"s desktop klijentom</a>, možete obavljati sve radnje s datotekama unutar "
+"lokalne fascikle biblioteke. Te radnje bit će otpremljene na server. "
 
 #: templates/help/library_history_and_snapshots.html:7
 msgid ""
@@ -1281,6 +1657,10 @@ msgid ""
 "creates a \"snapshot\" of the previous state of the library. The snapshot "
 "contains the complete file and folder structure of the library."
 msgstr ""
+"Seafile prati historiju izmjena cijele biblioteke. Kada se u biblioteci "
+"izvrši neka radnja s datotekom (ažuriranje ili brisanje datoteke i slično), "
+"Seafile kreira \"snimak stanja\" prethodnog stanja biblioteke. Snimak sadrži"
+" cijelu strukturu datoteka i fascikli biblioteke."
 
 #: templates/help/library_history_and_snapshots.html:8
 msgid ""
@@ -1291,10 +1671,16 @@ msgid ""
 "files in the library will be restored to that point of time, all at once. It"
 " works like a \"time machine\" for the library."
 msgstr ""
+"Ponekad izmijenite mnogo datoteka u biblioteci, a zatim poželite poništiti "
+"sve te promjene. Vraćanje brojnih datoteka na stare verzije može biti "
+"zamorno. Tada je funkcija snimaka stanja veoma korisna. Cijelu biblioteku "
+"možete vratiti u bilo koju tačku u prošlosti. Sve datoteke u biblioteci "
+"odjednom će se vratiti u stanje iz tog trenutka. Funkcija djeluje kao "
+"\"vremenska mašina\" za biblioteku."
 
 #: templates/help/library_history_and_snapshots.html:9
 msgid "To view library history and snapshots:"
-msgstr ""
+msgstr "Da biste pregledali historiju i snimke stanja biblioteke:"
 
 #: templates/help/library_history_and_snapshots.html:11
 msgid ""
@@ -1302,12 +1688,17 @@ msgid ""
 "\"History\" icon in the library navigation top bar. All the change record of"
 " the library will be displayed in a list."
 msgstr ""
+"U Seafile web aplikaciji otvorite korijensku fasciklu biblioteke. Kliknite "
+"ikonu \"Historija\" u gornjoj traci za navigaciju biblioteke. Svi zapisi o "
+"promjenama biblioteke prikazat će se u spisku."
 
 #: templates/help/library_history_and_snapshots.html:12
 msgid ""
 "Click the \"view snapshot\" link on any modification record. You'll see the "
 "library state at the point of time."
 msgstr ""
+"Kliknite vezu \"prikaži snimak stanja\" na bilo kojem zapisu o izmjeni. "
+"Vidjet ćete stanje biblioteke u tom trenutku."
 
 #: templates/help/library_history_and_snapshots.html:13
 msgid ""
@@ -1315,6 +1706,9 @@ msgid ""
 "you're the library's owner, you can restore the entire library to this point"
 " of time."
 msgstr ""
+"U prikazu snimka stanja možete preuzeti ili vratiti bilo koju datoteku ili "
+"fasciklu. Ako ste vlasnik biblioteke, možete vratiti cijelu biblioteku u "
+"stanje iz tog trenutka."
 
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
@@ -1323,6 +1717,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Možete podesiti period čuvanja historije biblioteke: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">postavljanje perioda "
+"čuvanja historije</a>."
 
 #: templates/help/manage_library_as_wiki.html:6
 msgid ""
@@ -1332,6 +1729,11 @@ msgid ""
 "files store textual, tabular as well as graphical information; You can also "
 "add links to other documents in a Markdown file."
 msgstr ""
+"Wiki stranice u Seafileu služe za jednostavno prikupljanje i pohranu manjih "
+"količina strukturiranih podataka. Pišu se u Markdownu (MD), jednostavnom "
+"jeziku za označavanje koji osigurava kompatibilnost između platformi. MD "
+"datoteke mogu sadržavati tekstualne, tabelarne i grafičke informacije, a u "
+"Markdown datoteku možete dodati i veze ka drugim dokumentima."
 
 #: templates/help/manage_library_as_wiki.html:7
 msgid ""
@@ -1340,10 +1742,15 @@ msgid ""
 " Seafile libraries, they can be synced and shared with other users just like"
 " any ordinary library."
 msgstr ""
+"U Seafileu možete upravljati standardnom bibliotekom kao Wiki prostorom "
+"pomoću \"Prikaza kolona\", uvedenog u verziji 7.0. Budući da Seafile "
+"implementira Wiki stranice kao standardne Seafile biblioteke, mogu se "
+"sinhronizovati i dijeliti s drugim korisnicima kao i svaka obična "
+"biblioteka."
 
 #: templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
-msgstr ""
+msgstr "Prikaz kolona"
 
 #: templates/help/manage_library_as_wiki.html:9
 msgid ""
@@ -1354,10 +1761,17 @@ msgid ""
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
 msgstr ""
+"Wiki stranice obično imaju bočnu traku sa stablolikom strukturom fascikli "
+"koja omogućava brzo i jednostavno pregledanje stranica. Seafileov prikaz "
+"kolona omogućava upravljanje datotekama u biblioteci na isti način kao u "
+"Wiki prostoru. Korisnici mogu pregledati sadržaj i premještati datoteke i "
+"fascikle jednostavnim prevlačenjem i ispuštanjem. Radnje nad datotekama, kao"
+" što su preimenovanje, premještanje i otvaranje putem klijenta, dostupne su "
+"u kontekstnom meniju koji se otvara desnim klikom."
 
 #: templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
-msgstr ""
+msgstr "WYSIWYG uređivač Markdowna"
 
 #: templates/help/manage_library_as_wiki.html:13
 msgid ""
@@ -1373,12 +1787,24 @@ msgid ""
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
 msgstr ""
+"Wiki stranice u Seafileu čuvaju se kao obični dokumenti u Markdown formatu. "
+"Da biste kreirali novu Wiki stranicu u biblioteci, kreirajte novi Markdown "
+"dokument. MD datoteke možete uređivati direktno iz Seafile web interfejsa "
+"pomoću online MD uređivača. Web uređivač pruža ugodno korisničko iskustvo i "
+"bogate opcije oblikovanja teksta, slika i tabela. Slike možete uvesti u MD "
+"datoteke iz biblioteka i lokalnog prostora za pohranu ili putem hiperveza. "
+"Osnovne funkcije uređivanja slika, kao što je promjena veličine, dostupne su"
+" i u WYSIWYG interfejsu uređivača. Tabele možete umetati i mijenjati u "
+"nekoliko klikova. Isto važi i za sadržaj tabele: cijelu tabelu ili njen dio "
+"možete kopirati bez napuštanja WYSIWYG prikaza."
 
 #: templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
 msgstr ""
+"Historiji izmjena Markdown datoteke možete jednostavno pristupiti klikom na "
+"dugme \"Historija datoteke\" u meniju na vrhu interfejsa uređivača."
 
 #: templates/help/manage_library_as_wiki.html:17
 msgid ""
@@ -1386,10 +1812,12 @@ msgid ""
 "Table of contents, file information, and collaborative commenting are "
 "provided in this side bar."
 msgstr ""
+"Na desnoj strani Markdown uređivača možete otvoriti skrivenu bočnu traku. "
+"Ona sadrži sadržaj, informacije o datoteci i komentare za saradnju."
 
 #: templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
-msgstr ""
+msgstr "Označavanje datoteka i povezani dokumenti"
 
 #: templates/help/manage_library_as_wiki.html:20
 msgid ""
@@ -1398,12 +1826,18 @@ msgid ""
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
 msgstr ""
+"Označavanje datoteka važna je funkcija za upravljanje znanjem. Seafile "
+"korisnicima omogućava definisanje oznaka za svaku biblioteku i dodjeljivanje"
+" oznaka datotekama. Oznakama možete upravljati u bočnoj traci Markdown "
+"uređivača ili u interfejsu preglednika datoteka."
 
 #: templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
 msgstr ""
+"Interfejs preglednika datoteka prikazuje sažetak svih oznaka datoteka u "
+"trenutnoj biblioteci."
 
 #: templates/help/read-only_syncing.html:6
 #, python-format
@@ -1417,16 +1851,26 @@ msgid ""
 " copy at the server side. To prevent data loss, the local copy is renamed to"
 " a conflict file."
 msgstr ""
+"Za biblioteke ili fascikle samo za čitanje Seafile prikazuje ikonu zabrane "
+"(<img src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) "
+"kako bi označio da su samo za čitanje. Međutim, korisnici i dalje mogu "
+"mijenjati sinhronizovane lokalne kopije. Seafile će zanemariti izmijenjenu "
+"lokalnu kopiju. Ako se izmijeni i kopija na serveru, klijent će prikazati "
+"obavještenje da je lokalno izmijenjena kopija u sukobu s kopijom na serveru."
+" Da bi se spriječio gubitak podataka, lokalna kopija preimenovat će se u "
+"datoteku u sukobu."
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
 "If you want the be-shared users not be able to modify local copies, you can "
 "consider using the Seafile Drive client."
 msgstr ""
+"Ako želite spriječiti korisnike s kojima dijelite datoteke da mijenjaju "
+"lokalne kopije, razmotrite korištenje Seafile Drive klijenta."
 
 #: templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
-msgstr ""
+msgstr "Vraćanje izbrisanih datoteka i fascikli"
 
 #: templates/help/restoring_deleted_files.html:7
 msgid ""
@@ -1434,16 +1878,21 @@ msgid ""
 "Sometimes you find files are deleted mistakenly. You can find back your "
 "deleted files in the trash bin of each library."
 msgstr ""
+"Svaka biblioteka u Seafileu automatski prati brisanje datoteka. Ponekad se "
+"datoteke izbrišu greškom. Izbrisane datoteke možete pronaći u korpi za "
+"otpatke svake biblioteke."
 
 #: templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
-msgstr ""
+msgstr "Korpu za otpatke koristite ovako:"
 
 #: templates/help/restoring_deleted_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the parent folder containing the deleted "
 "file or folder."
 msgstr ""
+"U Seafile web aplikaciji otvorite nadređenu fasciklu koja je sadržavala "
+"izbrisanu datoteku ili fasciklu."
 
 #: templates/help/restoring_deleted_files.html:11
 msgid ""
@@ -1451,6 +1900,9 @@ msgid ""
 " folders will be listed in deletion time order. In the bottom of the list, "
 "you can click the \"more\" button to load more deleted files."
 msgstr ""
+"Kliknite ikonu \"korpa za otpatke\" na traci radnji biblioteke. Izbrisane "
+"datoteke i fascikle prikazat će se prema vremenu brisanja. Na dnu spiska "
+"kliknite dugme \"više\" da biste učitali dodatne izbrisane datoteke."
 
 #: templates/help/restoring_deleted_files.html:12
 msgid ""
@@ -1458,6 +1910,9 @@ msgid ""
 "folder's parent folder has been deleted, it will be restored to the "
 "library's root folder."
 msgstr ""
+"Na spisku izbrisanih datoteka možete vratiti datoteke i fascikle. Ako je "
+"nadređena fascikla datoteke ili fascikle izbrisana, ona će biti vraćena u "
+"korijensku fasciklu biblioteke."
 
 #: templates/help/restoring_deleted_files.html:13
 msgid ""
@@ -1465,6 +1920,9 @@ msgid ""
 "the current folder. Files deleted in the sub-folders of the current folder "
 "are also included in the list."
 msgstr ""
+"Imajte na umu da korpa za otpatke sadrži samo datoteke i podfascikle "
+"izbrisane unutar trenutne fascikle. Spisak uključuje i datoteke izbrisane u "
+"njenim podfasciklama."
 
 #: templates/help/restoring_deleted_files.html:15
 #, python-format
@@ -1473,6 +1931,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Možete podesiti period čuvanja izbrisanih datoteka: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">postavljanje perioda "
+"čuvanja historije</a>."
 
 #: templates/help/selective_sync.html:8
 msgid ""
@@ -1481,6 +1942,9 @@ msgid ""
 "selectively sync a sub-folder in a library, instead of syncing the entire "
 "library."
 msgstr ""
+"Možda na Seafile serveru imate veoma velike biblioteke, a trenutno vas "
+"zanima samo podfascikla unutar jedne od njih. U tom slučaju možete "
+"selektivno sinhronizovati podfasciklu umjesto cijele biblioteke."
 
 #: templates/help/selective_sync.html:10
 msgid ""
@@ -1489,40 +1953,54 @@ msgid ""
 "folder. Right click on the sub-folder. Choose \"Sync this folder\" in the "
 "pop-up menu."
 msgstr ""
+"Da biste sinhronizovali podfasciklu, dvostrukim klikom otvorite preglednik "
+"datoteka u oblaku za biblioteku koja nije sinhronizovana. Otvorite nadređenu"
+" fasciklu te podfascikle, kliknite desnim tasterom miša na podfasciklu i u "
+"iskačućem meniju odaberite \"Sinhronizuj ovu fasciklu\"."
 
 #: templates/help/selective_sync.html:14
 msgid ""
 "After syncing the sub-folder, you can see its syncing status in the \"Synced"
 " Libraries\" group in the client's main window."
 msgstr ""
+"Nakon sinhronizacije podfascikle, njen status sinhronizacije možete vidjeti "
+"u grupi \"Sinhronizovane biblioteke\" u glavnom prozoru klijenta."
 
 #: templates/help/setting_library_history.html:6
 msgid "Setting library history retention period"
-msgstr ""
+msgstr "Postavljanje perioda čuvanja historije biblioteke"
 
 #: templates/help/setting_library_history.html:7
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
 msgstr ""
+"Dužina perioda čuvanja historije biblioteke određuje koliko dugo možete "
+"pristupati podacima historije u sljedećim funkcijama:"
 
 #: templates/help/setting_library_history.html:9
 msgid ""
 "Restore deleted files: you cannot restore files and folders deleted before "
 "the retention period."
 msgstr ""
+"Vraćanje izbrisanih datoteka: ne možete vratiti datoteke i fascikle "
+"izbrisane prije isteka perioda čuvanja."
 
 #: templates/help/setting_library_history.html:10
 msgid ""
 "File versions: you cannot access file versions older than the retention "
 "period."
 msgstr ""
+"Verzije datoteka: ne možete pristupiti verzijama datoteka starijim od "
+"perioda čuvanja."
 
 #: templates/help/setting_library_history.html:11
 msgid ""
 "Library history and snapshots: you cannot access library snapshots older "
 "than the retention period."
 msgstr ""
+"Historija i snimci stanja biblioteke: ne možete pristupiti snimcima stanja "
+"biblioteke starijim od perioda čuvanja."
 
 #: templates/help/setting_library_history.html:13
 msgid ""
@@ -1530,51 +2008,70 @@ msgid ""
 "library, separately. You must be the library's owner to set the retention "
 "period. To set retention period length:"
 msgstr ""
+"Period čuvanja starih verzija datoteka može se zasebno podesiti za svaku "
+"biblioteku. Da biste ga podesili, morate biti vlasnik biblioteke. Postupak "
+"je sljedeći:"
 
 #: templates/help/setting_library_history.html:15
 msgid ""
 "In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
 "the below screenshot). All libraries owned by you will be listed."
 msgstr ""
+"U Seafile web aplikaciji kliknite karticu \"Moje\" u navigacijskom oknu, kao"
+" na snimku ekrana u nastavku. Prikazat će se sve biblioteke koje su u vašem "
+"vlasništvu."
 
 #: templates/help/setting_library_history.html:16
 msgid ""
 "Move the cursor onto the row of the library. An operation menu will appear. "
 "Click \"History Setting\" in the drop-down menu."
 msgstr ""
+"Postavite pokazivač na red biblioteke. Pojavit će se meni radnji. U "
+"padajućem meniju kliknite \"Postavka historije\"."
 
 #: templates/help/setting_library_history.html:17
 msgid "In the pop-up dialog, you can set the length of file retention period."
-msgstr ""
+msgstr "U iskačućem dijalogu možete podesiti dužinu perioda čuvanja datoteka."
 
 #: templates/help/sharing_files_and_folders.html:6
 msgid ""
 "In Seafile there are a few ways to share files and folders with others:"
 msgstr ""
+"U Seafileu postoji nekoliko načina za dijeljenje datoteka i fascikli s "
+"drugima:"
 
 #: templates/help/sharing_files_and_folders.html:8
 msgid ""
 "Using links: there are multiple types of links that can be used to share "
 "with various scope of collaborators."
 msgstr ""
+"Dijeljenje putem veza: dostupno je više vrsta veza za dijeljenje s "
+"različitim krugovima saradnika."
 
 #: templates/help/sharing_files_and_folders.html:10
 msgid ""
 "Share links: Any user who has access to the links can access the files or "
 "folders pointed by the link. No login is required."
 msgstr ""
+"Veze za dijeljenje: svako ko ima pristup vezi može pristupiti datotekama ili"
+" fasciklama na koje ona upućuje. Prijava nije potrebna."
 
 #: templates/help/sharing_files_and_folders.html:11
 msgid ""
 "Upload links: Any user who has access to the links can upload files to the "
 "folder pointed by the link. No login is required."
 msgstr ""
+"Veze za otpremanje: svako ko ima pristup vezi može otpremati datoteke u "
+"fasciklu na koju ona upućuje. Prijava nije potrebna."
 
 #: templates/help/sharing_files_and_folders.html:12
 msgid ""
 "Internal links: Only logged in users who have read permission to the file or"
 " folder can access this link. Used for internal file sharing."
 msgstr ""
+"Interne veze: ovoj vezi mogu pristupiti samo prijavljeni korisnici koji "
+"imaju dozvolu za čitanje datoteke ili fascikle. Koriste se za interno "
+"dijeljenje datoteka."
 
 #: templates/help/sharing_files_and_folders.html:15
 msgid ""
@@ -1582,10 +2079,13 @@ msgid ""
 "library or folder for specific users or groups. Users have to log in to "
 "access the folders."
 msgstr ""
+"Dijeljenje biblioteka ili fascikli: koristi se za postavljanje dozvola "
+"pristupa biblioteci ili fascikli za određene korisnike ili grupe. Korisnici "
+"se moraju prijaviti da bi pristupili fasciklama."
 
 #: templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
-msgstr ""
+msgstr "Kreiranje veza za dijeljenje datoteka ili fascikli"
 
 #: templates/help/sharing_files_and_folders.html:18
 msgid ""
@@ -1593,12 +2093,17 @@ msgid ""
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
 msgstr ""
+"Veze za dijeljenje javne su veze ka datotekama ili fasciklama. Može im "
+"pristupiti bilo ko, uključujući osobe koje nemaju Seafile račun. Veze možete"
+" zaštititi i lozinkom te vremenom isteka."
 
 #: templates/help/sharing_files_and_folders.html:19
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
 msgstr ""
+"Možete postaviti i dozvole pristupa za veze za dijeljenje. Dostupne su tri "
+"vrste dozvola:"
 
 #: templates/help/sharing_files_and_folders.html:21
 msgid ""
@@ -1606,6 +2111,9 @@ msgid ""
 "the type of files can be previewed in web browser, they can also be viewed "
 "online (e.g. Office files)."
 msgstr ""
+"Pregled i preuzimanje: datoteka ili datoteke u fascikli mogu se preuzeti. "
+"Ako se mogu pregledati u web pregledniku, mogu se pregledati i online (npr. "
+"Office datoteke)."
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
@@ -1613,6 +2121,9 @@ msgid ""
 "browser, but cannot be downloaded. This is useful for sharing confidential "
 "data."
 msgstr ""
+"Samo pregled: datoteka ili datoteke u fascikli mogu se pregledati samo u web"
+" pregledniku i ne mogu se preuzeti. Ovo je korisno za dijeljenje "
+"povjerljivih podataka."
 
 #: templates/help/sharing_files_and_folders.html:23
 msgid ""
@@ -1620,16 +2131,22 @@ msgid ""
 "file can be edited in web browser (e.g. an Office file), any user who has "
 "access to the link is allowed to edit it."
 msgstr ""
+"Uređivanje u oblaku i preuzimanje: slično opciji \"Pregled i preuzimanje\", "
+"ali ako se datoteka može uređivati u web pregledniku (npr. Office datoteka),"
+" svaki korisnik koji ima pristup vezi može je uređivati."
 
 #: templates/help/sharing_files_and_folders.html:25
 msgid "To create a share link in Seafile web app:"
-msgstr ""
+msgstr "Da biste kreirali vezu za dijeljenje u Seafile web aplikaciji:"
 
 #: templates/help/sharing_files_and_folders.html:27
 msgid ""
 "Navigate into the parent folder containing the file or folder. Hover your "
 "mouse over the file or folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Otvorite nadređenu fasciklu koja sadrži datoteku ili fasciklu. Postavite "
+"pokazivač miša na datoteku ili fasciklu i kliknite ikonu \"Dijeli\" koja će "
+"se pojaviti."
 
 #: templates/help/sharing_files_and_folders.html:28
 msgid ""
@@ -1637,6 +2154,9 @@ msgid ""
 " on the left panel. Then click \"Generate\" button to create a link. You can"
 " use password, expiration time and permission to protect your link."
 msgstr ""
+"Pojavit će se prozor s opcijama dijeljenja. Kliknite karticu \"Veza za "
+"dijeljenje\" u lijevom oknu, a zatim kliknite dugme \"Generiši\" da biste "
+"kreirali vezu. Vezu možete zaštititi lozinkom, vremenom isteka i dozvolom."
 
 #: templates/help/sharing_files_and_folders.html:29
 #: templates/help/sharing_files_and_folders.html:42
@@ -1644,10 +2164,12 @@ msgid ""
 "Copy the link to email, instant messaging client or any other tool to send "
 "it to others."
 msgstr ""
+"Kopirajte vezu u e-poštu, aplikaciju za razmjenu poruka ili neki drugi alat "
+"i pošaljite je drugima."
 
 #: templates/help/sharing_files_and_folders.html:31
 msgid "You can also create share links from the desktop clients."
-msgstr ""
+msgstr "Veze za dijeljenje možete kreirati i iz desktop klijenata."
 
 #: templates/help/sharing_files_and_folders.html:33
 msgid ""
@@ -1656,6 +2178,11 @@ msgid ""
 " on the file or folder that you want to create a link to. In the pop-up "
 "menu, choose \"Seafile\" then \"Create share link\"."
 msgstr ""
+"Ako je biblioteka sinhronizovana, dvaput kliknite na nju u glavnom prozoru "
+"Seafile klijenta da biste otvorili njenu lokalnu fasciklu. Kliknite desnim "
+"tasterom miša na datoteku ili fasciklu za koju želite kreirati vezu. U "
+"iskačućem meniju odaberite \"Seafile\", a zatim \"Kreiraj vezu za "
+"dijeljenje\"."
 
 #: templates/help/sharing_files_and_folders.html:34
 msgid ""
@@ -1663,10 +2190,13 @@ msgid ""
 " Seafile client. The cloud file browser window will be opened, and you can "
 "create a link to a file or folder in it."
 msgstr ""
+"Ako biblioteka nije sinhronizovana, dvaput kliknite na nju u glavnom prozoru"
+" Seafile klijenta. Otvorit će se prozor preglednika datoteka u oblaku u "
+"kojem možete kreirati vezu ka datoteci ili fascikli."
 
 #: templates/help/sharing_files_and_folders.html:36
 msgid "Creating upload links to folders"
-msgstr ""
+msgstr "Kreiranje veza za otpremanje u fascikle"
 
 #: templates/help/sharing_files_and_folders.html:37
 msgid ""
@@ -1674,16 +2204,21 @@ msgid ""
 "upload links for folders. Others cannot see the files in the folders. They "
 "can only upload files to them."
 msgstr ""
+"Veze za otpremanje možete koristiti za prikupljanje datoteka od drugih. "
+"Možete ih kreirati samo za fascikle. Drugi ne mogu vidjeti datoteke u tim "
+"fasciklama, već u njih mogu samo otpremati datoteke."
 
 #: templates/help/sharing_files_and_folders.html:38
 msgid "To create an upload link in Seafile web app:"
-msgstr ""
+msgstr "Da biste kreirali vezu za otpremanje u Seafile web aplikaciji:"
 
 #: templates/help/sharing_files_and_folders.html:40
 msgid ""
 "Navigate into the parent folder containing the folder. Hover your mouse over"
 " the folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Otvorite nadređenu fasciklu koja sadrži fasciklu. Postavite pokazivač miša "
+"na fasciklu i kliknite ikonu \"Dijeli\" koja će se pojaviti."
 
 #: templates/help/sharing_files_and_folders.html:41
 msgid ""
@@ -1691,10 +2226,13 @@ msgid ""
 "tab on the left panel. Then click \"Generate\" button to create a link. You "
 "can use password to protect your link."
 msgstr ""
+"Pojavit će se prozor s opcijama dijeljenja. Kliknite karticu \"Veza za "
+"otpremanje\" u lijevom oknu, a zatim kliknite dugme \"Generiši\" da biste "
+"kreirali vezu. Vezu možete zaštititi lozinkom."
 
 #: templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
-msgstr ""
+msgstr "Dijeljenje biblioteka ili fascikli"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
@@ -1702,62 +2240,81 @@ msgid ""
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
+"Biblioteku ili fasciklu možete podijeliti s drugim registrovanim Seafile "
+"korisnicima. Drugi joj mogu pristupiti putem web aplikacije i Seafile "
+"klijenata."
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
-msgstr ""
+msgstr "Možete odabrati obuhvat dijeljenja:"
 
 #: templates/help/sharing_files_and_folders.html:48
 msgid "Share with user: You can share with one or more users."
 msgstr ""
+"Dijeljenje s korisnikom: biblioteku možete podijeliti s jednim ili više "
+"korisnika."
 
 #: templates/help/sharing_files_and_folders.html:49
 msgid "Share with group: You can share with a group."
-msgstr ""
+msgstr "Dijeljenje s grupom: biblioteku možete podijeliti s grupom."
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share with organization: If you're using a private server, sometimes it's "
 "useful to share with all members on the server (the entire organization)."
 msgstr ""
+"Dijeljenje s organizacijom: ako koristite privatni server, ponekad je "
+"korisno dijeliti sa svim članovima servera, odnosno cijelom organizacijom."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "Možete postaviti i dozvolu za dijeljenje:"
 
 #: templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
 msgstr ""
+"Čitanje i pisanje: korisnici mogu čitati, pisati, otpremati, preuzimati i "
+"sinhronizovati datoteke."
 
 #: templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
 msgstr ""
+"Samo za čitanje: korisnici mogu čitati, preuzimati i sinhronizovati "
+"datoteke."
 
 #: templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
 msgstr ""
+"Administrator: pored dozvole za pisanje, korisnici mogu i dijeliti "
+"biblioteku."
 
 #: templates/help/sharing_files_and_folders.html:57
 msgid ""
 "Online Read-Write: users can view and edit files online via a web browser. "
 "The files cannot be downloaded."
 msgstr ""
+"Online čitanje i pisanje: korisnici mogu pregledati i uređivati datoteke "
+"online putem web preglednika. Datoteke se ne mogu preuzeti."
 
 #: templates/help/sharing_files_and_folders.html:58
 msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
 msgstr ""
+"Online samo za čitanje: korisnici mogu pregledati datoteke samo online putem"
+" web preglednika. Datoteke se ne mogu preuzeti."
 
 #: templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder with a user or group:"
-msgstr ""
+msgstr "Da biste podijelili biblioteku ili fasciklu s korisnikom ili grupom:"
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
 "Hover your mouse over the library or folder and click on the \"Share\" icon "
 "that appears."
 msgstr ""
+"Postavite pokazivač miša na biblioteku ili fasciklu i kliknite ikonu "
+"\"Dijeli\" koja će se pojaviti."
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
@@ -1765,6 +2322,9 @@ msgid ""
 "user\" or \"Share with group\" tab on the left panel. Select the user or "
 "group. Then click \"Submit\"."
 msgstr ""
+"Pojavit će se prozor s opcijama dijeljenja. Kliknite karticu \"Dijeli s "
+"korisnikom\" ili \"Dijeli s grupom\" u lijevom oknu. Odaberite korisnika ili"
+" grupu, a zatim kliknite \"Pošalji\"."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -1773,6 +2333,10 @@ msgid ""
 " you share it with a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
+"Nakon što biblioteku ili fasciklu podijelite s korisnikom, on je može "
+"vidjeti klikom na karticu \"Dijeljeno sa mnom\" u lijevom oknu Seafile web "
+"aplikacije. Ako je podijelite s grupom, članovi grupe mogu je vidjeti "
+"otvaranjem te grupe."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -1781,10 +2345,14 @@ msgid ""
 "Library\" button. In the drop-down menu, you can choose to share an existing"
 " library or create a new library and share it."
 msgstr ""
+"Da biste podijelili biblioteku s cijelom organizacijom, u Seafile web "
+"aplikaciji kliknite karticu \"Dijeljeno sa svima\" u lijevom oknu, a zatim "
+"dugme \"Dodaj biblioteku\". U padajućem meniju možete odabrati postojeću "
+"biblioteku za dijeljenje ili kreirati novu i podijeliti je."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
-msgstr ""
+msgstr "Interne veze"
 
 #: templates/help/sharing_files_and_folders.html:68
 msgid ""
@@ -1794,6 +2362,11 @@ msgid ""
 "library. You may just copy the link and paste it into an email or IM "
 "software."
 msgstr ""
+"Ovoj vezi mogu pristupiti samo prijavljeni korisnici koji imaju dozvolu za "
+"čitanje datoteke ili fascikle. Koristi se za interno dijeljenje datoteka. To"
+" je praktičan način dijeljenja datoteka među članovima tima koji imaju "
+"pristup zajedničkoj biblioteci. Vezu možete kopirati i zalijepiti u e-poštu "
+"ili aplikaciju za razmjenu poruka."
 
 #: templates/help/sync_interval.html:8
 msgid ""
@@ -1804,10 +2377,16 @@ msgid ""
 "local folder. You can set the interval of this periodic sync. The interval "
 "is set in the unit of seconds."
 msgstr ""
+"Seafile klijent obično automatski otkriva promjene u lokalnoj fascikli i "
+"otprema ih na server. Međutim, ako se lokalna fascikla nalazi na Windows "
+"mrežnom disku, Seafile klijent možda neće pouzdano otkrivati promjene. U tom"
+" slučaju možete podesiti klijent da povremeno provjerava promjene u lokalnoj"
+" fascikli. Možete postaviti interval ove periodične sinhronizacije. Interval"
+" se izražava u sekundama."
 
 #: templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "Sinhronizacija s postojećom fasciklom"
 
 #: templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -1821,24 +2400,37 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/conflicts/\">conflict files</a> if file contents "
 "are different in the local folder and the library. "
 msgstr ""
+"Ponekad već imate biblioteku na Seafile serveru koju su podijelili drugi ili"
+" otpremili s drugog računara. Tu biblioteku možete sinhronizovati s "
+"postojećom fasciklom na računaru. Lokalna fascikla mora imati isti naziv kao"
+" biblioteka. Datoteke u lokalnoj fascikli spojit će se s datotekama u "
+"biblioteci. Nijedna datoteka u lokalnoj fascikli ni biblioteci neće biti "
+"prepisana niti izgubljena. Ako se sadržaj datoteka razlikuje, spajanje će "
+"stvoriti neke <a href=\"%(SITE_ROOT)shelp/conflicts/\">datoteke u "
+"sukobu</a>. "
 
 #: templates/help/syncing_existing_folders.html:10
 msgid ""
 "To sync a library with an existing folder, right click on the library in "
 "Seafile client's main window and click \"Sync this library\"."
 msgstr ""
+"Da biste sinhronizovali biblioteku s postojećom fasciklom, kliknite desnim "
+"tasterom miša na biblioteku u glavnom prozoru Seafile klijenta, a zatim "
+"kliknite \"Sinhronizuj ovu biblioteku\"."
 
 #: templates/help/syncing_existing_folders.html:14
 msgid "In the pop-up dialog, click the \"Sync with an existing folder\" link."
 msgstr ""
+"U iskačućem dijalogu kliknite vezu \"Sinhronizuj s postojećom fasciklom\"."
 
 #: templates/help/syncing_existing_folders.html:18
 msgid "Then choose an existing folder to sync with this library."
 msgstr ""
+"Zatim odaberite postojeću fasciklu za sinhronizaciju s ovom bibliotekom."
 
 #: templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "Prekid i ponovna sinhronizacija biblioteke"
 
 #: templates/help/unsync_resync.html:8
 #, python-format
@@ -1850,6 +2442,13 @@ msgid ""
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
 msgstr ""
+"Kada više ne želite sinhronizovati lokalnu fasciklu s bibliotekom, možete "
+"prekinuti sinhronizaciju. Nakon toga promjene u lokalnoj fascikli i "
+"datotekama neće se otpremati, a promjene u biblioteci neće se preuzimati. "
+"Ako ponovo želite sinhronizovati biblioteku s lokalnom fasciklom, možete "
+"koristiti funkciju <a "
+"href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sinhronizacije s "
+"postojećom fasciklom</a>."
 
 #: templates/help/unsync_resync.html:10
 msgid ""
@@ -1858,6 +2457,11 @@ msgid ""
 "unsync and then immediately sync the library with the same folder. You can "
 "find this action in the pop-up menu of the client's main window."
 msgstr ""
+"Ponekad interne greške u klijentu blokiraju sinhronizaciju. U takvim "
+"slučajevima obično pomaže \"ponovna sinhronizacija\" biblioteke. To znači da"
+" se sinhronizacija biblioteke prekine, a zatim se ona odmah ponovo "
+"sinhronizuje s istom fasciklom. Ovu radnju možete pronaći u iskačućem meniju"
+" glavnog prozora klijenta."
 
 #: templates/help/using_drive_client.html:7
 msgid ""
@@ -1865,16 +2469,21 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
 msgstr ""
+"Nakon instalacije Drive klijenta prema uputama na <a "
+"href=\"https://www.seafile.com/en/download/\">stranici za preuzimanje</a>, "
+"pokrenite ga dvostrukim klikom na ikonu aplikacije \"SeaDrive\" na desktopu."
 
 #: templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
 msgstr ""
+"Od vas će se tražiti da odaberete slovo diska za virtuelni disk. Prema "
+"zadanim postavkama koristit će se \"S:\"."
 
 #: templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "Zatim ćete biti upitani da se prijavite na Seafile server."
 
 #: templates/help/using_drive_client.html:12
 msgid ""
@@ -1883,6 +2492,10 @@ msgid ""
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
 msgstr ""
+"Nakon uspješne prijave na server, Drive klijent će početi preuzimati spisak "
+"biblioteka i datoteka sa servera. Sadržaj datoteka se još neće preuzimati, "
+"pa postupak neće dugo trajati. Klijent možete ostaviti da radi u pozadini. "
+"Kada preuzimanje završi, dobit ćete obavještenje."
 
 #: templates/help/using_drive_client.html:14
 msgid ""
@@ -1892,21 +2505,28 @@ msgid ""
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
 msgstr ""
+"Otvorit će se fascikla virtuelnog diska. Vidjet ćete da funkcioniše kao "
+"običan tvrdi disk na računaru. Fascikle najvišeg nivoa na virtuelnom disku "
+"predstavljaju biblioteke na Seafile serveru. Sadržaj datoteka preuzima se "
+"kada otvorite datoteku. Nedavno otvorene datoteke keširaju se na lokalnom "
+"disku. Sve keširane datoteke označene su zelenom kvačicom."
 
 #: templates/help/using_drive_client.html:17
 msgid "Synced State"
-msgstr ""
+msgstr "Status sinhronizacije"
 
 #: templates/help/using_drive_client.html:18
 msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
 msgstr ""
+"Datoteke i fascikle na virtuelnom disku mogu biti samo u oblaku, "
+"sinhronizovane ili djelimično sinhronizovane."
 
 #: templates/help/using_drive_client.html:22
 #: templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "Status"
 
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
@@ -1916,11 +2536,11 @@ msgstr "Ikona"
 #: templates/help/using_drive_client.html:24
 #: templates/help/using_drive_client.html:53
 msgid "Details"
-msgstr ""
+msgstr "Detalji"
 
 #: templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
-msgstr ""
+msgstr "Sadržaj dostupan samo u oblaku"
 
 #: templates/help/using_drive_client.html:31
 msgid ""
@@ -1930,71 +2550,89 @@ msgid ""
 "downloaded is only information about the file, such as its name, its size "
 "and the date it was updated."
 msgstr ""
+"Sadržaj dostupan samo u oblaku prikazuje se na virtuelnom disku, ali ne "
+"zauzima puni prostor koji bi datoteka inače koristila. U pregledniku "
+"datoteka možete vidjeti datoteku, ali se njen sadržaj u cijelosti preuzima "
+"tek kada vam zatreba. Preuzimaju se samo informacije o datoteci, kao što su "
+"naziv, veličina i datum ažuriranja."
 
 #: templates/help/using_drive_client.html:34
 msgid "Synced content"
-msgstr ""
+msgstr "Sinhronizovani sadržaj"
 
 #: templates/help/using_drive_client.html:36
 msgid ""
 "Synced content is downloaded and saved on the hard drive of your computer. "
 "You can directly edit these files from applications on your computer."
 msgstr ""
+"Sinhronizovani sadržaj preuzet je i sačuvan na tvrdom disku računara. Ove "
+"datoteke možete direktno uređivati pomoću aplikacija na računaru."
 
 #: templates/help/using_drive_client.html:39
 msgid "Partially synced content"
-msgstr ""
+msgstr "Djelimično sinhronizovani sadržaj"
 
 #: templates/help/using_drive_client.html:41
 msgid ""
 "Partially synced folders contain both synced and cloud-only files or "
 "folders."
 msgstr ""
+"Djelimično sinhronizovane fascikle sadrže i sinhronizovane datoteke ili "
+"fascikle i one dostupne samo u oblaku."
 
 #: templates/help/using_drive_client.html:46
 msgid "Special States"
-msgstr ""
+msgstr "Posebni statusi"
 
 #: templates/help/using_drive_client.html:47
 msgid ""
 "For files that are already synced to local computer, they may be in 3 other "
 "special states, besides the normal \"synced\" state. "
 msgstr ""
+"Datoteke koje su već sinhronizovane s lokalnim računarom mogu, pored "
+"uobičajenog statusa \"sinhronizovano\", biti u još 3 posebna statusa. "
 
 #: templates/help/using_drive_client.html:58
 msgid "Locked by other user"
-msgstr ""
+msgstr "Zaključao drugi korisnik"
 
 #: templates/help/using_drive_client.html:60
 msgid ""
 "The file is locked by other user on the server. You can only open the file "
 "in read-only mode. You cannot modify, delete, rename or move the file."
 msgstr ""
+"Drugi korisnik zaključao je datoteku na serveru. Možete je otvoriti samo u "
+"režimu samo za čitanje. Ne možete je mijenjati, brisati, preimenovati ni "
+"premještati."
 
 #: templates/help/using_drive_client.html:63
 msgid "Locked by me"
-msgstr ""
+msgstr "Zaključao/la sam"
 
 #: templates/help/using_drive_client.html:65
 msgid ""
 "The file is locked by you. This prevents others from modifying the file."
-msgstr ""
+msgstr "Vi ste zaključali datoteku. Time sprečavate druge da je mijenjaju."
 
 #: templates/help/using_drive_client.html:68
 msgid "Read-only"
-msgstr ""
+msgstr "Samo za čitanje"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
 "The folder or library of this file is shared with read-only permission with "
 "you. You cannot modify, delete or move the file."
 msgstr ""
+"Biblioteka ili fascikla ove datoteke podijeljena je s vama uz dozvolu samo "
+"za čitanje. Ne možete mijenjati, brisati ni premještati datoteku."
 
 #: templates/help/using_drive_client.html:74
 msgid ""
 "The Drive client regularly cleans up unused cached files in the background. "
 "You can also limit the local cache space."
 msgstr ""
+"Drive klijent redovno čisti neiskorištene keširane datoteke u pozadini. "
+"Možete ograničiti i prostor za lokalni keš."
 
 #: templates/help/using_drive_client.html:76
 msgid ""
@@ -2002,10 +2640,15 @@ msgid ""
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
 msgstr ""
+"U Drive klijentu možete se prijaviti na više računa. Međutim, na virtuelnom "
+"disku prikazuju se samo datoteke s trenutno odabranog servera. Možete se "
+"prebacivati između računa."
 
 #: templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
 msgstr ""
+"1. Zašto ne mogu kreirati datoteke ni brisati fascikle u korijenskoj "
+"fascikli?"
 
 #: templates/help/using_drive_client.html:81
 msgid ""
@@ -2016,13 +2659,22 @@ msgid ""
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
 msgstr ""
+"Korijenska fascikla virtuelnog diska sadrži samo fascikle biblioteka. "
+"Seafile može sinhronizovati samo datoteke unutar biblioteka. Datoteke u "
+"korijenskoj fascikli ne mogu se otpremiti na Seafile server, pa nema smisla "
+"podržavati njihovo kreiranje. Budući da fascikle najvišeg nivoa na "
+"virtuelnom disku predstavljaju biblioteke, ne želimo da korisnici greškom "
+"izbrišu biblioteke. Zato Drive klijent ne podržava brisanje fascikli "
+"najvišeg nivoa."
 
 #: templates/help/viewing_files_within_web_app.html:6
 msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
 msgstr ""
+"Neke vrste datoteka mogu se direktno otvoriti i pregledati u Seafile web "
+"aplikaciji. Trenutno su to:"
 
 #: templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr ""
+msgstr "Slikovne datoteke"
