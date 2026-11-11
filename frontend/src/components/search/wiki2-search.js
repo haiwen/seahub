@@ -3,6 +3,7 @@ import { Modal, ModalBody, Input, Button } from 'reactstrap';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
 import searchAPI from '@/api/search-api';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext, mediaUrl } from '@/utils/constants';
 import { debounce, Utils } from '@/utils/utils';
 import Icon from '../icon';
@@ -196,7 +197,10 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
         <span>{gettext('Search')}</span>
       </Button>
       {isModalOpen &&
-        <Modal className="wiki2-search-modal" isOpen={isModalOpen} toggle={resetToDefault} autoFocus={false} returnFocusAfterClose={false} size='lg'>
+        <Modal className="wiki2-search-modal" isOpen={isModalOpen} toggle={resetToDefault} autoFocus={false} returnFocusAfterClose={false} size='lg' fullscreen="md">
+          <SeahubModalHeader className="wiki2-search-mobile-header d-md-none" toggle={resetToDefault} isShowCloseTooltip={false}>
+            {gettext('Search')}
+          </SeahubModalHeader>
           <ModalBody>
             <div className="wiki2-search-input">
               <span className="d-flex align-items-center search-icon-left input-icon-addon">
@@ -226,7 +230,7 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
                 </>
               )}
             </div>
-            <div className="wiki2-search-result-container" style={{ maxHeight: (window.innerHeight - 200) }} ref={searchResultListContainerRef}>
+            <div className="wiki2-search-result-container" ref={searchResultListContainerRef}>
               {isLoading && <Loading />}
               {(value === '' && !isResultGotten) && (
                 <div className="search-result-none search-result-start-searching-tip">
