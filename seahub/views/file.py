@@ -45,7 +45,7 @@ from seahub.auth import SESSION_MOBILE_LOGIN_KEY
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.base.accounts import ANONYMOUS_EMAIL, User
 from seahub.base.templatetags.seahub_tags import file_icon_filter
-from seahub.share.models import FileShare, check_share_link_common
+from seahub.share.models import FileShare, check_share_link_common, check_share_link_access_by_scope
 from seahub.share.decorators import share_link_audit, share_link_login_required
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import Wiki, WikiDoesNotExist, WikiPageMissing
@@ -1400,6 +1400,7 @@ def view_shared_file(request, fileshare):
         send_file_access_msg(request, repo, path, 'web')
         request.session['seadoc_share_session'] = {
             'file_uuid': file_uuid,
+            'share_token': fileshare.token,
             'permission': seadoc_perm,
             'seadoc_access_token': ret_dict['seadoc_access_token'],
         }
@@ -1682,6 +1683,8 @@ def view_file_via_shared_dir(request, fileshare):
         send_file_access_msg(request, repo, real_path, 'web')
         request.session['seadoc_share_session'] = {
             'file_uuid': file_uuid,
+            'share_token': fileshare.token,
+            'share_file_path': real_path,
             'permission': seadoc_perm,
             'seadoc_access_token': ret_dict['seadoc_access_token'],
         }
@@ -2033,6 +2036,9 @@ def view_media_file_via_share_link(request):
     if not image_path or not token:
         return HttpResponseBadRequest('invalid params')
 
+    if settings.SHARE_LINK_LOGIN_REQUIRED and not request.user.is_authenticated:
+        return render_permission_error(request, _('Permission denied'))
+
     image_file_name = os.path.basename(image_path)
     image_type, image_ext = get_file_type_and_ext(image_file_name)
     if image_type != IMAGE:
@@ -2048,7 +2054,7 @@ def view_media_file_via_share_link(request):
         err_msg = 'Share link has expired'
         return render_error(request, err_msg)
 
-    if not check_share_link_user_access(file_share, request.user.username):
+    if not check_share_link_access_by_scope(request, file_share):
         err_msg = _('Permission denied')
         return render_error(request, err_msg)
 
