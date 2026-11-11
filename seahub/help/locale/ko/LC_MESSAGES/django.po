@@ -5,7 +5,7 @@
 # 
 # Translators:
 # 9325254679b58572483e76a836735ed8_cb93a58 <3519b07acca9e77cf8a0d6585a92c7bf_147769>, 2024
-# Seong-ho Cho <darkcircle.0426@gmail.com>, 2024
+# Seong-ho Cho <darkcircle.0426@gmail.com>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-17 21:05+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>, 2024\n"
+"Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>, 2026\n"
 "Language-Team: Korean (https://app.transifex.com/haiwen/teams/5086/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -319,6 +319,8 @@ msgid ""
 " There is also an option to control whether individual users can share "
 "libraries with a department."
 msgstr ""
+"부서 라이브러리는 시스템 관리자 또는 부서 관리자가 만들 수 있습니다. 개별 사용자가 부서 내 구성원에게 라이브러리를 공유할 수 있는지 "
+"여부를 설정하는 옵션도 있습니다."
 
 #: templates/help/departments.html:33
 msgid ""
@@ -376,7 +378,7 @@ msgstr "라이브러리 이름 바꾸기"
 msgid ""
 "Share a library with users or groups outside of this department. This is "
 "very useful for cross-department collaboration."
-msgstr ""
+msgstr "부서 밖 사용자 똔느 그룹에 라이브러리를 공유합니다. 부서간 협업에 요긴합니다."
 
 #: templates/help/departments.html:49
 #, python-format
@@ -386,7 +388,7 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
 msgstr ""
-"해당 부서의 하위부서 또는사용자 라이브러리의 폴더 권한 세부 조정. <a "
+"해당 부서의 하위 부서 또는 사용자 라이브러리의 폴더 권한 세부 조정. <a "
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">폴더 권한 기능</a>과 유사하게 동작합니다."
 
 #: templates/help/departments.html:53
@@ -671,7 +673,7 @@ msgstr ""
 msgid ""
 "In some corner cases, the \"SeaDrive\" shortcut will be left-over in Windows"
 " Explorer and you want to remove it."
-msgstr ""
+msgstr "일부 극단적인 경우에는, \"SeaDrive\" 단축 아이콘을 윈도우 탐색기에 남겨두고 제거하고 싶을 때가 있습니다."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
@@ -968,6 +970,8 @@ msgid ""
 "want to allow a specific member of the group to modify files in one sub-"
 "folder. You can grant write permission of this sub-folder to this person."
 msgstr ""
+"라이브러리를 그룹에 \"읽기 전용\" 권한으로 공유합니다. 하위 폴더의 파일 수정을 그룹의 일부 구성원에게만 허용할 수도 있습니다. 그럴"
+" 경우 해당 사용자에게만 하위 폴더의 쓰기 권한을 허용할 수 있습니다."
 
 #: templates/help/folder_permission.html:11
 msgid ""
@@ -976,6 +980,9 @@ msgid ""
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
+"3 그룹에 공유한 라이브러리가 있습니다. 라이브러리 안에 하위 폴더 3개가 있고 그룹마다 파일을 업로드할 폴더를 하나씩 점유합니다. "
+"그러나 각 그룹의 폴더를 다른 그룹의 사용자가 건드리는 행위를 원치 않을 수 있습니다. 이럴 경우 각 그룹에 대해 하위 폴더에 대해서만 "
+"쓰기 권한을 넘겨줄 수 있습니다."
 
 #: templates/help/folder_permission.html:13
 msgid ""
@@ -1158,7 +1165,7 @@ msgstr ""
 msgid ""
 "Creating a group is a convenient way to share files with many people. In "
 "Seafile, you can create and manage a group easily."
-msgstr ""
+msgstr "그룹 만들기는 여러 사람에게 파일을 공유하는 간편한 수단입니다. Seafile에서는 그룹을 쉽게 만들고 관리할 수 있습니다."
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
@@ -1188,6 +1195,8 @@ msgid ""
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared with this group."
 msgstr ""
+"좌측 창의 \"그룹에 공유\"를 누르면 여러분이 속한 모든 그룹을 볼 수 있습니다. 아무 그룹이든 눌러서 들어가면 해당 그룹에 공유한 "
+"라이브러리를 볼 수 있습니다."
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1204,6 +1213,8 @@ msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders with a group."
 msgstr ""
+"라이브러리 또는 폴더를 그룹에 공유하는 방법을 알아보려면 <a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">파일 및 폴더 공유</a>를 살펴보세요."
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -1838,6 +1849,8 @@ msgid ""
 "the type of files can be previewed in web browser, they can also be viewed "
 "online (e.g. Office files)."
 msgstr ""
+"미리 보기 및 다운로드: 파일 또는 폴더 내 파일을 다운로드할 수 있습니다. 웹 브라우저에서 미리 볼 수 있는 파일이라면, 온라인에서 "
+"파일을 미리 볼 수 있습니다(예: 오피스 파일)."
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
@@ -1958,17 +1971,17 @@ msgstr "공유 범위를 선택할 수 있습니다:"
 
 #: templates/help/sharing_files_and_folders.html:48
 msgid "Share with user: You can share with one or more users."
-msgstr ""
+msgstr "사용자와 공유: 하나 이상의 사용자와 공유할 수 있습니다."
 
 #: templates/help/sharing_files_and_folders.html:49
 msgid "Share with group: You can share with a group."
-msgstr ""
+msgstr "그룹에 공유: 그룹과 공유할 수 있습니다."
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share with organization: If you're using a private server, sometimes it's "
 "useful to share with all members on the server (the entire organization)."
-msgstr ""
+msgstr "조직과 공유: 개별 서버를 사용중이라면 서버(조직 전체)의 모든 구성원에게 공유할 때 요긴할 수 있습니다."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
@@ -2001,7 +2014,7 @@ msgstr "온라인 읽기 전용: 사용자는 웹 브라우저를 통해 온라�
 
 #: templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder with a user or group:"
-msgstr ""
+msgstr "라이브러리 또는 폴더를 사용자 또는 그룹과 공유하려면:"
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""

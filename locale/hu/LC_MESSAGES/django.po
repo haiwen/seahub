@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 21:05+0800\n"
+"POT-Creation-Date: 2026-11-11 09:59+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Hungarian (http://app.transifex.com/haiwen/seahub/language/hu/)\n"
@@ -50,7 +50,7 @@ msgstr "Bejelentkezés sikertelen: Hibás válasz az ADFS/SAML szolgáltatástó
 
 #: seahub/adfs_auth/views.py:123 seahub/adfs_auth/views.py:139
 #: seahub/api2/endpoints/admin/users.py:784
-#: seahub/api2/endpoints/admin/users.py:1290 seahub/base/accounts.py:1242
+#: seahub/api2/endpoints/admin/users.py:1290 seahub/base/accounts.py:1246
 #: seahub/forms.py:30 seahub/institutions/api_views.py:202
 msgid "The number of users exceeds the limit."
 msgstr "A felhasználók száma meghaladja a korlátot."
@@ -108,12 +108,12 @@ msgid ""
 msgstr ""
 
 #: seahub/api2/endpoints/admin/account.py:205
-#: seahub/api2/endpoints/user.py:101 seahub/api2/views.py:374
+#: seahub/api2/endpoints/user.py:101 seahub/api2/views.py:375
 msgid "Name is too long (maximum is 64 characters)"
 msgstr "A név túl hosszú (legfeljebb 64 karakter lehet)"
 
 #: seahub/api2/endpoints/admin/account.py:209
-#: seahub/api2/endpoints/user.py:105 seahub/api2/views.py:378
+#: seahub/api2/endpoints/user.py:105 seahub/api2/views.py:379
 #: seahub/forms.py:44 seahub/profile/forms.py:27
 msgid "Name should not include '/'."
 msgstr "Név nem tartalmazhat \"/\" jelet."
@@ -158,7 +158,7 @@ msgstr "A jelszó alaphelyzetbe állítása nem lehetséges."
 #: seahub/api2/endpoints/admin/groups.py:135
 #: seahub/api2/endpoints/admin/groups.py:275
 #: seahub/api2/endpoints/groups.py:237 seahub/api2/endpoints/groups.py:310
-#: seahub/api2/views.py:4644 seahub/group/forms.py:36
+#: seahub/api2/views.py:4652 seahub/group/forms.py:36
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
@@ -190,8 +190,8 @@ msgstr "Saját kötet"
 #: seahub/api2/endpoints/admin/libraries.py:224
 #: seahub/api2/endpoints/group_libraries.py:211
 #: seahub/api2/endpoints/group_owned_libraries.py:141
-#: seahub/api2/views.py:1148 seahub/api2/views.py:1391
-#: seahub/api2/views.py:4820
+#: seahub/api2/views.py:1146 seahub/api2/views.py:1389
+#: seahub/api2/views.py:4828
 #| msgid "User %s already exists."
 msgid "Library name already exists."
 msgstr ""
@@ -219,16 +219,16 @@ msgstr "Nem sikerült %s hozzáadása az intézményhez: a felhasználó már ta
 msgid "System library can not be deleted."
 msgstr "A rendszerkötetet nem lehet törölni."
 
-#: seahub/api2/endpoints/admin/libraries.py:418 seahub/api2/views.py:1905
+#: seahub/api2/endpoints/admin/libraries.py:418 seahub/api2/views.py:1912
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr "Átadás sikertelen: %s szerepköre %s, nem adható hozzá kötet."
 
-#: seahub/api2/endpoints/admin/libraries.py:444 seahub/api2/views.py:1910
+#: seahub/api2/endpoints/admin/libraries.py:444 seahub/api2/views.py:1917
 msgid "Library can not be transferred to owner."
 msgstr "Kötet nem adható át a tulajdonosának."
 
-#: seahub/api2/endpoints/admin/organizations.py:494
+#: seahub/api2/endpoints/admin/organizations.py:498
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Your team {org.org_name} has been deactivated"
@@ -376,7 +376,7 @@ msgstr "Tárhely kvóta"
 
 #: seahub/api2/endpoints/admin/users.py:645
 #: seahub/api2/endpoints/admin/users.py:682
-#: seahub/organizations/api/admin/users.py:155
+#: seahub/organizations/api/admin/users.py:158
 msgid "There are more than 500 users, and sort is not offered."
 msgstr "Több mint 500 felhasználó van, a rendezés nem érhető el."
 
@@ -489,8 +489,8 @@ msgstr "A vírusos fájl nem található."
 #: seahub/api2/endpoints/subscription.py:92
 #: seahub/api2/endpoints/subscription.py:129
 #: seahub/api2/endpoints/upload_links.py:335
-#: seahub/api2/endpoints/wiki2.py:523 seahub/api2/endpoints/wiki2.py:551
-#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4147
+#: seahub/api2/endpoints/wiki2.py:519 seahub/api2/endpoints/wiki2.py:547
+#: seahub/api2/endpoints/wiki_pages.py:142 seahub/api2/views.py:4155
 #: seahub/notifications/models.py:628 seahub/notifications/models.py:669
 #: seahub/notifications/models.py:711 seahub/notifications/models.py:762
 #: seahub/notifications/models.py:818 seahub/notifications/models.py:845
@@ -499,11 +499,11 @@ msgstr "A vírusos fájl nem található."
 #: seahub/notifications/models.py:958 seahub/notifications/models.py:984
 #: seahub/notifications/models.py:1008 seahub/notifications/models.py:1025
 #: seahub/notifications/models.py:1042 seahub/notifications/models.py:1071
-#: seahub/seadoc/apis.py:2886 seahub/share/views.py:230
+#: seahub/seadoc/apis.py:2941 seahub/share/views.py:230
 #: seahub/subscription/views.py:90 seahub/utils/__init__.py:176
 #: seahub/views/__init__.py:843 seahub/views/ajax.py:398
 #: seahub/views/ajax.py:402 seahub/views/sysadmin.py:187
-#: seahub/wiki/views.py:210 seahub/wiki/views.py:217 seahub/wiki/views.py:226
+#: seahub/wiki/views.py:215 seahub/wiki/views.py:222 seahub/wiki/views.py:231
 msgid "Internal Server Error"
 msgstr "Belső kiszolgálóhiba"
 
@@ -522,13 +522,13 @@ msgstr "A cél útvonal érvénytelen"
 #: seahub/api2/endpoints/copy_move_task.py:148
 #: seahub/api2/endpoints/move_folder_merge.py:176
 #: seahub/api2/endpoints/repos_batch.py:505
-#: seahub/api2/endpoints/wiki2.py:2027 seahub/api2/views.py:1998
-#: seahub/api2/views.py:2038 seahub/api2/views.py:2100
-#: seahub/api2/views.py:2144 seahub/api2/views.py:2190
-#: seahub/api2/views.py:2239 seahub/api2/views.py:2706
-#: seahub/api2/views.py:2814 seahub/seadoc/apis.py:471
-#: seahub/seadoc/apis.py:598 seahub/seadoc/apis.py:692
-#: seahub/seadoc/apis.py:3249
+#: seahub/api2/endpoints/wiki2.py:2024 seahub/api2/endpoints/wiki2.py:2071
+#: seahub/api2/views.py:2005 seahub/api2/views.py:2045
+#: seahub/api2/views.py:2107 seahub/api2/views.py:2151
+#: seahub/api2/views.py:2197 seahub/api2/views.py:2246
+#: seahub/api2/views.py:2713 seahub/api2/views.py:2821
+#: seahub/seadoc/apis.py:471 seahub/seadoc/apis.py:598
+#: seahub/seadoc/apis.py:692 seahub/seadoc/apis.py:3304
 msgid "Out of quota."
 msgstr "Kvóta túllépés."
 
@@ -540,11 +540,11 @@ msgstr "Nem lehet a(z) %(src)s mappát a saját almappájába (%(des)s) mozgatni
 #: seahub/api2/endpoints/copy_move_task.py:180
 #: seahub/api2/endpoints/file.py:322 seahub/api2/endpoints/file.py:402
 #: seahub/api2/endpoints/file.py:517 seahub/api2/endpoints/file.py:593
-#: seahub/api2/endpoints/file.py:746 seahub/api2/endpoints/file.py:859
-#: seahub/api2/endpoints/file.py:972
+#: seahub/api2/endpoints/file.py:738 seahub/api2/endpoints/file.py:851
+#: seahub/api2/endpoints/file.py:964
 #: seahub/api2/endpoints/via_repo_token.py:1126
 #: seahub/api2/endpoints/via_repo_token.py:1266
-#: seahub/api2/endpoints/wiki2.py:864
+#: seahub/api2/endpoints/wiki2.py:865
 msgid "File is locked"
 msgstr "A fájl zárolva van"
 
@@ -571,8 +571,8 @@ msgstr ""
 
 #: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:540
 #: seahub/api2/endpoints/via_repo_token.py:966
-#: seahub/api2/endpoints/wiki2.py:661 seahub/api2/endpoints/wikis.py:128
-#: seahub/api2/views.py:2046 seahub/seadoc/apis.py:3256
+#: seahub/api2/endpoints/wiki2.py:657 seahub/api2/endpoints/wikis.py:128
+#: seahub/api2/views.py:2053 seahub/seadoc/apis.py:3311
 msgid "The number of files in library exceeds the limit"
 msgstr "A kötetben lévő fájlok száma meghaladja a korlátot"
 
@@ -584,11 +584,11 @@ msgstr "A kötetben lévő fájlok száma meghaladja a korlátot"
 #: seahub/api2/endpoints/subscription.py:72
 #: seahub/api2/endpoints/subscription.py:112
 #: seahub/api2/endpoints/upload_links.py:322
-#: seahub/api2/endpoints/wiki2.py:1713 seahub/api2/endpoints/wikis.py:108
+#: seahub/api2/endpoints/wiki2.py:1719 seahub/api2/endpoints/wikis.py:108
 #: seahub/api2/endpoints/wikis.py:203 seahub/profile/forms.py:24
-#: seahub/profile/views.py:289 seahub/seadoc/apis.py:2870
+#: seahub/profile/views.py:289 seahub/seadoc/apis.py:2925
 #: seahub/seadoc/views.py:37 seahub/seadoc/views.py:91
-#: seahub/seadoc/views.py:174 seahub/seadoc/views.py:220
+#: seahub/seadoc/views.py:174 seahub/seadoc/views.py:223
 #: seahub/subscription/views.py:27 seahub/subscription/views.py:43
 #: seahub/thumbnail/views.py:54 seahub/thumbnail/views.py:124
 #: seahub/views/__init__.py:646 seahub/views/ajax.py:83
@@ -602,17 +602,23 @@ msgstr "Jogosultság megtagadva"
 msgid "File extension is not in the whitelist"
 msgstr "A fájlkiterjesztés nem szerepel a fehérlistán"
 
-#: seahub/api2/endpoints/file.py:764 seahub/api2/endpoints/file.py:784
-#: seahub/api2/endpoints/file.py:1059
+#: seahub/api2/endpoints/file.py:636 seahub/api2/endpoints/seahub_io.py:47
+msgid ""
+"The Word document contains too much uncompressed content to convert. Please "
+"split it into smaller documents and try again."
+msgstr ""
+
+#: seahub/api2/endpoints/file.py:756 seahub/api2/endpoints/file.py:776
+#: seahub/api2/endpoints/file.py:1051
 #: seahub/api2/endpoints/via_repo_token.py:1283
 msgid "File is not locked."
 msgstr "A fájl nincs zárolva."
 
-#: seahub/api2/endpoints/file.py:811 seahub/api2/endpoints/share_links.py:908
+#: seahub/api2/endpoints/file.py:803 seahub/api2/endpoints/share_links.py:908
 msgid "You can not refresh this file's lock."
 msgstr "Nem újíthatja meg a fájl zárolását."
 
-#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2877
+#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2932
 msgid "The participant already exists."
 msgstr "A résztvevő már létezik."
 
@@ -632,10 +638,11 @@ msgstr "%s felhasználó már a csoport tagja."
 
 #: seahub/api2/endpoints/group_members.py:116
 #: seahub/api2/endpoints/group_members.py:367
-#: seahub/api2/endpoints/group_members.py:526 seahub/api2/views.py:1900
+#: seahub/api2/endpoints/group_members.py:526 seahub/api2/views.py:1907
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
-#: seahub/organizations/api/admin/users.py:337
+#: seahub/organizations/api/admin/user_two_factor_auth.py:47
+#: seahub/organizations/api/admin/users.py:340
 #, python-format
 msgid "User %s not found in organization."
 msgstr "%s felhasználó nem található a jelenlegi szervezetben."
@@ -648,7 +655,7 @@ msgid "User %s is an organization user."
 msgstr "%s felhasználó szervezeti felhasználó."
 
 #: seahub/api2/endpoints/group_members.py:438 seahub/group/error_msg.py:17
-#: seahub/group/error_msg.py:23 seahub/views/file.py:571
+#: seahub/group/error_msg.py:23 seahub/views/file.py:579
 msgid "Group does not exist"
 msgstr "A csoport nem létezik"
 
@@ -688,8 +695,8 @@ msgstr "%s már meghívott."
 #: seahub/api2/endpoints/invitations.py:68
 #: seahub/api2/endpoints/invitations.py:144
 #: seahub/api2/endpoints/repo_share_invitations.py:178
-#: seahub/api2/endpoints/share_link_auth.py:138 seahub/base/accounts.py:1253
-#: seahub/organizations/api/admin/users.py:268
+#: seahub/api2/endpoints/share_link_auth.py:138 seahub/base/accounts.py:1257
+#: seahub/organizations/api/admin/users.py:271
 #, python-format
 msgid "User %s already exists."
 msgstr "%s felhasználó már létezik."
@@ -706,34 +713,34 @@ msgstr ""
 #: seahub/api2/endpoints/repo_share_invitations.py:227
 #: seahub/api2/endpoints/send_share_link_email.py:34
 #: seahub/api2/endpoints/send_upload_link_email.py:34 seahub/auth/forms.py:153
-#: seahub/organizations/api/admin/users.py:791
+#: seahub/organizations/api/admin/users.py:798
 msgid ""
 "Failed to send email, email service is not properly configured, please "
 "contact administrator."
 msgstr "Az e-mail küldése meghiúsult, az e-mail szolgáltatás nincs megfelelően beállítva. Vegye fel a kapcsolatot a rendszergazdával."
 
-#: seahub/api2/endpoints/multi_share_links.py:108
-#: seahub/api2/endpoints/multi_share_links.py:367
+#: seahub/api2/endpoints/multi_share_links.py:121
+#: seahub/api2/endpoints/multi_share_links.py:380
 #: seahub/api2/endpoints/share_links.py:357
 #: seahub/api2/endpoints/upload_links.py:171
 msgid "Password is required."
 msgstr "Jelszó szükséges."
 
-#: seahub/api2/endpoints/multi_share_links.py:113
+#: seahub/api2/endpoints/multi_share_links.py:126
 #: seahub/api2/endpoints/share_links.py:363
 #: seahub/api2/endpoints/upload_links.py:177
 #: seahub/api2/endpoints/webdav_secret.py:60
 msgid "Password is too short."
 msgstr "A jelszó túl rövid"
 
-#: seahub/api2/endpoints/multi_share_links.py:117
+#: seahub/api2/endpoints/multi_share_links.py:130
 #: seahub/api2/endpoints/share_links.py:367
 #: seahub/api2/endpoints/upload_links.py:181
 #: seahub/api2/endpoints/webdav_secret.py:64
 msgid "Password is too weak."
 msgstr "A jelszó túl gyenge"
 
-#: seahub/api2/endpoints/multi_share_links.py:121
+#: seahub/api2/endpoints/multi_share_links.py:134
 #: seahub/api2/endpoints/share_links.py:371
 #: seahub/api2/endpoints/upload_links.py:185
 #: seahub/api2/endpoints/webdav_secret.py:52
@@ -742,28 +749,28 @@ msgid ""
 "symbols."
 msgstr "A jelszó csak számot, nagybetűt, kisbetűt és egyéb szimbólumokat tartalmazhat."
 
-#: seahub/api2/endpoints/multi_share_links.py:144
-#: seahub/api2/endpoints/multi_share_links.py:390
+#: seahub/api2/endpoints/multi_share_links.py:157
+#: seahub/api2/endpoints/multi_share_links.py:403
 #: seahub/api2/endpoints/share_links.py:394
 #: seahub/api2/endpoints/share_links.py:739
 #: seahub/api2/endpoints/upload_links.py:208
-#: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3707
+#: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3715
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr "A lejárati napok száma legalább %s"
 
-#: seahub/api2/endpoints/multi_share_links.py:149
-#: seahub/api2/endpoints/multi_share_links.py:396
+#: seahub/api2/endpoints/multi_share_links.py:162
+#: seahub/api2/endpoints/multi_share_links.py:409
 #: seahub/api2/endpoints/share_links.py:400
 #: seahub/api2/endpoints/share_links.py:745
 #: seahub/api2/endpoints/upload_links.py:214
-#: seahub/api2/endpoints/upload_links.py:403 seahub/api2/views.py:3713
+#: seahub/api2/endpoints/upload_links.py:403 seahub/api2/views.py:3721
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "A lejárati napok száma legfeljebb %s"
 
-#: seahub/api2/endpoints/multi_share_links.py:169
-#: seahub/api2/endpoints/multi_share_links.py:418
+#: seahub/api2/endpoints/multi_share_links.py:182
+#: seahub/api2/endpoints/multi_share_links.py:431
 #: seahub/api2/endpoints/share_links.py:422
 #: seahub/api2/endpoints/share_links.py:769
 #: seahub/api2/endpoints/upload_links.py:236
@@ -772,8 +779,8 @@ msgstr "A lejárati napok száma legfeljebb %s"
 msgid "Expiration time should be later than %s."
 msgstr "A lejárati időnek későbbinek kell lennie, mint %s."
 
-#: seahub/api2/endpoints/multi_share_links.py:178
-#: seahub/api2/endpoints/multi_share_links.py:427
+#: seahub/api2/endpoints/multi_share_links.py:191
+#: seahub/api2/endpoints/multi_share_links.py:440
 #: seahub/api2/endpoints/share_links.py:431
 #: seahub/api2/endpoints/share_links.py:778
 #: seahub/api2/endpoints/upload_links.py:245
@@ -796,7 +803,7 @@ msgstr "Ez a kötet még nem lett feloldva."
 #: seahub/api2/endpoints/repo_send_new_password.py:45
 #: seahub/api2/endpoints/user.py:90 seahub/api2/endpoints/user.py:97
 #: seahub/api2/endpoints/user.py:113 seahub/group/views.py:187
-#: seahub/organizations/api/admin/users.py:787
+#: seahub/organizations/api/admin/users.py:794
 msgid "Feature disabled."
 msgstr "Funkció letiltva."
 
@@ -810,11 +817,11 @@ msgstr "Kötet jelszavának visszaállítása sikertelen."
 msgid "New password of library %s"
 msgstr "Új kötet jelszó %s"
 
-#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4144
+#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4152
 msgid "Wrong password"
 msgstr "Hibás jelszó"
 
-#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4150
+#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4158
 msgid "Decrypt library error"
 msgstr "Kötet visszafejtési hiba"
 
@@ -908,8 +915,8 @@ msgstr "A(z) %s megosztási link már létezik."
 
 #: seahub/api2/endpoints/subscription.py:32
 #: seahub/api2/endpoints/subscription.py:68
-#: seahub/api2/endpoints/subscription.py:108 seahub/oauth/views.py:379
-#: seahub/oauth/views.py:391 seahub/organizations/api/admin/info.py:139
+#: seahub/api2/endpoints/subscription.py:108 seahub/oauth/views.py:383
+#: seahub/oauth/views.py:395 seahub/organizations/api/admin/info.py:143
 #: seahub/organizations/api/admin/logo.py:33
 #: seahub/organizations/api/admin/logo.py:42 seahub/subscription/views.py:24
 #: seahub/subscription/views.py:40 seahub/weixin/views.py:41
@@ -958,20 +965,20 @@ msgstr "Már van %(nb_avatars)d avatarja, a maximális engedélyezett szám %(nb
 msgid "Length of WebDAV password should be less than 30."
 msgstr "A WebDAV jelszó hossza nem haladhatja meg a 30 karaktert."
 
-#: seahub/api2/endpoints/wiki2.py:264 seahub/api2/endpoints/wiki2.py:1728
+#: seahub/api2/endpoints/wiki2.py:260 seahub/api2/endpoints/wiki2.py:1734
 #: seahub/api2/endpoints/wikis.py:212
 msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
 msgstr "A név csak betűket, számokat, szóközt, kötőjelet vagy aláhúzást tartalmazhat."
 
-#: seahub/api2/endpoints/wiki2.py:1463
+#: seahub/api2/endpoints/wiki2.py:1469
 msgid "URL is invalid"
 msgstr "Az URL érvénytelen"
 
-#: seahub/api2/endpoints/wiki2.py:1467
+#: seahub/api2/endpoints/wiki2.py:1473
 msgid "The custom part of URL should have 5-30 characters."
 msgstr "Az URL egyéni részének 5-30 karakterből kell állnia."
 
-#: seahub/api2/endpoints/wiki2.py:1494
+#: seahub/api2/endpoints/wiki2.py:1500
 msgid "This custom domain is already in use and cannot be used for your wiki"
 msgstr "Ez az egyéni domain már használatban van, és nem használható a wikihez"
 
@@ -992,7 +999,7 @@ msgstr "Név kötelező."
 msgid "A share link for you"
 msgstr "Egy megosztási link az Ön számára"
 
-#: seahub/api2/views.py:1896
+#: seahub/api2/views.py:1903
 #| msgid "Permission error: only group staff can add member"
 msgid "Permission error: you are not the admin of the department"
 msgstr "Jogosultsági hiba: Ön nem a részleg adminisztrátora"
@@ -1007,7 +1014,7 @@ msgid "Email or Username"
 msgstr "Email vagy felhasználónév"
 
 #: seahub/auth/forms.py:33 seahub/auth/forms.py:267
-#: seahub/base/accounts.py:1230
+#: seahub/base/accounts.py:1234
 #: seahub/invitations/templates/invitations/token_view.html:15
 #: seahub/organizations/templates/organizations/org_register.html:49
 #: seahub/share/views.py:224 seahub/templates/decrypt_repo_form.html:10
@@ -1061,7 +1068,7 @@ msgid "New password confirmation"
 msgstr "Új jelszó ismét"
 
 #: seahub/auth/forms.py:232 seahub/auth/forms.py:279
-#: seahub/base/accounts.py:1285 seahub/organizations/forms.py:71
+#: seahub/base/accounts.py:1289 seahub/organizations/forms.py:73
 msgid "The two password fields didn't match."
 msgstr "A megadott jelszavak nem egyeznek"
 
@@ -1073,12 +1080,13 @@ msgstr "Régi jelszó"
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr "A régi jelszó hibás. Próbálja újra."
 
-#: seahub/auth/forms.py:268 seahub/base/accounts.py:1232
+#: seahub/auth/forms.py:268 seahub/base/accounts.py:1236
 msgid "Password (again)"
 msgstr "Jelszó (ismét)"
 
 #: seahub/auth/forms.py:299 seahub/forms.py:35 seahub/invitations/views.py:39
-#: seahub/invitations/views.py:54 seahub/organizations/forms.py:49
+#: seahub/invitations/views.py:54 seahub/organizations/forms.py:44
+#: seahub/organizations/forms.py:51 seahub/organizations/views.py:265
 #: seahub/profile/forms.py:46
 msgid "A user with this email already exists."
 msgstr "Már van felhasználó ezzel az e-mail címmel"
@@ -1091,7 +1099,7 @@ msgstr "A fiók zárolva túl sok érvénytelen bejelentkezési kísérlet miatt
 msgid "Logged out"
 msgstr "Kijelentkezett"
 
-#: seahub/auth/views.py:388 seahub/organizations/views.py:241
+#: seahub/auth/views.py:388 seahub/organizations/views.py:242
 msgid "Cloudflare Turnstile check failed. Please refresh and try again."
 msgstr ""
 
@@ -1125,44 +1133,44 @@ msgstr "Sikeresen frissítette az avatarját."
 msgid "Successfully deleted the requested avatars."
 msgstr "Sikeresen törlődtek a kijelölt avatarok."
 
-#: seahub/base/accounts.py:705 seahub/base/accounts.py:736
+#: seahub/base/accounts.py:709 seahub/base/accounts.py:740
 #, python-format
 msgid "Account %(account)s froze on %(site)s."
 msgstr "%(account)s felhasználói fiók zárolva %(site)s oldalon"
 
-#: seahub/base/accounts.py:1220
+#: seahub/base/accounts.py:1224
 msgid "Email address"
 msgstr "E-mail cím"
 
-#: seahub/base/accounts.py:1226
+#: seahub/base/accounts.py:1230
 msgid "Username"
 msgstr "Felhasználónév"
 
-#: seahub/base/accounts.py:1227
+#: seahub/base/accounts.py:1231
 msgid "This value must be of length 40"
 msgstr "Legfeljebb 40 karakter hosszú lehet"
 
-#: seahub/base/accounts.py:1246
+#: seahub/base/accounts.py:1250
 msgid "Enter a valid email address."
 msgstr "Adjon meg érvényes e-mail címet."
 
-#: seahub/base/accounts.py:1257
+#: seahub/base/accounts.py:1261
 msgid "Invalid user id."
 msgstr "Érvénytelen felhasználóazonosító."
 
-#: seahub/base/accounts.py:1307
+#: seahub/base/accounts.py:1311
 msgid "name"
 msgstr "név"
 
-#: seahub/base/accounts.py:1310
+#: seahub/base/accounts.py:1314
 msgid "department"
 msgstr "osztály"
 
-#: seahub/base/accounts.py:1313
+#: seahub/base/accounts.py:1317
 msgid "telephone"
 msgstr "telefon"
 
-#: seahub/base/accounts.py:1316
+#: seahub/base/accounts.py:1320
 msgid "note"
 msgstr "megjegyzés"
 
@@ -1458,11 +1466,11 @@ msgstr "Az e-mail kötelező."
 #: seahub/dingtalk/views.py:224 seahub/dingtalk/views.py:261
 #: seahub/dingtalk/views.py:304 seahub/dingtalk/views.py:351
 #: seahub/dingtalk/views.py:371 seahub/dingtalk/views.py:444
-#: seahub/dingtalk/views.py:491 seahub/oauth/views.py:118
-#: seahub/oauth/views.py:141 seahub/oauth/views.py:162
-#: seahub/oauth/views.py:194 seahub/oauth/views.py:206
-#: seahub/oauth/views.py:212 seahub/oauth/views.py:257
-#: seahub/oauth/views.py:349 seahub/templates/remote_user/error.html:8
+#: seahub/dingtalk/views.py:491 seahub/oauth/views.py:119
+#: seahub/oauth/views.py:142 seahub/oauth/views.py:163
+#: seahub/oauth/views.py:195 seahub/oauth/views.py:207
+#: seahub/oauth/views.py:213 seahub/oauth/views.py:258
+#: seahub/oauth/views.py:353 seahub/templates/remote_user/error.html:8
 #: seahub/weixin/views.py:70 seahub/weixin/views.py:87
 #: seahub/weixin/views.py:108 seahub/weixin/views.py:194
 #: seahub/weixin/views.py:212 seahub/work_weixin/views.py:69
@@ -1630,10 +1638,10 @@ msgstr "%(site_name)s csapat"
 
 #: seahub/group/views.py:110 seahub/share/views.py:137
 #: seahub/views/__init__.py:471 seahub/views/ajax.py:378
-#: seahub/views/ajax.py:424 seahub/views/file.py:1311
-#: seahub/views/file.py:1339 seahub/views/file.py:1625
-#: seahub/views/file.py:1665 seahub/views/file.py:2112
-#: seahub/views/file.py:2118 seahub/views/repo.py:115 seahub/views/repo.py:172
+#: seahub/views/ajax.py:424 seahub/views/file.py:1319
+#: seahub/views/file.py:1347 seahub/views/file.py:1633
+#: seahub/views/file.py:1673 seahub/views/file.py:2120
+#: seahub/views/file.py:2126 seahub/views/repo.py:115 seahub/views/repo.py:172
 #: seahub/views/repo.py:230 seahub/views/repo.py:258 seahub/views/repo.py:287
 #: seahub/views/repo.py:384
 msgid "Permission denied"
@@ -1736,6 +1744,36 @@ msgstr "Fiók létrehozása"
 msgid "Set your password"
 msgstr "Állítsa be jelszavát"
 
+#: seahub/invitations/templates/invitations/token_view.html:18
+#: seahub/invitations/templates/invitations/token_view.html:25
+#: seahub/templates/registration/login.html:53
+#: seahub/templates/registration/password_change_form.html:16
+#: seahub/templates/registration/password_change_form.html:24
+#: seahub/templates/registration/password_change_form.html:32
+#: seahub/templates/registration/password_reset_confirm.html:17
+#: seahub/templates/registration/password_reset_confirm.html:25
+#: seahub/templates/registration/password_set_form.html:21
+#: seahub/templates/registration/password_set_form.html:29
+#: seahub/templates/sysadmin/sudo_mode.html:44
+#| msgid "New password"
+msgid "Show password"
+msgstr ""
+
+#: seahub/invitations/templates/invitations/token_view.html:18
+#: seahub/invitations/templates/invitations/token_view.html:25
+#: seahub/templates/registration/login.html:53
+#: seahub/templates/registration/password_change_form.html:16
+#: seahub/templates/registration/password_change_form.html:24
+#: seahub/templates/registration/password_change_form.html:32
+#: seahub/templates/registration/password_reset_confirm.html:17
+#: seahub/templates/registration/password_reset_confirm.html:25
+#: seahub/templates/registration/password_set_form.html:21
+#: seahub/templates/registration/password_set_form.html:29
+#: seahub/templates/sysadmin/sudo_mode.html:44
+#| msgid "New password"
+msgid "Hide password"
+msgstr ""
+
 #: seahub/invitations/templates/invitations/token_view.html:22
 #: seahub/organizations/templates/organizations/org_register.html:53
 #: seahub/templates/registration/password_change_form.html:29
@@ -1754,7 +1792,7 @@ msgstr "Jelszó megerősítése"
 #: seahub/templates/decrypt_repo_form.html:13
 #: seahub/templates/registration/password_change_form.html:38
 #: seahub/templates/registration/password_reset_confirm.html:31
-#: seahub/templates/registration/password_reset_form.html:63
+#: seahub/templates/registration/password_reset_form.html:64
 #: seahub/templates/registration/password_set_form.html:35
 #: seahub/templates/share_access_validation.html:29
 msgid "Submit"
@@ -1762,12 +1800,12 @@ msgstr "Beküldés"
 
 #: seahub/invitations/templates/invitations/token_view.html:52
 #: seahub/organizations/templates/organizations/org_register.html:100
-#: seahub/templates/registration/login.html:208
+#: seahub/templates/registration/login.html:210
 #: seahub/templates/registration/password_change_form.html:65
 #: seahub/templates/registration/password_reset_confirm.html:61
 #: seahub/templates/registration/password_set_form.html:58
 #: seahub/templates/registration/registration_form.html:102
-#: seahub/templates/sysadmin/sudo_mode.html:85
+#: seahub/templates/sysadmin/sudo_mode.html:87
 msgid "Password cannot be blank"
 msgstr "A jelszó megadása kötelező"
 
@@ -2258,42 +2296,42 @@ msgid ""
 "document %(sdoc_name)s\n"
 msgstr "%(author)s megoldottnak jelölte a(z) „%(resolve_comment)s” megjegyzést a(z) %(sdoc_name)s dokumentumban\n"
 
-#: seahub/oauth/views.py:218
+#: seahub/oauth/views.py:219
 #| msgid "Failed to bind SAML, please login first."
 msgid "Failed to connect OAuth, please login first."
 msgstr ""
 
-#: seahub/oauth/views.py:222
+#: seahub/oauth/views.py:223
 msgid "The OAuth account has already been connected to another account."
 msgstr ""
 
-#: seahub/oauth/views.py:228
+#: seahub/oauth/views.py:229
 msgid "The OAuth account has already been connected to another LDAP account."
 msgstr ""
 
-#: seahub/oauth/views.py:233
+#: seahub/oauth/views.py:234
 #| msgid "Failed to send email, please contact administrator."
 msgid "Failed to connect OAuth, please contact administrator."
 msgstr ""
 
-#: seahub/oauth/views.py:260
+#: seahub/oauth/views.py:261
 #: seahub/templates/remote_user/create_unknown_user_false.html:8
 #: seahub/work_weixin/views.py:111
 msgid ""
 "Error, new user registration is not allowed, please contact administrator."
 msgstr "Hiba, új felhasználó regisztrációja nem engedélyezett, kérjük, forduljon az adminisztrátorhoz."
 
-#: seahub/oauth/views.py:363
+#: seahub/oauth/views.py:367
 #| msgid "Failed to unbind SAML, please set a password first."
 msgid "Failed to unbind OAuth, please set a password first."
 msgstr ""
 
-#: seahub/oauth/views.py:366
+#: seahub/oauth/views.py:370
 #| msgid "Failed to bind SAML, please login first."
 msgid "Failed to unbind OAuth, the user is forced login by SSO."
 msgstr ""
 
-#: seahub/oauth/views.py:369
+#: seahub/oauth/views.py:373
 #| msgid "Failed to unbind SAML, please set a contact email first."
 msgid "Failed to unbind OAuth, please set a contact email or login ID first."
 msgstr ""
@@ -2324,12 +2362,12 @@ msgid ""
 "browsers. We advise you to use the latest version of Chrome or Firefox."
 msgstr "Tipp: ez utóbbi megoldás nagyobb biztonságot ad, de nem minden böngésző támogatja megfelelően. Ha ezt a lehetőséget választja, kérjük, győződjön meg róla, hogy a Chrome vagy a Firefox böngészők legfrissebb verzióját használja."
 
-#: seahub/organizations/api/admin/users.py:812
-#: seahub/organizations/api/admin/users.py:816
+#: seahub/organizations/api/admin/users.py:819
+#: seahub/organizations/api/admin/users.py:823
 msgid "The number of users exceeds the limit"
 msgstr "A felhasználók száma meghaladja a korlátot"
 
-#: seahub/organizations/api/admin/users.py:834
+#: seahub/organizations/api/admin/users.py:841
 #, python-brace-format
 msgid "User {email} already exists."
 msgstr "A(z) {email} felhasználó már létezik."
@@ -2411,12 +2449,12 @@ msgstr "Következő"
 msgid "Per page: "
 msgstr "Oldalanként: "
 
-#: seahub/organizations/views.py:363 seahub/organizations/views.py:392
+#: seahub/organizations/views.py:368 seahub/organizations/views.py:397
 #: seahub/thumbnail/views.py:112
 msgid "Invalid token."
 msgstr "Érvénytelen kulcs."
 
-#: seahub/organizations/views.py:395
+#: seahub/organizations/views.py:400
 #| msgid "Expiration"
 msgid "Expired token."
 msgstr "Lejárt token."
@@ -2481,14 +2519,14 @@ msgid ""
 msgstr "A metaadat-funkció nem támogatott a(z) %s fájlnál többet tartalmazó köteteknél"
 
 #: seahub/seadoc/views.py:32 seahub/seadoc/views.py:86
-#: seahub/seadoc/views.py:164 seahub/seadoc/views.py:210
-#: seahub/seadoc/views.py:247 seahub/views/__init__.py:462
+#: seahub/seadoc/views.py:164 seahub/seadoc/views.py:213
+#: seahub/seadoc/views.py:253 seahub/views/__init__.py:462
 #: seahub/views/__init__.py:505 seahub/views/__init__.py:641
 #: seahub/views/__init__.py:807 seahub/views/ajax.py:373
 msgid "Library does not exist"
 msgstr "A kötet nem létezik"
 
-#: seahub/seadoc/views.py:158 seahub/seadoc/views.py:204
+#: seahub/seadoc/views.py:158 seahub/seadoc/views.py:207
 msgid "File path invalid."
 msgstr "Fájl elérési útja érvénytelen."
 
@@ -2647,12 +2685,12 @@ msgstr "Sajnáljuk, a kért oldal nem található."
 msgid "File, Collaboration, Team, Organization"
 msgstr "Fájl, Együttműködés, Csapat, Szervezet"
 
-#: seahub/templates/base.html:34
+#: seahub/templates/base.html:30
 #: seahub/templates/wiki/wiki_publish_ssr.html:52
 msgid "Close"
 msgstr "Bezárás"
 
-#: seahub/templates/base.html:51
+#: seahub/templates/base.html:47
 msgid "Language"
 msgstr "Nyelv"
 
@@ -2734,9 +2772,9 @@ msgstr "Megosztott kötetek"
 #: seahub/templates/onlyoffice_file_view_react.html:213
 #: seahub/templates/sdoc_file_view_react.html:68
 #: seahub/templates/sdoc_file_view_react.html:91
-#: seahub/templates/view_file_onlyoffice.html:99
-#: seahub/templates/view_file_onlyoffice.html:200
-#: seahub/templates/view_file_onlyoffice.html:223
+#: seahub/templates/view_file_onlyoffice.html:95
+#: seahub/templates/view_file_onlyoffice.html:196
+#: seahub/templates/view_file_onlyoffice.html:219
 msgid "Failed. Please check the network."
 msgstr "Sikertelen. Ellenőrizze a hálózatot."
 
@@ -2815,11 +2853,11 @@ msgstr "Bejelentkezés ezzel:"
 msgid "Forgot password?"
 msgstr "Elfelejtette jelszavát?"
 
-#: seahub/templates/registration/login.html:196
+#: seahub/templates/registration/login.html:198
 msgid "Failed to refresh the CAPTCHA, please try again later."
 msgstr "A captcha frissítése nem sikerült, kérem, próbálja meg később."
 
-#: seahub/templates/registration/login.html:204
+#: seahub/templates/registration/login.html:206
 #: seahub/templates/registration/multi_adfs_sso.html:104
 msgid "Email or username cannot be blank"
 msgstr "Az email vagy felhasználónév megadása kötelező"
@@ -2904,6 +2942,7 @@ msgid "We will send you an email to set new password"
 msgstr "Hamarosan küldünk egy e-mailt a jelszóváltoztatáshoz"
 
 #: seahub/templates/registration/password_reset_form.html:57
+#: seahub/templates/registration/password_reset_form.html:58
 msgid "Your email used in login"
 msgstr "A bejelentkezéshez használt e-mail címe"
 
@@ -3495,10 +3534,10 @@ msgstr "Hibás tárolóazonosító"
 msgid "Bad upload link token."
 msgstr "Hibás feltöltési link token."
 
-#: seahub/views/ajax.py:335 seahub/views/file.py:565 seahub/views/file.py:597
-#: seahub/views/file.py:1331 seahub/views/file.py:1659
-#: seahub/views/file.py:2262 seahub/views/file.py:2267
-#: seahub/views/file.py:2274
+#: seahub/views/ajax.py:335 seahub/views/file.py:573 seahub/views/file.py:605
+#: seahub/views/file.py:1339 seahub/views/file.py:1667
+#: seahub/views/file.py:2273 seahub/views/file.py:2278
+#: seahub/views/file.py:2285
 msgid "File does not exist"
 msgstr "A fájl nem létezik"
 
@@ -3510,79 +3549,80 @@ msgstr "Hibás repo id a feltöltési linkben."
 msgid "No conflict in the merge."
 msgstr "Nincs ütközés az összeolvasztás során."
 
-#: seahub/views/file.py:238
+#: seahub/views/file.py:239
 msgid "HTTPError: failed to open file online"
 msgstr "HTTP hiba: fájl online megnyitása meghiúsult"
 
-#: seahub/views/file.py:242
+#: seahub/views/file.py:243
 msgid "URLError: failed to open file online"
 msgstr "URL hiba: fájl online megnyitása meghiúsult"
 
-#: seahub/views/file.py:249
+#: seahub/views/file.py:250
 msgid "The encoding you chose is not proper."
 msgstr "A választott kódolás nem megfelelő."
 
-#: seahub/views/file.py:266 seahub/views/file.py:269
+#: seahub/views/file.py:267 seahub/views/file.py:270
 msgid "Unknown file encoding"
 msgstr "Érvénytelen fájlkódolás"
 
-#: seahub/views/file.py:397 seahub/views/file.py:415 seahub/views/file.py:841
+#: seahub/views/file.py:398 seahub/views/file.py:416 seahub/views/file.py:849
 msgid "The library is encrypted, can not open file online."
 msgstr "Ez egy titkosított kötet, a fájlokat nem lehet online megjeleníteni."
 
-#: seahub/views/file.py:399 seahub/views/file.py:845 seahub/views/file.py:973
-#: seahub/views/file.py:1018
+#: seahub/views/file.py:400 seahub/views/file.py:853 seahub/views/file.py:981
+#: seahub/views/file.py:1026
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "Fájlméret több mint %s, nem nyitható meg online."
 
-#: seahub/views/file.py:552 seahub/views/file.py:574 seahub/views/file.py:579
-#: seahub/views/file.py:633 seahub/views/file.py:1182
-#: seahub/views/file.py:1208 seahub/views/file.py:1238
-#: seahub/views/file.py:1387 seahub/views/file.py:1701
-#: seahub/views/file.py:2226
+#: seahub/views/file.py:498 seahub/views/file.py:503 seahub/views/file.py:517
+#: seahub/views/file.py:560 seahub/views/file.py:582 seahub/views/file.py:587
+#: seahub/views/file.py:641 seahub/views/file.py:1190
+#: seahub/views/file.py:1216 seahub/views/file.py:1246
+#: seahub/views/file.py:1395 seahub/views/file.py:1709
+#: seahub/views/file.py:2237
 msgid "Unable to view file"
 msgstr "Fájl megtekintése sikertelen"
 
-#: seahub/views/file.py:873 seahub/views/file.py:1130
-#: seahub/views/file.py:1498 seahub/views/file.py:1766
+#: seahub/views/file.py:881 seahub/views/file.py:1138
+#: seahub/views/file.py:1506 seahub/views/file.py:1774
 msgid "Error when prepare Office Online file preview page."
 msgstr "Hiba történt a fájl Online Office előnézeti oldal betöltése közben."
 
-#: seahub/views/file.py:908 seahub/views/file.py:1146
-#: seahub/views/file.py:1519 seahub/views/file.py:1783
+#: seahub/views/file.py:916 seahub/views/file.py:1154
+#: seahub/views/file.py:1527 seahub/views/file.py:1791
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "Hiba történt a fájl OnlyOffice előnézeti oldal betöltése közben."
 
-#: seahub/views/file.py:1274
+#: seahub/views/file.py:1282
 msgid "Unable to download file, invalid file path"
 msgstr "A fájlt nem lehet letölteni, érvénytelen elérési útvonal"
 
-#: seahub/views/file.py:1283
+#: seahub/views/file.py:1291
 msgid "Unable to download file, wrong file path"
 msgstr "A fájlt nem lehet letölteni, hibás elérési útvonal"
 
-#: seahub/views/file.py:1290
+#: seahub/views/file.py:1298
 msgid "Unable to download file."
 msgstr "Fájl letöltése sikertelen."
 
-#: seahub/views/file.py:1466 seahub/views/file.py:1548
-#: seahub/views/file.py:1744 seahub/views/file.py:1837
+#: seahub/views/file.py:1474 seahub/views/file.py:1556
+#: seahub/views/file.py:1752 seahub/views/file.py:1845
 #: seahub/views/repo.py:325
 #, python-format
 msgid "Share link for %s."
 msgstr "Megosztási link ehhez: %s."
 
-#: seahub/views/file.py:1986 seahub/views/file.py:1991
+#: seahub/views/file.py:1994 seahub/views/file.py:1999
 msgid "Unable to download file"
 msgstr "A fájl letöltése nem lehetséges"
 
-#: seahub/views/file.py:2248
+#: seahub/views/file.py:2259
 #| msgid "Wiki not found."
 msgid "revision not found"
 msgstr "revízió nem található"
 
-#: seahub/views/file.py:2255
+#: seahub/views/file.py:2266
 msgid "The original file does not exist"
 msgstr "Az eredeti fájl nem létezik"
 
@@ -3721,7 +3761,12 @@ msgstr "A %s felhasználót nem lehet adminisztrátornak jelölni, a felhasznál
 msgid "Optional"
 msgstr "Opcionálos"
 
-#: seahub/wiki/views.py:159
+#: seahub/views/sysadmin.py:974
+#| msgid "Invalid date."
+msgid "Invalid license data."
+msgstr ""
+
+#: seahub/wiki/views.py:164
 msgid "Unable to view Wiki"
 msgstr "Wiki megtekintése sikertelen"
 
@@ -3788,9 +3833,6 @@ msgstr "Wiki megtekintése sikertelen"
 
 #~ msgid "Invalid argument."
 #~ msgstr "Invalid argument."
-
-#~ msgid "Invalid date."
-#~ msgstr "Invalid date."
 
 #~ msgid "Invalid file size."
 #~ msgstr "Invalid file size."
