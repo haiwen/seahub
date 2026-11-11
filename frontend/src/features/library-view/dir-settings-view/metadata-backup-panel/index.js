@@ -7,17 +7,11 @@ import SeahubModalHeader from '@/components/seahub-modal-header';
 import toaster from '@/components/toast';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
+import getDownloadFilename from './get-download-filename';
 
 import './index.css';
 
 const POLL_INTERVAL = 1000;
-
-const getDownloadFilename = (contentDisposition) => {
-  const encoded = contentDisposition?.match(/filename\*=UTF-8''([^;]+)/i);
-  if (encoded) return decodeURIComponent(encoded[1]);
-  const filename = contentDisposition?.match(/filename="?([^";]+)"?/i);
-  return filename ? filename[1] : 'metadata-backup.xlsx';
-};
 
 const MetadataBackupPanel = ({ repoID, enableMetadata }) => {
   const [operation, setOperation] = useState(null);
