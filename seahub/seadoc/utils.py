@@ -16,6 +16,7 @@ from seahub.settings import SEADOC_PRIVATE_KEY
 from seahub.utils import normalize_file_path, gen_file_get_url, gen_file_upload_url, gen_inner_file_get_url, \
     get_inner_fileserver_root
 from seahub.utils.auth import AUTHORIZATION_PREFIX
+from seahub.utils.document_assets import get_asset_path
 from seahub.views import check_folder_permission
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
@@ -172,7 +173,9 @@ def get_seadoc_asset_upload_link(repo_id, parent_path, username):
 
 
 def get_seadoc_asset_download_link(repo_id, parent_path, filename, username):
-    file_path = posixpath.join(parent_path, filename)
+    file_path = get_asset_path(parent_path, filename)
+    if not file_path:
+        return None
     obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
     if not obj_id:
         return None

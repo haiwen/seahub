@@ -57,6 +57,7 @@ from seahub.utils import render_error, is_org_context, \
     normalize_file_path, get_service_url, \
     normalize_cache_key, gen_file_get_url_by_sharelink, gen_file_get_url_new
 from seahub.utils.ip import get_remote_ip
+from seahub.utils.markdown import markdown_contains_image
 from seahub.utils.file_types import (IMAGE, PDF, SVG, AUDIO,
                                      MARKDOWN, TEXT, VIDEO, SEADOC, EXCALIDRAW)
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
@@ -1422,6 +1423,7 @@ def view_shared_file(request, fileshare):
         send_file_access_msg(request, repo, path, 'web')
         request.session['exdraw_share_session'] = {
             'file_uuid': file_uuid,
+            'share_token': fileshare.token,
             'permission': exdraw_perm,
             'excalidraw_access_token': ret_dict['excalidraw_access_token'],
         }
@@ -2031,6 +2033,11 @@ def view_media_file_via_share_link(request):
     if not image_path or not token:
         return HttpResponseBadRequest('invalid params')
 
+    image_file_name = os.path.basename(image_path)
+    image_type, image_ext = get_file_type_and_ext(image_file_name)
+    if image_type != IMAGE:
+        return render_error(request, 'Invalid file type')
+
     file_share = FileShare.objects.get_valid_file_link_by_token(token)
 
     if not file_share:
@@ -2053,7 +2060,7 @@ def view_media_file_via_share_link(request):
     shared_file_name = os.path.basename(file_share.path)
     file_type, file_ext = get_file_type_and_ext(shared_file_name)
 
-    if file_type != MARKDOWN and file_type != EXCALIDRAW:
+    if file_type != MARKDOWN:
         err_msg = 'Invalid file type'
         return render_error(request, err_msg)
 
@@ -2073,19 +2080,10 @@ def view_media_file_via_share_link(request):
     if err_msg:
         return render_error(request, err_msg)
 
-    # If the image does not exist in markdown
-    serviceURL = get_service_url().rstrip('/')
-    image_file_name = os.path.basename(image_path)
-
-    # Translation ‘(’ ')'
-    image_file_name = image_file_name.replace('(', r'\(')
-    image_file_name = image_file_name.replace(')', r'\)')
-    encoded_image_file_name = urllib.parse.quote(image_file_name)
-
-    safe_pattern = f'({serviceURL})/lib/({repo_id})/file(.*?){re.escape(encoded_image_file_name)}\\?raw=1'
-    p = re.compile(safe_pattern)
-    result = re.search(p, file_content)
-    if not result:
+    # Only allow images referenced by their full URL in the shared Markdown.
+    image_url = '%s/lib/%s/file%s?raw=1' % (
+        get_service_url().rstrip('/'), repo_id, urllib.parse.quote(image_path))
+    if not markdown_contains_image(file_content, image_url):
         return render_error(request, 'Image does not exist')
 
     # get image
