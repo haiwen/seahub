@@ -40,6 +40,78 @@ LDAP_PROVIDER = getattr(settings, 'LDAP_PROVIDER', 'ldap')
 SSO_LDAP_USE_SAME_UID = getattr(settings, 'SSO_LDAP_USE_SAME_UID', False)
 
 
+def get_user_email_in_provider(session_info, attribute_mapping):
+    # Use the same SAML attribute parsing logic as `make_profile(...)`, and
+    # only return Seahub's `contact_email` field.
+    attributes = session_info.get('ava', {})
+    if not attributes:
+        logger.info('ADFS user lookup: no assertion attributes found when resolving contact_email provider field.')
+        return None
+
+    parse_result = {}
+    for saml_attr, django_attrs in list(attribute_mapping.items()):
+        try:
+            for attr in django_attrs:
+                parse_result[attr] = attributes[saml_attr][0]
+        except KeyError:
+            continue
+
+    contact_email = parse_result.get('contact_email')
+    if contact_email:
+        logger.info('ADFS user lookup: resolved contact_email %s from SAML attribute mapping.',
+                    contact_email)
+        return contact_email
+
+    logger.info('ADFS user lookup: no contact_email was resolved from SAML attribute mapping.')
+    return None
+
+
+def get_old_user_by_email_or_contact_email(session_info, attribute_mapping, uid):
+    # Resolution order for an unbound ADFS login:
+    # 1. Find the provider-side email value from the field mapped to Seahub's
+    #    `contact_email`.
+    # 2. Use that same email value to look up an existing Seahub user in
+    #    ccnet.EmailUser via `get_old_user(...)`.
+    # 3. If that still does not match, use the same email value to find the
+    #    owning account from seahub.profile_profile.
+    # 3. If neither lookup matches, the caller may create a new SAML user.
+    email = get_user_email_in_provider(session_info, attribute_mapping)
+    if email:
+        logger.info('ADFS user lookup: trying ccnet.EmailUser lookup by mapped email %s for uid %s.',
+                    email, uid)
+        try:
+            user = User.objects.get_old_user(email, SAML_PROVIDER_IDENTIFIER, uid)
+            logger.info('ADFS user lookup: matched existing user %s from ccnet.EmailUser by mapped email %s.',
+                        user.username, email)
+            return user
+        except User.DoesNotExist:
+            logger.info('ADFS user lookup: no existing ccnet.EmailUser matched mapped email %s.', email)
+
+    if not email:
+        logger.info('ADFS user lookup: no contact_email available, cannot continue profile lookup for uid %s.',
+                    uid)
+        return None
+
+    # The same provider-side email value is then used to look up the owner in
+    # seahub.profile_profile.contact_email.
+    logger.info('ADFS user lookup: trying seahub.profile_profile lookup by contact_email %s for uid %s.',
+                email, uid)
+    username = Profile.objects.get_username_by_contact_email(email)
+    if not username:
+        logger.info('ADFS user lookup: no profile matched contact_email %s.', email)
+        return None
+
+    try:
+        user = User.objects.get(email=username)
+        logger.info('ADFS user lookup: matched user %s via seahub.profile_profile contact_email %s.',
+                    user.username, email)
+        return user
+    except User.DoesNotExist:
+        logger.warning('Found profile contact_email %s but user %s does not exist.',
+                       email, username)
+        return None
+
+
 class Saml2Backend(ModelBackend):
     def get_user(self, username):
         try:
@@ -58,13 +130,18 @@ class Saml2Backend(ModelBackend):
             logger.error('The name_id is not available. Could not determine user identifier.')
             return None
         name_id = name_id.text
+        logger.info('ADFS authentication: start resolving user for uid %s.', name_id)
 
         saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, name_id)
         if not saml_user and SSO_LDAP_USE_SAME_UID:
             saml_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, name_id)
             if saml_user:
+                logger.info('ADFS authentication: matched LDAP social auth binding for uid %s, reusing user %s.',
+                            name_id, saml_user.username)
                 SocialAuthUser.objects.add(saml_user.username, SAML_PROVIDER_IDENTIFIER, name_id)
         if saml_user:
+            logger.info('ADFS authentication: found existing SAML binding for uid %s to user %s.',
+                        name_id, saml_user.username)
             user = self.get_user(saml_user.username)
             if not user:
                 # Means found user in social_auth_usersocialauth but not found user in EmailUser,
@@ -72,23 +149,41 @@ class Saml2Backend(ModelBackend):
                 logger.warning('The DB data is invalid, delete it and recreate one.')
                 SocialAuthUser.objects.filter(provider=SAML_PROVIDER_IDENTIFIER, uid=name_id).delete()
         else:
-            # compatible with old users via name_id
-            try:
-                user = User.objects.get_old_user(name_id, SAML_PROVIDER_IDENTIFIER, name_id)
-            except User.DoesNotExist:
-                user = None
+            # If there is no existing SAML binding yet, resolve the user in this
+            # order:
+            # 1. ccnet.EmailUser by the provider field mapped to Seahub's
+            #    `contact_email`
+            # 2. seahub.profile_profile by that same email value
+            # 3. create a new SAML user below if still unmatched
+            user = get_old_user_by_email_or_contact_email(session_info,
+                                                          attribute_mapping,
+                                                          name_id)
+            if user:
+                # Persist the ADFS <-> Seahub binding once we have identified an
+                # existing account from either EmailUser or profile_profile.
+                logger.info('ADFS authentication: binding uid %s to existing user %s.',
+                            name_id, user.username)
+                SocialAuthUser.objects.add_if_not_exists(user.username,
+                                                         SAML_PROVIDER_IDENTIFIER,
+                                                         name_id)
 
         if not user and create_unknown_user:
+            logger.info('ADFS authentication: no existing user matched uid %s, creating new SAML user.',
+                        name_id)
             activate_after_creation = getattr(settings, 'SAML_ACTIVATE_USER_AFTER_CREATION', True)
             try:
                 user = User.objects.create_saml_user(is_active=activate_after_creation)
                 SocialAuthUser.objects.add(user.username, SAML_PROVIDER_IDENTIFIER, name_id)
+                logger.info('ADFS authentication: created new SAML user %s for uid %s.',
+                            user.username, name_id)
             except Exception as e:
                 logger.error('create saml user failed: %s' % e)
                 return None
 
             # create org user
             if org_id and org_id > 0:
+                logger.info('ADFS authentication: adding newly created user %s to org %s.',
+                            user.username, org_id)
                 ccnet_api.add_org_user(org_id, user.username, 0)
 
             if not activate_after_creation:
@@ -106,6 +201,8 @@ class Saml2Backend(ModelBackend):
                 logger.warning('The attributes dictionary is empty')
                 return user
 
+            logger.info('ADFS authentication: resolved uid %s to user %s, updating profile and syncing groups.',
+                        name_id, user.username)
             self.make_profile(user, attributes, attribute_mapping)
             self.sync_saml_groups(user, attributes)
 
