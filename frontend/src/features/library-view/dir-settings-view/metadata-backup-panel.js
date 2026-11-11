@@ -8,6 +8,8 @@ import toaster from '@/components/toast';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 
+import './metadata-backup-panel.css';
+
 const POLL_INTERVAL = 1000;
 
 const getDownloadFilename = (contentDisposition) => {
@@ -129,14 +131,33 @@ const MetadataBackupPanel = ({ repoID, enableMetadata }) => {
         <p className="setting-tip">{gettext('Turn on extended properties before backing up or restoring metadata.')}</p>
       )}
       {preview && (
-        <Modal isOpen={true} toggle={() => setPreview(null)}>
+        <Modal isOpen={true} toggle={() => setPreview(null)} className="metadata-backup-import">
           <SeahubModalHeader toggle={() => setPreview(null)}>{gettext('Import metadata backup')}</SeahubModalHeader>
-          <ModalBody>
+          <ModalBody className="metadata-backup-import__body">
             <p>{gettext('This import will replace all existing metadata in this library.')}</p>
-            <p className="mb-1">{gettext('Metadata records')}: {preview.metadata_rows}</p>
-            <p className="mb-1">{gettext('Metadata columns')}: {preview.columns}</p>
-            <p>{gettext('Tags')}: {preview.tags}</p>
-            <p className="text-warning mb-0">
+            <table className="metadata-backup-import__summary">
+              <thead>
+                <tr>
+                  <th scope="col">{gettext('Item')}</th>
+                  <th scope="col">{gettext('Count')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{gettext('Metadata records')}</td>
+                  <td>{preview.metadata_rows}</td>
+                </tr>
+                <tr>
+                  <td>{gettext('Metadata columns')}</td>
+                  <td>{preview.columns}</td>
+                </tr>
+                <tr>
+                  <td>{gettext('Tags')}</td>
+                  <td>{preview.tags}</td>
+                </tr>
+              </tbody>
+            </table>
+            <p className="metadata-backup-import__tip">
               {gettext('Export a metadata backup first if you may need to undo this operation.')}
             </p>
           </ModalBody>
