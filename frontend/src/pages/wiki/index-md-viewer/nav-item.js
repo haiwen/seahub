@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import Icon from '@/components/icon';
+import { gettext } from '@/utils/constants';
 
 const propTypes = {
   node: PropTypes.object.isRequired,
@@ -45,6 +46,7 @@ class NavItem extends React.Component {
 
   renderLink = ({ href, name, path, children }) => {
     const { currentPath } = this.props;
+    const { expanded } = this.state;
     const className = classNames('wiki-nav-content', {
       'no-children': !children || children.length === 0,
       'wiki-nav-content-highlight': currentPath === path,
@@ -58,7 +60,16 @@ class NavItem extends React.Component {
     }
 
     if (name) {
-      return <div className={className} onClick={this.itemClick}><span title={name}>{name}</span></div>;
+      if (children && children.length > 0) {
+        return (
+          <div className={className}>
+            <button type="button" className="wiki-nav-toggle-label" onClick={this.itemClick} aria-expanded={expanded}>
+              {name}
+            </button>
+          </div>
+        );
+      }
+      return <div className={className}><span title={name}>{name}</span></div>;
     }
 
     return null;
@@ -70,11 +81,17 @@ class NavItem extends React.Component {
     if (node.children.length > 0) {
       return (
         <div className="pl-4 position-relative">
-          <span className="switch-btn" onClick={this.toggleExpanded}>
+          <button
+            type="button"
+            className="switch-btn"
+            onClick={this.toggleExpanded}
+            aria-label={expanded ? gettext('Collapse') : gettext('Expand')}
+            aria-expanded={expanded}
+          >
             <span className={`${expanded ? '' : 'rotate-270 d-inline-flex align-items-center'}`} aria-hidden="true">
               <Icon symbol="down" />
             </span>
-          </span>
+          </button>
           {this.renderLink(node)}
           {expanded && node.children.map((child, index) => {
             return (

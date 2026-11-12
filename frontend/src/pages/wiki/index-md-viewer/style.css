@@ -6,7 +6,8 @@
   margin-left: 1rem;
 }
 
-.wiki-nav-content a, 
+.wiki-nav-content a,
+.wiki-nav-content button,
 .wiki-nav-content span {
   color: #4d5156;
   font-size: 14px;
@@ -26,6 +27,17 @@
   color: #ED7109;
 }
 
+.wiki-nav-toggle-label {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
 .switch-btn {
   position: absolute;
   left: 0;
@@ -33,5 +45,7 @@
   color: #c0c0c0;
   cursor: pointer;
   font-size: 12px;
-  padding-right: 10px;
+  padding: 0 10px 0 0;
+  border: 0;
+  background: transparent;
 }

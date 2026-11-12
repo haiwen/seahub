@@ -224,6 +224,7 @@ const SearchComponent = ({
               symbol="close"
               className="clean-btn"
               size={24}
+              aria-label={gettext('Clear')}
               onClick={handleClear}
             />
           )}

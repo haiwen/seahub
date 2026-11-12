@@ -83,6 +83,7 @@ const RateData = ({ value, onChange, updatePopoverState }) => {
                       <IconBtn
                         key={type + 'color' + color}
                         symbol={type}
+                        aria-label={`${gettext('Select')}`}
                         onClick={() => onRateStyleChange(color, type)}
                         style={{ fill: color }}
                         className="rate-column-data-style-item"

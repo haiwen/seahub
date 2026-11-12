@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import Icon from '@/components/icon';
 import IconBtn from '@/components/icon-btn';
+import { gettext } from '@/utils/constants';
 import Color from './color';
 import Name from './name';
 
@@ -95,7 +96,12 @@ const Option = ({
       </div>
       <div id={`sf-metadata-edit-option-more-operation-${option.id}`} className="sf-metadata-edit-option-more-operations">
         {(isViewing || isDeleting) && (
-          <IconBtn className="op-icon" onClick={onDelete} symbol="delete" />
+          <IconBtn
+            className="op-icon"
+            onClick={onDelete}
+            symbol="delete"
+            aria-label={gettext('Delete')}
+          />
         )}
       </div>
     </div>

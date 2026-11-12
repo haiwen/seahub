@@ -3,7 +3,7 @@ import { Table } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Icon from '@/components/icon';
 import Loading from '@/components/loading';
-import { siteRoot } from '@/utils/constants';
+import { gettext, siteRoot } from '@/utils/constants';
 
 const WorkWeixinDepartmentMembersListPropTypes = {
   isMembersListLoading: PropTypes.bool.isRequired,
@@ -36,7 +36,7 @@ class WorkWeixinDepartmentMembersList extends Component {
           <td>
             {!member.email &&
               <input type="checkbox" className="form-check-input align-middle mt-0" onChange={() => this.props.onUserChecked(member)}
-                checked={(member.userid in newUsersTempObj) ? 'checked' : ''}>
+                checked={member.userid in newUsersTempObj} aria-label={gettext('Select member')}>
               </input>}
           </td>
           <td><img className="avatar" src={avatar} alt=""></img></td>
@@ -58,6 +58,7 @@ class WorkWeixinDepartmentMembersList extends Component {
                 <th width="5%">
                   {canCheckUserIds.length > 0 &&
                     <input type="checkbox" className="form-check-input" checked={this.props.isCheckedAll}
+                      aria-label={gettext('Select all')}
                       onChange={() => this.props.onAllUsersChecked()}>
                     </input>}
                 </th>
