@@ -50,7 +50,22 @@
   vertical-align: -0.15em;
 }
 
+.sf-metadata-field-display-setting-item-container .sf-metadata-switch {
+  min-width: 0;
+}
+
+.sf-metadata-field-display-setting-switch {
+  display: flex;
+  align-items: center;
+}
+
+.sf-metadata-field-display-setting-switch .text-truncate {
+  flex: 1;
+  min-width: 0;
+}
+
 .sf-metadata-field-display-setting-item-container .sf-metadata-switch .custom-switch .seafile-multicolor-icon {
+  flex-shrink: 0;
   fill: #666;
   transform: scale(0.8);
   font-size: 16px;
@@ -63,6 +78,7 @@
 }
 
 .sf-metadata-field-display-setting-item-container .sf-metadata-switch .custom-switch .custom-switch-indicator {
+  flex-shrink: 0;
   margin-right: .25rem;
 }
 
