@@ -14,6 +14,7 @@ from django.db import connection
 from django.db.models import Q
 from django.utils.translation import gettext as _
 from django.utils import translation
+from django.utils import timezone
 from django.utils.timezone import make_naive, is_aware
 import ldap
 from ldap import sasl
@@ -51,7 +52,8 @@ from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.repo import normalize_repo_status_code
 from seahub.utils.ccnet_db import CcnetDB
-from seahub.constants import DEFAULT_ADMIN, DEFAULT_ORG
+from seahub.constants import DEFAULT_ADMIN, DEFAULT_ORG, DEFAULT_USER
+from seahub.invitations.models import Invitation
 from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_available_roles
 from seahub.utils.licenseparse import user_number_over_limit
@@ -907,6 +909,104 @@ class AdminUsers(APIView):
             UserOptions.objects.set_force_passwd_change(user_obj.email)
 
         return Response(user_info)
+
+
+class AdminInviteUsers(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser, )
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request):
+        """Invite users by email, without setting an initial password."""
+
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        if not IS_EMAIL_CONFIGURED:
+            error_msg = _('Failed to send email, email service is not properly configured, please contact administrator.')
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        email_list = request.data.getlist('email', None)
+        if not email_list:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'email invalid.')
+
+        if user_number_over_limit(len(email_list)):
+            error_msg = _('The number of users exceeds the limit.')
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        result = {'success': [], 'failed': []}
+
+        for email in email_list:
+            email = email.strip().lower()
+            if not email or not is_valid_email(email):
+                result['failed'].append({
+                    'email': email,
+                    'error_msg': _('Email %s invalid.') % email,
+                })
+                continue
+
+            vid = get_virtual_id_by_email(email)
+            try:
+                user = User.objects.get(email=vid)
+                if user.is_active:
+                    result['failed'].append({
+                        'email': email,
+                        'error_msg': _('User %s already exists.') % email,
+                    })
+                    continue
+
+                pending_invitations = Invitation.objects.filter(
+                    accepter=email, accept_time__isnull=True)
+                if pending_invitations.filter(
+                        expire_time__gt=timezone.now()).exists():
+                    result['failed'].append({
+                        'email': email,
+                        'error_msg': _('%s is already invited.') % email,
+                    })
+                    continue
+
+                pending_invitations.delete()
+            except User.DoesNotExist:
+                user = User.objects.create_user(
+                    email, None, is_staff=False, is_active=False)
+                user = User.objects.update_role(user.username, DEFAULT_USER)
+
+            if not user.role:
+                user = User.objects.update_role(user.username, DEFAULT_USER)
+
+            invitation = Invitation.objects.add(
+                inviter=request.user.username,
+                accepter=email,
+                invite_type=DEFAULT_USER,
+            )
+            try:
+                send_success = invitation.send_to(email=email)
+            except Exception as e:
+                logger.error(e)
+                send_success = False
+
+            if not send_success:
+                invitation.delete()
+                result['failed'].append({
+                    'email': email,
+                    'error_msg': _('Failed to send email, please contact administrator.'),
+                })
+                continue
+
+            admin_operation.send(
+                sender=None,
+                admin_name=request.user.username,
+                operation=USER_ADD,
+                detail={'email': email},
+            )
+
+            user_info = get_user_info(user.username)
+            user_info['last_login'] = ''
+            user_info['last_access_time'] = ''
+            result['success'].append(user_info)
+
+        return Response(result)
 
 
 class AdminLDAPUsers(APIView):
