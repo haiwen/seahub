@@ -137,6 +137,7 @@ class AdminLibraries(APIView):
                     repo_info = get_repo_info(repo)
                     repos.append(repo_info)
 
+            add_archive_status(repos)
             return Response({"name": repo_name, "owner": owner, "repos": repos})
 
         elif repo_name:
@@ -150,6 +151,7 @@ class AdminLibraries(APIView):
                     repo_info = get_repo_info(repo)
                     repos.append(repo_info)
 
+            add_archive_status(repos)
             return Response({"name": repo_name, "owner": '', "repos": repos})
 
         elif owner:
@@ -168,6 +170,7 @@ class AdminLibraries(APIView):
                 repo_info = get_repo_info(repo)
                 repos.append(repo_info)
 
+            add_archive_status(repos)
             return Response({"name": '', "owner": owner, "repos": repos})
 
         # get libraries by page
