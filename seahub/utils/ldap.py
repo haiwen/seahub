@@ -12,6 +12,9 @@ LDAP_ADMIN_DN = getattr(settings, 'LDAP_ADMIN_DN', '')
 LDAP_ADMIN_PASSWORD = getattr(settings, 'LDAP_ADMIN_PASSWORD', '')
 LDAP_LOGIN_ATTR = getattr(settings, 'LDAP_LOGIN_ATTR', '')
 
+# None keeps the legacy user bind mode; False selects password-based simple bind.
+LDAP_USER_BIND_ENABLE_SASL = getattr(settings, 'LDAP_USER_BIND_ENABLE_SASL', None)
+
 LDAP_PROVIDER = getattr(settings, 'LDAP_PROVIDER', 'ldap')
 LDAP_USER_OBJECT_CLASS = getattr(settings, 'LDAP_USER_OBJECT_CLASS', 'person')
 LDAP_FOLLOW_REFERRALS = getattr(settings, 'LDAP_FOLLOW_REFERRALS', True)
@@ -29,6 +32,7 @@ MULTI_LDAP_1_PROVIDER = getattr(settings, 'MULTI_LDAP_1_PROVIDER', 'ldap1')
 MULTI_LDAP_1_FILTER = getattr(settings, 'MULTI_LDAP_1_FILTER', '')
 MULTI_LDAP_1_ENABLE_SASL = getattr(settings, 'MULTI_LDAP_1_ENABLE_SASL', False)
 MULTI_LDAP_1_SASL_MECHANISM = getattr(settings, 'MULTI_LDAP_1_SASL_MECHANISM', '')
+MULTI_LDAP_1_USER_BIND_ENABLE_SASL = getattr(settings, 'MULTI_LDAP_1_USER_BIND_ENABLE_SASL', None)
 MULTI_LDAP_1_FOLLOW_REFERRALS = getattr(settings, 'MULTI_LDAP_1_FOLLOW_REFERRALS', True)
 
 MULTI_LDAP_1_CONTACT_EMAIL_ATTR = getattr(settings, 'MULTI_LDAP_1_CONTACT_EMAIL_ATTR', '')
