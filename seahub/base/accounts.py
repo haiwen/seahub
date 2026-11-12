@@ -914,6 +914,11 @@ class CustomLDAPBackend(object):
     def search_user(self, server_url, admin_dn, admin_password, enable_sasl, sasl_mechanism,
                     sasl_authc_id_attr, base_dn, login_attr_conf, login_attr, password, serch_filter,
                     contact_email_attr, role_attr, follow_referrals):
+        # An empty password must never be accepted: an LDAP simple bind with an
+        # empty password can succeed as an unauthenticated bind on some servers.
+        if not password:
+            raise Exception('LDAP user password must not be empty')
+
         try:
             admin_bind = self.ldap_bind(server_url, admin_dn, admin_dn,
                                         admin_password, enable_sasl,
@@ -951,9 +956,14 @@ class CustomLDAPBackend(object):
         except Exception as e:
             raise Exception('parse ldap result failed: %s' % e)
 
+        # SASL EXTERNAL proves the identity of the LDAP client (e.g. via a TLS
+        # certificate), not the identity of the user who supplied a password.
+        # Keep EXTERNAL for the directory search, but verify the user's password
+        # with a simple bind using the DN returned by that search.
+        user_enable_sasl = enable_sasl and sasl_mechanism != 'EXTERNAL'
         try:
             user_bind = self.ldap_bind(server_url, dn, authc_id,
-                                       password, enable_sasl,
+                                       password, user_enable_sasl,
                                        sasl_mechanism, follow_referrals)
         except Exception as e:
             raise Exception(e)
