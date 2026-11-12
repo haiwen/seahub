@@ -16,6 +16,7 @@ const propTypes = {
   repo: PropTypes.object.isRequired,
   toggle: PropTypes.func.isRequired,
   onArchiveSuccess: PropTypes.func,
+  archiveRepo: PropTypes.func,
 };
 
 class RepoArchiveDialog extends Component {
@@ -92,13 +93,14 @@ class RepoArchiveDialog extends Component {
   };
 
   onArchive = () => {
-    const { repo } = this.props;
+    const { repo, archiveRepo } = this.props;
     this.setState({ isSubmitting: true });
 
     const isArchive = !repo.archive_status || repo.archive_status !== 'archived';
     const opType = isArchive ? 'archive' : 'unarchive';
 
-    seafileAPI.archiveRepo(repo.repo_id, opType).then((res) => {
+    const request = archiveRepo ? archiveRepo(repo.repo_id, opType) : seafileAPI.archiveRepo(repo.repo_id, opType);
+    request.then((res) => {
       const { task_id } = res.data;
 
       // Start background polling if task_id is returned

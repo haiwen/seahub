@@ -24,7 +24,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_e
 from seahub.group.utils import is_group_member, group_id_to_name
 from seahub.utils.repo import get_related_users_by_repo, normalize_repo_status_code, \
         normalize_repo_status_str, check_repo_name_conflict
-from seahub.utils import is_valid_dirent_name, is_valid_email, transfer_repo
+from seahub.utils import is_valid_dirent_name, is_valid_email, transfer_repo, is_pro_version
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
@@ -36,6 +36,7 @@ from seahub.base.models import RepoTransfer, RepoArchiveStatus, \
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.repo_metadata.utils import init_metadata, init_tags, add_init_metadata_task
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
+from seahub.settings import ENABLE_STORAGE_CLASSES
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -72,6 +73,7 @@ def get_repo_info(repo):
     result['encrypted'] = repo.encrypted
     result['file_count'] = repo.file_count
     result['status'] = normalize_repo_status_code(repo.status)
+    result['repo_type'] = repo.repo_type
     result['last_modified'] = timestamp_to_isoformat_timestr(repo.last_modified)
 
     if '@seafile_group' in owner:
@@ -82,6 +84,16 @@ def get_repo_info(repo):
         result['owner_name'] = email2nickname(owner)
 
     return result
+
+
+def add_archive_status(repos):
+    if not is_pro_version() or not ENABLE_STORAGE_CLASSES:
+        return
+
+    repo_ids = [repo['id'] for repo in repos]
+    archive_statuses = RepoArchiveStatus.objects.get_repos_archive_status(repo_ids)
+    for repo in repos:
+        repo['archive_status'] = archive_statuses.get(repo['id'])
 
 
 class AdminLibraries(APIView):
@@ -190,6 +202,8 @@ class AdminLibraries(APIView):
             repo_info = get_repo_info(repo)
             return_results.append(repo_info)
 
+        add_archive_status(return_results)
+
         page_info = {
             'has_next_page': has_next_page,
             'current_page': current_page
@@ -282,6 +296,7 @@ class AdminLibrary(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_info = get_repo_info(repo)
+        add_archive_status([repo_info])
 
         return Response(repo_info)
 
@@ -496,6 +511,7 @@ class AdminLibrary(APIView):
 
         repo = seafile_api.get_repo(repo_id)
         repo_info = get_repo_info(repo)
+        add_archive_status([repo_info])
 
         return Response(repo_info)
 
@@ -676,8 +692,11 @@ class AdminSearchLibrary(APIView):
             info['encrypted'] = repo.encrypted
             info['file_count'] = repo.file_count
             info['status'] = normalize_repo_status_code(repo.status)
+            info['repo_type'] = repo.repo_type
 
             result.append(info)
+
+        add_archive_status(result)
 
         page_info = {
             'has_next_page': has_next_page,
