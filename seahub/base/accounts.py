@@ -48,13 +48,13 @@ except ImportError:
 
 from seahub.utils.ldap import ENABLE_LDAP, LDAP_USER_FIRST_NAME_ATTR, LDAP_USER_LAST_NAME_ATTR, \
     LDAP_USER_NAME_REVERSE, LDAP_FILTER, LDAP_CONTACT_EMAIL_ATTR, LDAP_USER_ROLE_ATTR, \
-    ENABLE_SASL, SASL_MECHANISM, SASL_AUTHC_ID_ATTR, \
+    ENABLE_SASL, SASL_MECHANISM, SASL_AUTHC_ID_ATTR, LDAP_USER_BIND_ENABLE_SASL, \
     LDAP_PROVIDER, LDAP_SERVER_URL, LDAP_BASE_DN, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD, LDAP_LOGIN_ATTR, \
     ENABLE_MULTI_LDAP, MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_BASE_DN, MULTI_LDAP_1_ADMIN_DN, \
     MULTI_LDAP_1_ADMIN_PASSWORD, MULTI_LDAP_1_LOGIN_ATTR, \
     MULTI_LDAP_1_PROVIDER, MULTI_LDAP_1_FILTER, MULTI_LDAP_1_CONTACT_EMAIL_ATTR, \
     MULTI_LDAP_1_USER_ROLE_ATTR, MULTI_LDAP_1_ENABLE_SASL, MULTI_LDAP_1_SASL_MECHANISM, \
-    MULTI_LDAP_1_SASL_AUTHC_ID_ATTR, LDAP_UPDATE_USER_WHEN_LOGIN, \
+    MULTI_LDAP_1_SASL_AUTHC_ID_ATTR, MULTI_LDAP_1_USER_BIND_ENABLE_SASL, LDAP_UPDATE_USER_WHEN_LOGIN, \
     LDAP_FOLLOW_REFERRALS, MULTI_LDAP_1_FOLLOW_REFERRALS
 
 logger = logging.getLogger(__name__)
@@ -913,10 +913,14 @@ class CustomLDAPBackend(object):
 
     def search_user(self, server_url, admin_dn, admin_password, enable_sasl, sasl_mechanism,
                     sasl_authc_id_attr, base_dn, login_attr_conf, login_attr, password, serch_filter,
-                    contact_email_attr, role_attr, follow_referrals):
-        # An empty password must never be accepted: an LDAP simple bind with an
-        # empty password can succeed as an unauthenticated bind on some servers.
-        if not password:
+                    contact_email_attr, role_attr, follow_referrals, user_bind_enable_sasl=None):
+        # If unset, retain the original SASL setting for backwards compatibility.
+        # The search bind uses enable_sasl; the user bind can be configured separately.
+        if user_bind_enable_sasl is None:
+            user_bind_enable_sasl = enable_sasl
+
+        # Some LDAP servers accept empty-password simple binds as anonymous.
+        if not user_bind_enable_sasl and not password:
             raise Exception('LDAP user password must not be empty')
 
         try:
@@ -956,11 +960,9 @@ class CustomLDAPBackend(object):
         except Exception as e:
             raise Exception('parse ldap result failed: %s' % e)
 
-        # SASL EXTERNAL proves the identity of the LDAP client (e.g. via a TLS
-        # certificate), not the identity of the user who supplied a password.
-        # Keep EXTERNAL for the directory search, but verify the user's password
-        # with a simple bind using the DN returned by that search.
-        user_enable_sasl = enable_sasl and sasl_mechanism != 'EXTERNAL'
+        # A successful service SASL EXTERNAL bind must not be considered
+        # authentication of the user supplying a password.
+        user_enable_sasl = user_bind_enable_sasl
         try:
             user_bind = self.ldap_bind(server_url, dn, authc_id,
                                        password, user_enable_sasl,
@@ -986,7 +988,7 @@ class CustomLDAPBackend(object):
             nickname, contact_email, user_role = self.search_user(
                 LDAP_SERVER_URL, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD, ENABLE_SASL, SASL_MECHANISM,
                 SASL_AUTHC_ID_ATTR, LDAP_BASE_DN, LDAP_LOGIN_ATTR, login_attr, password, LDAP_FILTER,
-                LDAP_CONTACT_EMAIL_ATTR, LDAP_USER_ROLE_ATTR, LDAP_FOLLOW_REFERRALS)
+                LDAP_CONTACT_EMAIL_ATTR, LDAP_USER_ROLE_ATTR, LDAP_FOLLOW_REFERRALS, LDAP_USER_BIND_ENABLE_SASL)
             ldap_provider = LDAP_PROVIDER
         except Exception as e:
             if ENABLE_MULTI_LDAP:
@@ -1001,7 +1003,7 @@ class CustomLDAPBackend(object):
                         MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_ADMIN_DN, MULTI_LDAP_1_ADMIN_PASSWORD,
                         MULTI_LDAP_1_ENABLE_SASL, MULTI_LDAP_1_SASL_MECHANISM, MULTI_LDAP_1_SASL_AUTHC_ID_ATTR,
                         MULTI_LDAP_1_BASE_DN, MULTI_LDAP_1_LOGIN_ATTR, login_attr, password, MULTI_LDAP_1_FILTER,
-                        MULTI_LDAP_1_CONTACT_EMAIL_ATTR, MULTI_LDAP_1_USER_ROLE_ATTR, MULTI_LDAP_1_FOLLOW_REFERRALS)
+                        MULTI_LDAP_1_CONTACT_EMAIL_ATTR, MULTI_LDAP_1_USER_ROLE_ATTR, MULTI_LDAP_1_FOLLOW_REFERRALS, MULTI_LDAP_1_USER_BIND_ENABLE_SASL)
                     ldap_provider = MULTI_LDAP_1_PROVIDER
                 except Exception as e:
                     logger.error(e)

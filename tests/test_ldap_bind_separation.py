@@ -12,6 +12,8 @@ from pathlib import Path
 import types
 import unittest
 
+_UNSET = object()
+
 SOURCE = Path(__file__).resolve().parents[1] / 'seahub' / 'base' / 'accounts.py'
 
 
@@ -90,14 +92,16 @@ class BindSeparationTest(unittest.TestCase):
         self.ldap = FakeLDAP()
         self.backend = load_backend(SOURCE, self.ldap)
 
-    def do_search(self, password, enable_sasl=True, mechanism='EXTERNAL', admin_dn=''):
+    def do_search(self, password, enable_sasl=True, mechanism='EXTERNAL', admin_dn='', user_bind_enable_sasl=_UNSET):
+        if user_bind_enable_sasl is _UNSET:
+            user_bind_enable_sasl = False if mechanism == 'EXTERNAL' else None
         admin_password = 'reader-secret' if not enable_sasl or mechanism != 'EXTERNAL' else ''
         if not enable_sasl:
             admin_dn = 'cn=reader,o=msu,dc=ru'
         return self.backend.search_user(
             'ldaps://example', admin_dn, admin_password, enable_sasl,
             mechanism, 'uid', 'o=msu,dc=ru', 'mail', 'example@sai.msu.ru',
-            password, '', 'mail', '', False)
+            password, '', 'mail', '', False, user_bind_enable_sasl)
 
     def test_external_search_and_simple_user_bind(self):
         self.assertEqual(self.do_search('good-password'), ('Example User', 'example@sai.msu.ru', ''))
@@ -136,6 +140,24 @@ class BindSeparationTest(unittest.TestCase):
         self.do_search('good-password', enable_sasl=False)
         self.assertEqual(self.ldap.connections[0].binds[0], ('simple', 'cn=reader,o=msu,dc=ru', 'reader-secret'))
         self.assertEqual(self.ldap.connections[1].binds[0], ('simple', FakeConnection.USER_DN, 'good-password'))
+
+
+    def test_legacy_external_behavior_unchanged_when_not_configured(self):
+        # Legacy behavior is retained only for compatibility; it should not
+        # be selected for password-based logins when using EXTERNAL service auth.
+        self.do_search('good-password', user_bind_enable_sasl=None)
+        self.assertEqual(self.ldap.connections[0].binds[0][0:2], ('sasl', 'EXTERNAL'))
+        self.assertEqual(self.ldap.connections[1].binds[0][0:2], ('sasl', 'EXTERNAL'))
+
+    def test_user_simple_bind_can_be_selected_with_other_sasl_mechanisms(self):
+        self.do_search('good-password', mechanism='PLAIN', user_bind_enable_sasl=False)
+        self.assertEqual(self.ldap.connections[0].binds[0][0:2], ('sasl', 'PLAIN'))
+        self.assertEqual(self.ldap.connections[1].binds[0], ('simple', FakeConnection.USER_DN, 'good-password'))
+
+    def test_empty_password_rejected_when_simple_user_bind_is_selected(self):
+        with self.assertRaisesRegex(Exception, 'must not be empty'):
+            self.do_search('', mechanism='PLAIN', user_bind_enable_sasl=False)
+        self.assertEqual(self.ldap.connections, [])
 
     def test_other_sasl_mechanism_preserved(self):
         self.do_search('good-password', mechanism='PLAIN')
