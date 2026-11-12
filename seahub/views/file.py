@@ -59,6 +59,7 @@ from seahub.utils import render_error, is_org_context, \
     normalize_file_path, get_service_url, OFFICE_PREVIEW_MAX_SIZE, \
     normalize_cache_key, gen_file_get_url_by_sharelink, gen_file_get_url_new
 from seahub.utils.ip import get_remote_ip
+from seahub.utils.markdown import markdown_contains_image
 from seahub.utils.file_types import (IMAGE, PDF, SVG,
                                      DOCUMENT, SPREADSHEET, AUDIO,
                                      MARKDOWN, TEXT, VIDEO, XMIND, SEADOC, TLDRAW)
@@ -2068,6 +2069,11 @@ def view_media_file_via_share_link(request):
     if not image_path or not token:
         return HttpResponseBadRequest('invalid params')
 
+    image_file_name = os.path.basename(image_path)
+    image_type, image_ext = get_file_type_and_ext(image_file_name)
+    if image_type != IMAGE:
+        return render_error(request, 'Invalid file type')
+
     file_share = FileShare.objects.get_valid_file_link_by_token(token)
 
     if not file_share:
@@ -2101,18 +2107,10 @@ def view_media_file_via_share_link(request):
     if err_msg:
         return render_error(request, err_msg)
 
-    # If the image does not exist in markdown
-    serviceURL = get_service_url().rstrip('/')
-    image_file_name = os.path.basename(image_path)
-
-    # Translation ‘(’ ')'
-    image_file_name = image_file_name.replace('(', '\(')
-    image_file_name = image_file_name.replace(')', '\)')
-    encoded_image_file_name = urllib.parse.quote(image_file_name)
-
-    p = re.compile('(%s)/lib/(%s)/file(.*?)%s\?raw=1' % (serviceURL, repo_id, encoded_image_file_name))
-    result = re.search(p, file_content)
-    if not result:
+    # Authorize the full image URL, not another file with the same basename.
+    image_url = '%s/lib/%s/file%s?raw=1' % (
+        get_service_url().rstrip('/'), repo_id, urllib.parse.quote(image_path))
+    if not markdown_contains_image(file_content, image_url):
         return render_error(request, 'Image does not exist')
 
     # get image
