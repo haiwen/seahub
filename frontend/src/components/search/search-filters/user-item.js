@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext, mediaUrl } from '@/utils/constants';
-import { Utils } from '@/utils/utils';
 import IconBtn from '../../icon-btn';
 
 const UserItem = ({ user, isCancellable, onCancel }) => {
@@ -13,10 +12,7 @@ const UserItem = ({ user, isCancellable, onCancel }) => {
         <IconBtn
           className="user-remove"
           onClick={(e) => onCancel(e, user.name)}
-          onKeyDown={Utils.onKeyDown}
           symbol="close"
-          tabIndex="0"
-          role="button"
           aria-label={gettext('Delete')}
         />
       )}

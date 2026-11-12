@@ -53,12 +53,13 @@ function prepareCSRFToken(xhr, settings) {
 function feedback(con, type, time) {
     time = time || 5000;
     var $el;
+    var role = type === 'error' ? 'alert' : 'status';
     var hide_pos_top,
         show_pos_top = '15px';
     if ($('.messages').length > 0) {
-        $el = $('.messages').html('<li class="' + type + '">' + HTMLescape(con) + '</li>');
+        $el = $('.messages').attr('role', role).html('<li class="' + type + '">' + HTMLescape(con) + '</li>');
     } else {
-        $el = $('<ul class="messages"><li class="' + type + '">' + HTMLescape(con) + '</li></ul>');
+        $el = $('<ul class="messages" role="' + role + '"><li class="' + type + '">' + HTMLescape(con) + '</li></ul>');
         $('#main').append($el);
     }
 

@@ -65,20 +65,20 @@ html, body, #wrapper { height:100%; }
         {% if form.captcha.errors %}
         {{ form.captcha.errors}}
         {% elif form.errors.freeze_account %}
-        <p class="error mt-2">{{ form.errors.freeze_account }}</p>
+        <p class="error mt-2" role="alert">{{ form.errors.freeze_account }}</p>
         {% elif form.errors.inactive %}
-        <p class="error mt-2">{{ form.errors.inactive }}</p>
+        <p class="error mt-2" role="alert">{{ form.errors.inactive }}</p>
         {% elif form.errors.invalid_input %}
-        <p class="error mt-2">{{ form.errors.invalid_input }}</p>
+        <p class="error mt-2" role="alert">{{ form.errors.invalid_input }}</p>
         {% elif form.errors.not_found %}
-        <p class="error mt-2">{{ form.errors.not_found }}</p>
+        <p class="error mt-2" role="alert">{{ form.errors.not_found }}</p>
         {% elif form.errors.disable_pwd_login %}
-        <p class="error mt-2">{% trans "Please use Single Sign-On to login." %}</p>
+        <p class="error mt-2" role="alert">{% trans "Please use Single Sign-On to login." %}</p>
         {% else %}
-        <p class="error mt-2">{% trans "Incorrect email or password" %}</p>
+        <p class="error mt-2" role="alert">{% trans "Incorrect email or password" %}</p>
         {% endif %}
         {% else %}
-        <p class="error mt-2 hide"></p>
+        <p class="error mt-2 hide" role="alert"></p>
         {% endif %}
 
         <label class="checkbox-label mt-3 mb-0 remember-me">

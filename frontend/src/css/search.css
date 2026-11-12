@@ -537,12 +537,19 @@
   padding-top: 12px;
 }
 
-.search-types>div {
+.search-types>button {
   position: relative;
+  display: block;
+  width: 100%;
   height: 40px;
   line-height: 40px;
   cursor: pointer;
   padding: 0px 40px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
   border-radius: 4px;
 }
 
@@ -550,8 +557,8 @@
   background-color: var(--bs-active-secondary-bg);
 }
 
-.search-types>div:focus,
-.search-types>div:hover {
+.search-types>button:focus-visible,
+.search-types>button:hover {
   background-color: var(--bs-hover-secondary-bg);
 }
 

@@ -925,8 +925,22 @@ a.table-sort-op {
   color: inherit;
 }
 
+button.table-sort-op {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
 @media (max-width:767px) {
   a.table-sort-op {
+    display: inline-block;
+    margin-left: 15px;
+  }
+
+  button.table-sort-op {
     display: inline-block;
     margin-left: 15px;
   }

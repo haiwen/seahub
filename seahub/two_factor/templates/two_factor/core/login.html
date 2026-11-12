@@ -29,9 +29,9 @@
       {% endif %}
 
       {% if form.errors %}
-      <p class="error">{% trans "Incorrect code" %}</p>
+      <p class="error" role="alert">{% trans "Incorrect code" %}</p>
       {% else %}
-      <p class="error hide"></p>
+      <p class="error hide" role="alert"></p>
       {% endif %}
       <button type="submit" class="submit btn btn-primary btn-block h-auto mb-3">{% trans "Verify" %}</button>
 
@@ -49,9 +49,9 @@
       <p class="tip">{% trans "You can enter one of your backup codes in case you lost access to your mobile device." %}</p>
 
       {% if form.errors %}
-      <p class="error">{% trans "Incorrect code" %}</p>
+      <p class="error" role="alert">{% trans "Incorrect code" %}</p>
       {% else %}
-      <p class="error hide"></p>
+      <p class="error hide" role="alert"></p>
       {% endif %}
 
       <button type="submit" class="submit btn btn-primary btn-block h-auto mb-5">{% trans "Verify" %}</button>

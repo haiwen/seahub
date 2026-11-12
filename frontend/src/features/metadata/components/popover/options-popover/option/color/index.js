@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import CustomizePopover from '@/components/customize-popover';
 import IconBtn from '@/components/icon-btn';
+import { gettext } from '@/utils/constants';
 import { SELECT_OPTION_COLORS } from '../../../../../constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../../../store/operations';
 
@@ -47,6 +48,7 @@ const Color = ({ option, isViewing, isPredefined, onChange }) => {
         className="sf-metadata-edit-option-color"
         symbol="down"
         id={target}
+        aria-label={gettext('Edit')}
         style={{ backgroundColor: option?.color || null }}
         iconStyle={{ color: option?.textColor || '#666' }}
         onClick={openPopover}

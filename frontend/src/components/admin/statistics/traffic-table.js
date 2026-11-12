@@ -19,19 +19,31 @@ class TrafficTable extends React.Component {
 
   render() {
     const { type, sortBy, sortOrder } = this.props;
-    const sortIcon = sortOrder == 'asc' ? <Icon symbol="down" className="rotate-180 d-inline-block" aria-hidden="true" /> : <Icon symbol="down" aria-hidden="true" />;
+    const renderSortHeader = (label, sortKey, width) => {
+      const isSorted = sortBy === sortKey;
+      const ariaSort = isSorted ? (sortOrder == 'asc' ? 'ascending' : 'descending') : undefined;
+      const sortIcon = sortOrder == 'asc' ? <Icon symbol="down" className="rotate-180 d-inline-block" aria-hidden="true" /> : <Icon symbol="down" aria-hidden="true" />;
+
+      return (
+        <th width={width} scope="col" aria-sort={ariaSort}>
+          <button type="button" className="d-block table-sort-op cursor-pointer" onClick={() => this.props.sortItems(sortKey)}>
+            {label} {isSorted && sortIcon}
+          </button>
+        </th>
+      );
+    };
 
     return (
       <table className="table-hover">
         <thead>
           <tr>
-            <th width="16%">{type == 'user' ? gettext('User') : gettext('Organization')}</th>
-            <th width="11%"><div className="d-block table-sort-op cursor-pointer" onClick={this.props.sortItems.bind(this, 'sync_file_upload')}>{gettext('Sync Upload')} {sortBy === 'sync_file_upload' && sortIcon}</div></th>
-            <th width="14%"><div className="d-block table-sort-op cursor-pointer" onClick={this.props.sortItems.bind(this, 'sync_file_download')}>{gettext('Sync Download')} {sortBy === 'sync_file_download' && sortIcon}</div></th>
-            <th width="11%"><div className="d-block table-sort-op cursor-pointer" onClick={this.props.sortItems.bind(this, 'web_file_upload')}>{gettext('Web Upload')} {sortBy === 'web_file_upload' && sortIcon}</div></th>
-            <th width="14%"><div className="d-block table-sort-op cursor-pointer" onClick={this.props.sortItems.bind(this, 'web_file_download')}>{gettext('Web Download')} {sortBy === 'web_file_download' && sortIcon}</div></th>
-            <th width="17%"><div className="d-block table-sort-op cursor-pointer" onClick={this.props.sortItems.bind(this, 'link_file_upload')}>{gettext('Share link upload')} {sortBy === 'link_file_upload' && sortIcon}</div></th>
-            <th width="17%"><div className="d-block table-sort-op cursor-pointer" onClick={this.props.sortItems.bind(this, 'link_file_download')}>{gettext('Share link download')} {sortBy === 'link_file_download' && sortIcon}</div></th>
+            <th width="16%" scope="col">{type == 'user' ? gettext('User') : gettext('Organization')}</th>
+            {renderSortHeader(gettext('Sync Upload'), 'sync_file_upload', '11%')}
+            {renderSortHeader(gettext('Sync Download'), 'sync_file_download', '14%')}
+            {renderSortHeader(gettext('Web Upload'), 'web_file_upload', '11%')}
+            {renderSortHeader(gettext('Web Download'), 'web_file_download', '14%')}
+            {renderSortHeader(gettext('Share link upload'), 'link_file_upload', '17%')}
+            {renderSortHeader(gettext('Share link download'), 'link_file_download', '17%')}
           </tr>
         </thead>
         <tbody>

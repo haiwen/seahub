@@ -819,11 +819,10 @@ class Search extends Component {
       return (
         <div className="search-result-list-container" ref={this.searchResultListContainerRef}>
           <div className="search-types">
-            <div
+            <button
+              type="button"
               className={classnames('search-types-repos', { 'search-types-highlight': highlightIndex === 0 })}
               onClick={this.searchAllRepos}
-              tabIndex={0}
-              onKeyDown={Utils.onKeyDown}
             >
               <span className="search-icon-left input-icon-addon">
                 <Icon symbol="search" />
@@ -831,7 +830,7 @@ class Search extends Component {
               {inputValue}
               <span className="search-types-text">{gettext('in all libraries')}</span>
               <Icon symbol="enter" className="search-types-enter-icon" />
-            </div>
+            </button>
           </div>
           {resultItems.length > 0 && (
             <div className="library-result-container">
@@ -865,51 +864,51 @@ class Search extends Component {
       if (path && path !== '/' && !this.props.isViewFile && !isMetadataView && !isTagView) {
         return (
           <div className="search-types">
-            <div className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo} tabIndex={0}>
+            <button type="button" className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo}>
               <span className="search-icon-left input-icon-addon">
                 <Icon symbol="search" />
               </span>
               {inputValue}
               <span className="search-types-text">{gettext('in this library')}</span>
               {highlightIndex === 0 && <Icon symbol="enter" className="search-types-enter-icon" />}
-            </div>
-            <div className={`search-types-folder ${highlightIndex === 1 ? 'search-types-highlight' : ''}`} onClick={this.searchFolder} tabIndex={0}>
+            </button>
+            <button type="button" className={`search-types-folder ${highlightIndex === 1 ? 'search-types-highlight' : ''}`} onClick={this.searchFolder}>
               <span className="search-icon-left input-icon-addon">
                 <Icon symbol="search" />
               </span>
               {inputValue}
               <span className="search-types-text">{gettext('in this folder')}</span>
               {highlightIndex === 1 && <Icon symbol="enter" className="search-types-enter-icon" />}
-            </div>
-            <div className={`search-types-repos ${highlightIndex === 2 ? 'search-types-highlight' : ''}`} onClick={this.searchAllRepos} tabIndex={0}>
+            </button>
+            <button type="button" className={`search-types-repos ${highlightIndex === 2 ? 'search-types-highlight' : ''}`} onClick={this.searchAllRepos}>
               <span className="search-icon-left input-icon-addon">
                 <Icon symbol="search" />
               </span>
               {inputValue}
               <span className="search-types-text">{gettext('in all libraries')}</span>
               {highlightIndex === 2 && <Icon symbol="enter" className="search-types-enter-icon" />}
-            </div>
+            </button>
           </div>
         );
       } else {
         return (
           <div className="search-types">
-            <div className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo} tabIndex={0}>
+            <button type="button" className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo}>
               <span className="search-icon-left input-icon-addon">
                 <Icon symbol="search" />
               </span>
               {inputValue}
               <span className="search-types-text">{gettext('in this library')}</span>
               {highlightIndex === 0 && <Icon symbol="enter" className="search-types-enter-icon" />}
-            </div>
-            <div className={`search-types-repos ${highlightIndex === 1 ? 'search-types-highlight' : ''}`} onClick={this.searchAllRepos} tabIndex={0}>
+            </button>
+            <button type="button" className={`search-types-repos ${highlightIndex === 1 ? 'search-types-highlight' : ''}`} onClick={this.searchAllRepos}>
               <span className="search-icon-left input-icon-addon">
                 <Icon symbol="search" />
               </span>
               {inputValue}
               <span className="search-types-text">{gettext('in all libraries')}</span>
               {highlightIndex === 1 && <Icon symbol="enter" className="search-types-enter-icon" />}
-            </div>
+            </button>
           </div>
         );
       }

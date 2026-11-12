@@ -43,12 +43,12 @@
             {% if not request.user.is_authenticated %}
             {# for non-logged-in user #}
             <div id="lang">
-                <a href="#" id="lang-context" data-lang="{{ LANGUAGE_CODE }}">{{ LANGUAGE_CODE|language_name_local|capfirst }} <span class="lang-context-icon" aria-hidden="true"></span></a>
-                <div id="lang-context-selector" class="sf-popover hide" aria-label="{% trans "Language" %}" tabindex="0">
+                <button type="button" id="lang-context" data-lang="{{ LANGUAGE_CODE }}" aria-expanded="false" aria-controls="lang-context-selector">{{ LANGUAGE_CODE|language_name_local|capfirst }} <span class="lang-context-icon" aria-hidden="true"></span></button>
+                <div id="lang-context-selector" class="sf-popover hide">
                     <ul class="sf-popover-con">
                         {% for LANG in LANGUAGES %}
                         <li>
-                            <a href="{% url 'i18n' %}?lang={{ LANG.0 }}" aria-label="{{ LANG.1 }}" role="button">{{ LANG.1 }}</a>
+                            <a href="{% url 'i18n' %}?lang={{ LANG.0 }}">{{ LANG.1 }}</a>
                         </li>
                         {% endfor %}
                     </ul>
@@ -69,7 +69,7 @@
         </main>
 
         {% if messages %}
-        <ul class="messages hide">
+        <ul class="messages hide" role="status">
             {% for message in messages %}
             <li class="{{ message.tags }}">
                 {% if 'safe' in message.tags %}
@@ -168,8 +168,18 @@ $('#info-bar .close').on('keydown', function(event) {
         }
     });
 
+    var closeLangSelector = function(restoreFocus) {
+        lang_selector.addClass('hide');
+        lang_context.attr('aria-expanded', 'false');
+        if (restoreFocus) {
+            lang_context.trigger('focus');
+        }
+    };
+
     lang_context.on('click', function() {
-        lang_selector.toggleClass('hide');
+        var isExpanded = lang_context.attr('aria-expanded') === 'true';
+        lang_selector.toggleClass('hide', isExpanded);
+        lang_context.attr('aria-expanded', isExpanded ? 'false' : 'true');
         if (lang_selector.is(':visible')) {
             setLangSelectorMaxHeight();
         }
@@ -177,9 +187,15 @@ $('#info-bar .close').on('keydown', function(event) {
     });
 
     $(document).on('click', function(e) {
-        var element = e.target || e.srcElement;
-        if (element.id != 'lang-context-selector' && element.id != 'lang-context') {
-            lang_selector.addClass('hide');
+        if (!$(e.target).closest('#lang').length) {
+            closeLangSelector(false);
+        }
+    });
+
+    $(document).on('keydown', function(e) {
+        if ((e.which === 27 || e.key === 'Escape') && lang_context.attr('aria-expanded') === 'true') {
+            e.preventDefault();
+            closeLangSelector(true);
         }
     });
 })();

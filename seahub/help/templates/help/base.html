@@ -28,16 +28,22 @@
     display: block;
     opacity: 0.5;
 }
+#js-toggle-side-nav {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
 </style>
 {% endblock %}
 {% block side-panel-menu %}
-<span class="side-nav-toggle d-md-none d-flex align-items-center" title="{% trans "Side Nav Menu" %}" id="js-toggle-side-nav" aria-label="{% trans "Side Nav Menu" %}"><span class="mobile-help-menu-icon" aria-hidden="true"></span></span>
+<button type="button" class="side-nav-toggle d-md-none d-flex align-items-center" title="{% trans "Side Nav Menu" %}" id="js-toggle-side-nav" aria-label="{% trans "Side Nav Menu" %}" aria-expanded="false" aria-controls="help-side-nav"><span class="mobile-help-menu-icon" aria-hidden="true"></span></button>
 {% endblock %}
 {% block main_class %}d-flex ovhd{% endblock %}
 
 {% block main_content %}
 <div class="row flex-1 w-100 d-flex">
-    <div class="side-textnav col-md-3 side-nav help-side-nav h100">
+    <div id="help-side-nav" class="side-textnav col-md-3 side-nav help-side-nav h100">
         <div class="d-block d-md-none logo-container">
             <a href="{{ SITE_ROOT }}">
                 <img src="{{ MEDIA_URL }}{{ logo_path }}" title="{{ site_title }}" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
@@ -149,15 +155,27 @@ $('.help-side-nav .tab a').on('click', function() {
 
 $('#logo').addClass('d-none d-md-block');
 
-$('#js-toggle-side-nav').on('click', function(event) {
-    $('.side-nav').toggleClass('side-nav-shown');
-    $('.seafile-mask').toggleClass('seafile-mask__shown');
-    return false;
+var sideNavToggle = $('#js-toggle-side-nav');
+var setSideNavOpen = function(isOpen) {
+    $('.side-nav').toggleClass('side-nav-shown', isOpen);
+    $('.seafile-mask').toggleClass('seafile-mask__shown', isOpen);
+    sideNavToggle.attr('aria-expanded', String(isOpen));
+};
+
+sideNavToggle.on('click', function() {
+    setSideNavOpen(sideNavToggle.attr('aria-expanded') !== 'true');
 });
 
 $('.seafile-mask').on('click', function() {
-    $('.side-nav').toggleClass('side-nav-shown');
-    $('.seafile-mask').toggleClass('seafile-mask__shown');
+    setSideNavOpen(false);
+    sideNavToggle.trigger('focus');
+});
+
+$(document).on('keydown', function(event) {
+    if ((event.which === 27 || event.key === 'Escape') && sideNavToggle.attr('aria-expanded') === 'true') {
+        setSideNavOpen(false);
+        sideNavToggle.trigger('focus');
+    }
 });
 </script>
 {% endblock %}
