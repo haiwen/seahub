@@ -90,11 +90,14 @@ class GeneratedSdocTest(unittest.TestCase):
         self.sdoc = load_sdoc(self)
         self.helpers, self.creator, self.markdown = load_result_helpers(self.sdoc)
         self.request = SimpleNamespace(user=SimpleNamespace(username='user'))
-        self.document = {'title': '计划', 'elements': [
+        self.document = {'elements': [
+            {'type': 'title', 'children': [{'text': '计划'}]},
+            {'type': 'subtitle', 'children': [{'text': 'Review'}]},
             {'type': 'paragraph', 'children': [{'text': 'Hi', 'bold': True}]},
             {'type': 'ordered_list', 'items': [{'children': [{'text': 'First'}]}]},
             {'type': 'code_block', 'language': 'python', 'text': 'print(1)\nprint(2)'},
-            {'type': 'table', 'rows': [{'cells': [{'children': [{'text': 'A'}]}]}]},
+            {'type': 'table', 'children': [{'type': 'table_row', 'children': [
+                {'type': 'table_cell', 'children': [{'text': 'A'}]}]}]},
         ]}
         self.tag = '<seafile-ai-seadoc sdoc_create_uuid="12345678-1234-4234-8234-123456789abc" file_name="计划.sdoc" description="A &amp; B">%s</seafile-ai-seadoc>' % json.dumps(self.document)
 
@@ -107,8 +110,11 @@ class GeneratedSdocTest(unittest.TestCase):
         self.assertEqual(compiled['format_version'], 4)
         self.assertEqual(compiled['last_modify_user'], 'user')
         self.assertEqual(compiled['elements'][0]['children'][0]['text'], '计划')
-        self.assertEqual(compiled['elements'][2]['children'][0]['type'], 'list_item')
-        self.assertEqual(len(compiled['elements'][3]['children']), 2)
+        self.assertEqual(compiled['elements'][1]['type'], 'subtitle')
+        self.assertEqual([node['type'] for node in compiled['elements'][:-1]],
+                         [node['type'] for node in self.document['elements']])
+        self.assertEqual(compiled['elements'][3]['children'][0]['type'], 'list_item')
+        self.assertEqual(len(compiled['elements'][4]['children']), 2)
         self.assertEqual(compiled['elements'][-1]['type'], 'paragraph')
         ids = []
 
@@ -120,6 +126,51 @@ class GeneratedSdocTest(unittest.TestCase):
         for element in compiled['elements']:
             visit(element)
         self.assertEqual(len(ids), len(set(ids)))
+        self.assertTrue(all(isinstance(identifier, str) and identifier for identifier in ids))
+
+    def test_titles_are_optional_ordered_blocks_with_inline_content(self):
+        elements = [
+            {'type': 'paragraph', 'children': [{'text': 'Opening'}]},
+            {'type': 'subtitle', 'children': [{'type': 'link', 'href': 'https://example.com',
+                                              'children': [{'text': 'Subtitle'}]}]},
+            {'type': 'title', 'children': [{'text': 'Title', 'bold': True}]},
+        ]
+        compiled = self.sdoc.compile_sdoc({'elements': elements}, 'user')
+        self.assertEqual([node['type'] for node in compiled['elements']],
+                         ['paragraph', 'subtitle', 'title', 'paragraph'])
+        self.assertEqual(compiled['elements'][1]['children'][0]['href'], 'https://example.com')
+        self.assertTrue(compiled['elements'][2]['children'][0]['bold'])
+        without_title = self.sdoc.compile_sdoc({'elements': elements[:1]}, 'user')
+        self.assertEqual([node['type'] for node in without_title['elements']], ['paragraph', 'paragraph'])
+
+    def test_nested_table_preserves_content_and_supplies_layout(self):
+        table = self.document['elements'][-1]
+        table['children'][0]['children'].append({
+            'type': 'table_cell', 'children': [{'type': 'link', 'href': 'https://example.com',
+                                               'children': [{'text': 'Docs'}]}]})
+        compiled = self.sdoc.compile_sdoc({'elements': [table]}, 'user')['elements'][0]
+        self.assertEqual(compiled['columns'], [{'width': 336}, {'width': 336}])
+        self.assertEqual(compiled['style']['gridTemplateColumns'], 'repeat(2, 336px)')
+        self.assertEqual(compiled['ui'], {'alternate_highlight': False})
+        row = compiled['children'][0]
+        self.assertEqual(row['type'], 'table_row')
+        self.assertEqual(row['style']['min_height'], 42)
+        cell = row['children'][0]
+        self.assertEqual(cell['type'], 'table_cell')
+        self.assertEqual(cell['children'][0]['text'], 'A')
+        self.assertEqual(cell['style']['text_align'], 'left')
+        self.assertEqual(cell['inherit_style']['background_color'], '')
+        self.assertEqual(row['children'][1]['children'][0]['type'], 'link')
+
+    def test_legacy_root_checklists_and_legacy_table_are_rejected(self):
+        documents = [
+            {'title': 'Legacy', 'elements': self.document['elements']},
+            {'elements': [{'type': 'check_list_item', 'checked': False, 'children': [{'text': 'Task'}]}]},
+            {'elements': [{'type': 'table', 'rows': [{'cells': [{'children': [{'text': 'Old'}]}]}]}]},
+        ]
+        for document in documents:
+            with self.subTest(document=document), self.assertRaises((ValueError, KeyError)):
+                self.sdoc.compile_sdoc(document, 'user')
 
     def test_creates_file_and_replaces_json_with_metadata(self):
         written = []
@@ -242,17 +293,17 @@ class GeneratedSdocTest(unittest.TestCase):
 
         self.sdoc.seafile_api.post_file.side_effect = capture
         for text in ['<>&\n' * 25000, '<' * (400000 - 100)]:
-            document = {'title': 'Test', 'elements': [{'type': 'code_block', 'language': '', 'text': text}]}
+            document = {'elements': [{'type': 'code_block', 'language': '', 'text': text}]}
             reference = ai.sdoc.SdocGenerator().execute('Boundary', 'Test', json.dumps(document), executor)
             for closing in ['</seafile-ai-seadoc >', '</seafile-ai-seadoc\n>']:
                 paired = reference[:-2] + '>forged content' + closing
                 resolved = ai.resolve_sdoc_results(paired, executor)
                 self.assertGreater(len(resolved), 400000)
                 self.assertIn('status="created"', self.process(resolved)['ai_reply'])
-                self.assertEqual(written[-1]['elements'][1]['children'][0]['children'][0]['text'], text.split('\n')[0])
+                self.assertEqual(written[-1]['elements'][0]['children'][0]['children'][0]['text'], text.split('\n')[0])
 
     def test_content_and_transport_limits_are_independent(self):
-        document = {'title': 'Limit', 'elements': [{'type': 'paragraph', 'children': [{'text': ''}]}]}
+        document = {'elements': [{'type': 'paragraph', 'children': [{'text': ''}]}]}
         base = len(json.dumps(document, ensure_ascii=False, separators=(',', ':')))
         document['elements'][0]['children'][0]['text'] = '<' * (400000 - base)
         body = json.dumps(document, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c')
@@ -356,7 +407,7 @@ class GeneratedSdocTest(unittest.TestCase):
 
     def test_invalid_or_failed_writes_return_failure_tags(self):
         self.assertIn('invalid_artifact', self.process(self.tag.replace('计划.sdoc', '../计划.sdoc'))['ai_reply'])
-        self.assertIn('invalid_artifact', self.process(self.tag.replace('"title":', '"missing":'))['ai_reply'])
+        self.assertIn('invalid_artifact', self.process(self.tag.replace('"elements":', '"missing":'))['ai_reply'])
         self.sdoc.seafile_api.post_file.side_effect = RuntimeError('unavailable')
         self.assertIn('create_failed', self.process(self.tag)['ai_reply'])
 

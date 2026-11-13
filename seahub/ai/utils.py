@@ -423,12 +423,10 @@ def _compile_block(block):
     kind = block['type']
     if kind == 'paragraph':
         return _paragraph(block['children'])
-    if kind in ('header1', 'header2', 'header3', 'header4', 'header5', 'header6'):
+    if kind in ('title', 'subtitle', 'header1', 'header2', 'header3', 'header4', 'header5', 'header6'):
         return _node(kind, children=_inline(block['children']))
     if kind == 'blockquote':
         return _node(kind, children=[_paragraph(block['children'])])
-    if kind == 'check_list_item':
-        return _node(kind, checked=block['checked'], children=_inline(block['children']))
     if kind in ('ordered_list', 'unordered_list'):
         return _node(kind, children=[_node('list_item', children=[_paragraph(item['children'])])
                                      for item in block['items']])
@@ -439,14 +437,20 @@ def _compile_block(block):
     if kind == 'divider':
         return _node(kind, children=[_node(text='')])
     if kind == 'table':
-        width = len(block['rows'][0]['cells'])
+        width = len(block['children'][0]['children'])
         rows = []
-        for row in block['rows']:
+        for row in block['children']:
+            if row['type'] != 'table_row':
+                raise ValueError('Expected table_row')
+            if not 1 <= len(row['children']) == width <= 20:
+                raise ValueError('Table rows must have equal numbers of cells (1 to 20)')
+            if any(cell['type'] != 'table_cell' for cell in row['children']):
+                raise ValueError('Expected table_cell')
             rows.append(_node('table_row', style={'min_height': 42}, children=[
                 _node('table_cell',
                       style={'text_align': 'left', 'align_items': 'center', 'background_color': ''},
                       inherit_style={'text_align': 'left', 'background_color': ''},
-                      children=_inline(cell['children'])) for cell in row['cells']
+                      children=_inline(cell['children'])) for cell in row['children']
             ]))
         return _node(kind, columns=[{'width': 336} for _ in range(width)],
                      ui={'alternate_highlight': False},
@@ -457,12 +461,13 @@ def _compile_block(block):
 
 def compile_sdoc(document, username):
     """Add editor metadata to the simplified content validated by seafile-ai."""
+    if set(document) != {'elements'}:
+        raise ValueError('Expected only elements at the document root')
     return {
         'version': 0,
         'format_version': 4,
         'last_modify_user': username,
         'elements': [
-            _node('title', children=[_node(text=document['title'])]),
             *[_compile_block(block) for block in document['elements']],
             _paragraph(),
         ],
