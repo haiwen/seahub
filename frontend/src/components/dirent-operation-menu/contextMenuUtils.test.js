@@ -1,3 +1,4 @@
+import getTreeNodeMenuList from '@/components/tree-view/get-tree-node-menu-list';
 import Dirent from '@/models/dirent';
 import TextTranslation from '@/utils/text-translation';
 import { Utils } from '@/utils/utils';
@@ -7,7 +8,7 @@ jest.mock('@/components/toast', () => ({ danger: jest.fn() }));
 
 const repoInfo = { owner_email: 'owner@example.com' };
 const folder = { type: 'dir', name: 'folder', permission: 'rw' };
-const protectedFolder = { ...folder, write_protected: true };
+const protectedFolder = { ...folder, permission: 'navigate' };
 const keys = (items) => items.filter(item => item !== 'Divider').map(item => item.key);
 
 test('protected navigation folders expose no operations', () => {
@@ -37,7 +38,12 @@ test('ordinary writable folders retain their operations', () => {
 
 test('directory models preserve protection when cloned and serialized', () => {
   const dirent = new Dirent(protectedFolder);
-  expect(dirent.clone().write_protected).toBe(true);
-  expect(dirent.toJson().write_protected).toBe(true);
-  expect(new Dirent(folder).write_protected).toBe(false);
+  expect(dirent.clone().permission).toBe('navigate');
+  expect(dirent.toJson().permission).toBe('navigate');
+  expect(new Dirent(folder).permission).toBe('rw');
+});
+
+test('tree menus expose no operations for navigate regardless of library permission', () => {
+  expect(getTreeNodeMenuList({ object: protectedFolder }, 'rw', repoInfo)).toEqual([]);
+  expect(getTreeNodeMenuList({ object: protectedFolder }, 'r', repoInfo)).toEqual([]);
 });

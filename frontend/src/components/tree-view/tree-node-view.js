@@ -112,7 +112,7 @@ class TreeNodeView extends React.Component {
   };
 
   onNodeDragStart = (e) => {
-    if (this.props.node.object.write_protected) {
+    if (this.props.node.object.permission === 'navigate') {
       e.preventDefault();
       return;
     }
@@ -123,7 +123,7 @@ class TreeNodeView extends React.Component {
   };
 
   onNodeDragEnter = (e) => {
-    if (this.props.node.object.write_protected) return;
+    if (this.props.node.object.permission === 'navigate') return;
     if (Utils.isIEBrowser() || !this.canDrag) {
       return false;
     }
@@ -134,7 +134,7 @@ class TreeNodeView extends React.Component {
   };
 
   onNodeDragMove = (e) => {
-    if (this.props.node.object.write_protected) return;
+    if (this.props.node.object.permission === 'navigate') return;
     if (Utils.isIEBrowser() || !this.canDrag) {
       return false;
     }
@@ -150,7 +150,7 @@ class TreeNodeView extends React.Component {
   };
 
   onNodeDrop = (e) => {
-    if (this.props.node.object.write_protected) return;
+    if (this.props.node.object.permission === 'navigate') return;
     if (Utils.isIEBrowser() || !this.canDrag) {
       return false;
     }
@@ -282,7 +282,7 @@ class TreeNodeView extends React.Component {
           <div
             className="tree-node-text"
             title={node.object.name}
-            draggable={this.canDrag && !node.object.write_protected}
+            draggable={this.canDrag && node.object.permission !== 'navigate'}
             onDragStart={this.onNodeDragStart}
             onDragEnter={this.onNodeDragEnter}
             onDragLeave={this.onNodeDragLeave}

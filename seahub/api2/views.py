@@ -55,7 +55,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, translate_commit_desc_escape, \
     email2contact_email
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_PREVIEW_EDIT, \
-        PERMISSION_INVISIBLE, REPO_TYPE_WIKI
+        PERMISSION_NAVIGATE, REPO_TYPE_WIKI
 from seahub.group.views import remove_group_common, \
     rename_group_with_new_name, is_group_staff
 from seahub.group.utils import BadGroupNameError, ConflictGroupNameError, \
@@ -1997,7 +1997,7 @@ class FileBlockDownloadLinkView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if check_folder_permission(request, repo_id, parent_dir) is None:
+        if not parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_download:
             return api_error(status.HTTP_403_FORBIDDEN,
                     'You do not have permission to access this repo.')
 
@@ -2266,7 +2266,6 @@ def _collect_dir_file_recursively(username, repo_id, path, all_dirs):
         entry = {}
         if stat.S_ISDIR(dirent.mode):
             entry["type"] = 'dir'
-            entry["write_protected"] = bool(getattr(dirent, 'write_protected', False))
         else:
             entry["type"] = 'file'
             entry['modifier_email'] = dirent.modifier
@@ -2387,7 +2386,6 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
         entry = {}
         if stat.S_ISDIR(dirent.mode):
             dtype = "dir"
-            entry["write_protected"] = bool(getattr(dirent, 'write_protected', False))
         else:
             dtype = "file"
             entry['modifier_email'] = dirent.modifier
@@ -3062,7 +3060,7 @@ class FileMetaDataView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
         parent_dir = os.path.dirname(path)
-        if check_folder_permission(request, repo_id, parent_dir) is None:
+        if check_folder_permission(request, repo_id, path) is None:
             return api_error(status.HTTP_403_FORBIDDEN,
                     'You do not have permission to access this file.')
 
@@ -3103,7 +3101,7 @@ class FileView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
         parent_dir = os.path.dirname(path)
-        if check_folder_permission(request, repo_id, parent_dir) is None:
+        if check_folder_permission(request, repo_id, path) is None:
             return api_error(status.HTTP_403_FORBIDDEN,
                     'You do not have permission to access this file.')
 
@@ -3454,7 +3452,7 @@ class FileDetailView(APIView):
 
         # permission check
         parent_dir = os.path.dirname(path)
-        permission = check_folder_permission(request, repo_id, parent_dir)
+        permission = check_folder_permission(request, repo_id, path)
         if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -3857,10 +3855,10 @@ class DirView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        permission = check_folder_permission(request, repo_id, path, allow_navigation=True)
+        permission = check_folder_permission(request, repo_id, path)
         if not permission:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-        if permission != PERMISSION_INVISIBLE and parse_repo_perm(permission).can_download is False and \
+        if permission != PERMISSION_NAVIGATE and parse_repo_perm(permission).can_download is False and \
            not is_web_request(request):
             # preview only repo and this request does not came from web brower
             error_msg = 'Permission denied.'

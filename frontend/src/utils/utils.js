@@ -537,7 +537,7 @@ export const Utils = {
 
     let list = [];
     const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, PERMISSION, STAR, UNSTAR } = TextTranslation;
-    if (dirent.write_protected) {
+    if (dirent.permission === 'navigate') {
       return [];
     }
     const permission = dirent.permission;
@@ -614,14 +614,14 @@ export const Utils = {
   },
 
   canDownloadFile: function (dirent) {
-    if (dirent.write_protected) return false;
+    if (dirent.permission === 'navigate') return false;
     const { permission } = dirent;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
     return (permission == 'rw' || permission == 'r') || (isCustomPermission && customPermission.permission.download);
   },
 
   canDeleteFile: function (dirent) {
-    if (dirent.write_protected) return false;
+    if (dirent.permission === 'navigate') return false;
     const { permission } = dirent;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
     const perm = (permission == 'rw' || permission == 'cloud-edit') || (isCustomPermission && customPermission.permission.delete);
@@ -1931,7 +1931,7 @@ export const Utils = {
 
   getUserPermission: function (userPerm) {
     const { custom_permission } = window;
-    const common_permissions = ['rw', 'r', 'admin', 'cloud-edit', 'preview'];
+    const common_permissions = ['rw', 'r', 'admin', 'cloud-edit', 'preview', 'navigate'];
     // visit the shared repo(virtual repo) by custom permission
     if (!custom_permission || common_permissions.indexOf(userPerm) > -1) {
       return { isCustomPermission: false };

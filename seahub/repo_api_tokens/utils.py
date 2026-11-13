@@ -44,9 +44,6 @@ def _collect_dir_file_recursively(repo_id, path, all_dirs):
         entry = {}
         if stat.S_ISDIR(dirent.mode):
             entry["type"] = 'dir'
-            # Repository API tokens list as the repository owner, so these
-            # entries have no user-specific navigation protection.
-            entry["write_protected"] = bool(getattr(dirent, 'write_protected', False))
         else:
             entry["type"] = 'file'
             entry['modifier_email'] = dirent.modifier
@@ -129,7 +126,6 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
             dir_info["name"] = dirent.obj_name
             dir_info["mtime"] = timestamp_to_isoformat_timestr(dirent.mtime)
             dir_info["permission"] = dirent.permission
-            dir_info["write_protected"] = bool(getattr(dirent, 'write_protected', False))
             dir_info["parent_dir"] = parent_dir
             dir_info_list.append(dir_info)
 

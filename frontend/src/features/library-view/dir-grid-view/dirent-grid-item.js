@@ -201,7 +201,7 @@ class DirentGridItem extends React.Component {
   };
 
   onGridItemDragStart = (e) => {
-    if (this.props.dirent.write_protected || this.props.selectedDirentList.some(item => item.write_protected)) {
+    if (this.props.dirent.permission === 'navigate' || this.props.selectedDirentList.some(item => item.permission === 'navigate')) {
       e.preventDefault();
       return;
     }
@@ -222,7 +222,7 @@ class DirentGridItem extends React.Component {
   };
 
   onGridItemDragEnter = (e) => {
-    if (this.props.dirent.write_protected) return;
+    if (this.props.dirent.permission === 'navigate') return;
     if (Utils.isIEBrowser() || !this.canDrag) {
       return false;
     }
@@ -232,7 +232,7 @@ class DirentGridItem extends React.Component {
   };
 
   onGridItemDragOver = (e) => {
-    if (this.props.dirent.write_protected) return;
+    if (this.props.dirent.permission === 'navigate') return;
     if (Utils.isIEBrowser() || !this.canDrag) {
       return false;
     }
@@ -253,7 +253,7 @@ class DirentGridItem extends React.Component {
   };
 
   onGridItemDragDrop = (e) => {
-    if (this.props.dirent.write_protected) return;
+    if (this.props.dirent.permission === 'navigate') return;
     if (Utils.isIEBrowser() || !this.canDrag) {
       return false;
     }
@@ -487,7 +487,7 @@ class DirentGridItem extends React.Component {
               'grid-drop-show': isGridDropTipShow,
               'video-preview-container': isVideo
             })}
-            draggable={this.canDrag && !dirent.write_protected}
+            draggable={this.canDrag && dirent.permission !== 'navigate'}
             onDragStart={this.onGridItemDragStart}
             onDragEnter={this.onGridItemDragEnter}
             onDragOver={this.onGridItemDragOver}
@@ -576,7 +576,7 @@ class DirentGridItem extends React.Component {
               />
             }
           </div>
-          <div className="grid-file-name" onDragStart={this.onGridItemDragStart} draggable={this.canDrag && !dirent.write_protected} >
+          <div className="grid-file-name" onDragStart={this.onGridItemDragStart} draggable={this.canDrag && dirent.permission !== 'navigate'} >
             {(!dirent.isDir() && !this.canPreview) ?
               <a
                 className="sf-link grid-file-name-link"

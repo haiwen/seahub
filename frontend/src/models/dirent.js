@@ -15,7 +15,6 @@ class Dirent {
       this.mtime_relative = dayjs.unix(json.mtime).locale(lang).fromNow();
     }
     this.permission = json.permission || 'rw';
-    this.write_protected = json.write_protected || false;
     this.isSelected = json.isSelected || false;
     this.starred = json.starred || false;
     if (json.type === 'dir') {
@@ -72,7 +71,7 @@ class Dirent {
       mtime: this.mtime,
       type: this.type,
       is_dir: this.type !== 'file',
-      write_protected: this.write_protected,
+      permission: this.permission,
       size: this.size,
       modifier_name: this.modifier_name,
       modifier_email: this.modifier_email,

@@ -420,7 +420,7 @@ class DirentListItem extends React.Component {
   };
 
   onItemDragStart = (e) => {
-    if (this.props.dirent.write_protected || this.props.selectedDirentList.some(item => item.write_protected)) {
+    if (this.props.dirent.permission === 'navigate' || this.props.selectedDirentList.some(item => item.permission === 'navigate')) {
       e.preventDefault();
       return;
     }
@@ -454,7 +454,7 @@ class DirentListItem extends React.Component {
   };
 
   onItemDragEnter = (e) => {
-    if (this.props.dirent.write_protected) return;
+    if (this.props.dirent.permission === 'navigate') return;
     if (Utils.isIEBrowser() || !this.state.canDrag) {
       return false;
     }
@@ -465,7 +465,7 @@ class DirentListItem extends React.Component {
   };
 
   onItemDragOver = (e) => {
-    if (this.props.dirent.write_protected) return;
+    if (this.props.dirent.permission === 'navigate') return;
     if (Utils.isIEBrowser() || !this.state.canDrag) {
       return false;
     }
@@ -496,7 +496,7 @@ class DirentListItem extends React.Component {
   };
 
   onItemDragDrop = (e) => {
-    if (this.props.dirent.write_protected) return;
+    if (this.props.dirent.permission === 'navigate') return;
     if (Utils.isIEBrowser() || !this.state.canDrag) {
       return false;
     }
@@ -678,7 +678,7 @@ class DirentListItem extends React.Component {
                   ? <a className="sf-link text-truncate" onClick={this.onItemClick}>{dirent.name}</a>
                   : <a className="text-truncate" href={this.getDirentHref()} onClick={this.onItemClick}>{dirent.name}</a>
                 }
-                {!dirent.write_protected && dirent.starred &&
+                {dirent.permission !== 'navigate' && dirent.starred &&
                 <OpIcon
                   id={`star-icon-${dirent.id}`}
                   className="star-icon ml-2 flex-shrink-0"
@@ -696,7 +696,7 @@ class DirentListItem extends React.Component {
           </div>
 
           {/* Operations */}
-          {!dirent.write_protected && (
+          {dirent.permission !== 'navigate' && (
             <div className="dirent-mobile-ops">
               <MobileItemMenu>
                 {this.props.getDirentItemMenuList(dirent, true)
@@ -729,7 +729,7 @@ class DirentListItem extends React.Component {
           { 'hover': isOperationShow },
         )}
         style={gridStyle || undefined}
-        draggable={canDrag && !dirent.write_protected}
+        draggable={canDrag && dirent.permission !== 'navigate'}
         onFocus={this.onMouseEnter}
         onMouseEnter={this.onMouseEnter}
         onMouseOver={this.onMouseOver}
@@ -763,7 +763,7 @@ class DirentListItem extends React.Component {
 
         {/* Star */}
         <div className="dirent-operation dirent-operation-star">
-          {!dirent.write_protected && dirent.starred !== undefined &&
+          {dirent.permission !== 'navigate' && dirent.starred !== undefined &&
             <OpIcon
               id={`star-icon-${dirent.id}`}
               className="star-icon"
@@ -814,7 +814,7 @@ class DirentListItem extends React.Component {
                   <a href={this.getDirentHref()} onClick={this.onItemClick}>{dirent.name}</a>
                 }
               </span>
-              {!dirent.write_protected && this.state.isOperationShow && (
+              {dirent.permission !== 'navigate' && this.state.isOperationShow && (
                 <CustomDropdown
                   target={`item-dropdown-${dirent.id}`}
                   items={this.getItemMenuList(dirent, true)}

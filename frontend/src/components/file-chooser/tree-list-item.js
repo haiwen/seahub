@@ -48,7 +48,7 @@ class TreeViewItem extends React.Component {
 
   onItemClick = (e) => {
     e.stopPropagation(); // need prevent event popup
-    if (this.props.node.object.write_protected) {
+    if (this.props.node.object.permission === 'navigate') {
       this.onToggleClick(e);
       return;
     }

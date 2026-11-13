@@ -2,7 +2,7 @@ import TextTranslation from '../../utils/text-translation';
 import { Utils } from '../../utils/utils';
 
 const getTreeNodeMenuList = (node, userPerm, currentRepoInfo) => {
-  if (node.object.write_protected) return [];
+  if (node.object.permission === 'navigate') return [];
   const { NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE, OPEN_VIA_CLIENT } = TextTranslation;
   let menuList = node.object.type === 'dir'
     ? [NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE]

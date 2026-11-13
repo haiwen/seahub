@@ -142,7 +142,7 @@ export const getBatchMenuList = (repoInfo, userPerm, selectedDirents, getItemMen
   }
 
   let batchOptions = [];
-  if (selectedDirents.some(dirent => dirent.write_protected)) {
+  if (selectedDirents.some(dirent => dirent.permission === 'navigate')) {
     return batchOptions;
   }
   canDownload && batchOptions.push(TextTranslation.DOWNLOAD);
