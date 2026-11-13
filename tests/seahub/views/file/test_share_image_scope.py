@@ -7,6 +7,12 @@ from seahub.share.models import check_share_link_access_by_scope
 
 
 class ShareImageScopeTest(unittest.TestCase):
+    def setUp(self):
+        # File type detection reads database-backed Constance settings.
+        text_ext = patch('seahub.utils.get_conf_text_ext', return_value=[])
+        text_ext.start()
+        self.addCleanup(text_ext.stop)
+
     def test_login_required_rejects_before_share_lookup(self):
         request = SimpleNamespace(
             GET={'path': '/image.png', 'token': 'share'},

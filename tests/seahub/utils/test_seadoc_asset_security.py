@@ -10,6 +10,10 @@ from seahub.seadoc import apis, utils
 
 class SeadocAssetSecurityTest(unittest.TestCase):
     def setUp(self):
+        # File type detection reads database-backed Constance settings.
+        text_ext = patch('seahub.utils.get_conf_text_ext', return_value=[])
+        text_ext.start()
+        self.addCleanup(text_ext.stop)
         self.request = RequestFactory().get(
             '/asset', HTTP_IF_MODIFIED_SINCE='Fri, 01 Jan 2027 00:00:00 GMT')
         self.request.user = SimpleNamespace(username='user')
