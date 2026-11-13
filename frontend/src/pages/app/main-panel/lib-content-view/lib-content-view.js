@@ -3057,7 +3057,7 @@ class LibContentView extends React.Component {
       enableDirPrivateShare = true;
     }
 
-    let canUpload = true;
+    let canUpload = ['rw', 'admin', 'cloud-edit'].includes(userPerm);
     const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
     if (isCustomPermission) {
       const { upload } = customPermission.permission;

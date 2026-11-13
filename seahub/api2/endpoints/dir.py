@@ -28,7 +28,7 @@ from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.utils.repo import parse_repo_perm
-from seahub.constants import PERMISSION_INVISIBLE, PERMISSION_READ
+from seahub.constants import PERMISSION_READ, PERMISSION_NAVIGATE
 from seahub.repo_metadata.models import RepoMetadata
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
 from seahub.settings import THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, ENABLE_THUMBNAIL_SERVER
@@ -75,15 +75,13 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
 
         for dirent in dir_list:
 
-            if dirent.permission == PERMISSION_INVISIBLE:
-                continue
-
             dir_info = {}
             dir_info["type"] = "dir"
             dir_info["id"] = dirent.obj_id
             dir_info["name"] = dirent.obj_name
             dir_info["mtime"] = dirent.mtime
-            dir_info["permission"] = repo_permission or dirent.permission
+            dir_info["permission"] = (PERMISSION_NAVIGATE if dirent.permission == PERMISSION_NAVIGATE
+                                      else repo_permission or dirent.permission)
             dir_info["parent_dir"] = parent_dir
             dir_info_list.append(dir_info)
 

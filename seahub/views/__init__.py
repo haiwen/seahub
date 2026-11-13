@@ -64,7 +64,7 @@ from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
 
 from seahub.ocm.settings import ENABLE_OCM, OCM_REMOTE_SERVERS
 from seahub.ocm_via_webdav.settings import ENABLE_OCM_VIA_WEBDAV
-from seahub.constants import PERMISSION_READ, PERMISSION_INVISIBLE
+from seahub.constants import PERMISSION_READ, PERMISSION_INVISIBLE, PERMISSION_NAVIGATE
 from seahub.group.settings import GROUP_IMPORT_MEMBERS_EXTRA_MSG
 
 from seahub.weixin.settings import ENABLE_WEIXIN
@@ -136,6 +136,8 @@ def check_folder_permission(request, repo_id, path):
         return None
     if not permission or permission == PERMISSION_INVISIBLE:
         return None
+    if permission == PERMISSION_NAVIGATE:
+        return permission
 
     # A read-only repository makes every existing permission read-only; it
     # must not grant access to users who have no permission for the repository.

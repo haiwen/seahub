@@ -584,7 +584,7 @@ def convert_repo_path_when_can_not_view_file(request, repo_id, path):
             return render_permission_error(request, _('Unable to view file'))
 
     parent_dir = os.path.dirname(path)
-    permission = check_folder_permission(request, repo_id, parent_dir)
+    permission = check_folder_permission(request, repo_id, path)
     if not permission:
         return render_permission_error(request, _('Unable to view file'))
 
@@ -612,7 +612,7 @@ def view_lib_file(request, repo_id, path):
     username = request.user.username
     parent_dir = os.path.dirname(path)
 
-    permission = check_folder_permission(request, repo_id, parent_dir)
+    permission = check_folder_permission(request, repo_id, path)
     if not permission:
         return convert_repo_path_when_can_not_view_file(request, repo_id, path)
 
