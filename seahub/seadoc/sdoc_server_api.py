@@ -66,8 +66,6 @@ class SdocServerAPI(object):
         access_token = jwt.encode({
             'file_uuid': self.doc_uuid,
             'origin_doc_uuid': origin_doc_uuid,
-            'origin_doc_name': origin_doc_name,
-            'scope': 'document:publish',
             'exp': int(time.time()) + 300,
         }, SEADOC_PRIVATE_KEY, algorithm='HS256')
         headers = {'Authorization': 'Token ' + access_token}
