@@ -67,17 +67,17 @@ class WikisViewTest(BaseTestCase):
         assert 'published/test-wiki' in json_resp['data'][0]['link']
         assert json_resp['data'][0]['owner'] == self.user.username
 
-    def test_can_add(self):
+    def test_cannot_add_legacy_wiki(self):
         assert len(Wiki.objects.all()) == 0
 
         resp = self.client.post(self.url, {
             'repo_id': self.repo.id,
         })
-        self.assertEqual(200, resp.status_code)
-
-        assert len(Wiki.objects.all()) == 1
-        w = Wiki.objects.all()[0]
-        assert w.created_at is not None
+        self.assertEqual(403, resp.status_code)
+        self.assertEqual(json.loads(resp.content)['error_msg'],
+                         'Creating legacy wikis is no longer supported.')
+        self.assertFalse(Wiki.objects.exists())
+        self.assertFalse(seafile_api.get_file_id_by_path(self.repo.id, '/home.md'))
 
     def test_403_when_add_wiki_with_can_publish_repo_false(self):
         with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_CAN_PUBLISH_REPO_FALSE):
@@ -122,4 +122,3 @@ class WikiViewTest(BaseTestCase):
 
         self.assertEqual(200, resp.status_code)
         assert json_resp["permission"] == "public"
-
