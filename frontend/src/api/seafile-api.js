@@ -1172,12 +1172,12 @@ class SeafileAPI {
     return this.req.get(url);
   }
 
-  getFileUploadedBytes(repoID, filePath, fileName, lastModify) {
+  getFileUploadedBytes(repoID, filePath, fileName, fileMtime) {
     let url = this.server + '/api/v2.1/repos/' + repoID + '/file-uploaded-bytes/';
     let params = {
       parent_dir: filePath,
       file_name: fileName,
-      last_modify: lastModify,
+      file_mtime: fileMtime,
     };
     return this.req.get(url, { params: params });
   }

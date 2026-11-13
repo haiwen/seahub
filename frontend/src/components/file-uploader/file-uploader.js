@@ -180,7 +180,7 @@ class FileUploader extends React.Component {
       };
     }
     const lastModified = resumableFile.file.lastModified;
-    resumableFile.formData['last_modify'] = dayjs(lastModified).format('YYYY-MM-DDTHH:mm:ssZ');
+    resumableFile.formData['file_mtime'] = dayjs(lastModified).format('YYYY-MM-DDTHH:mm:ssZ');
   };
 
   onFileAdded = (resumableFile, files) => {
@@ -244,7 +244,7 @@ class FileUploader extends React.Component {
     if (resumableFile.uploadLink) {
       this.resumable.opts.target = resumableFile.uploadLink;
     }
-    seafileAPI.getFileUploadedBytes(repoID, path, resumableFile.fileName, resumableFile.formData.last_modify).then(res => {
+    seafileAPI.getFileUploadedBytes(repoID, path, resumableFile.fileName, resumableFile.formData.file_mtime).then(res => {
       if (this.isCancellingAll || this.suppressAdds || this.uploadSession !== sessionAtRequest) return;
       let uploadedBytes = res.data.uploadedBytes;
       let blockSize = parseInt(resumableUploadFileBlockSize) * 1024 * 1024 || 1024 * 1024;
@@ -726,7 +726,7 @@ class FileUploader extends React.Component {
     var firedRetry = false;
     resumableFile.resumableObj.on('chunkingComplete', () => {
       if (!firedRetry) {
-        seafileAPI.getFileUploadedBytes(repoID, path, fileName, resumableFile.formData.last_modify).then(res => {
+        seafileAPI.getFileUploadedBytes(repoID, path, fileName, resumableFile.formData.file_mtime).then(res => {
           let uploadedBytes = res.data.uploadedBytes;
           let blockSize = parseInt(resumableUploadFileBlockSize) * 1024 * 1024 || 1024 * 1024;
           let offset = Math.floor(uploadedBytes / blockSize);
