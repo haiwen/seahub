@@ -13,6 +13,16 @@ from seahub.utils import is_valid_email
 from seahub.base.accounts import User
 
 RE_VALID_USERNAME = re.compile(r'[\w.@+-]+$')
+INVALID_PASSWORD_MESSAGE = "Password must not be empty, be '!', or start or end with whitespace."
+
+
+def is_valid_password(password):
+    """
+    Whether the password can be entered at the web login, which strips
+    surrounding whitespace and requires a non-empty value; '!' marks a password
+    as unusable.
+    """
+    return password not in ('', '!') and password == password.strip()
 
 
 class Command(BaseCommand):
@@ -29,19 +39,26 @@ class Command(BaseCommand):
             help=(
                 'Tells Django to NOT prompt the user for input of any kind. '
                 'You must use --%s with --noinput, along with an option for '
-                'any other required field. Superusers created with --noinput will '
-                'not be able to log in until they\'re given a valid password.' %
+                'any other required field. Superusers created with --noinput and '
+                'without --password will not be able to log in until they\'re given '
+                'a valid password.' %
                 'username'
             ),
         )
 
-        for field in ['username', 'email', 'password']:
+        for field in ['username', 'email']:
             parser.add_argument(
                 '--%s' % field,
                 # dest=field,
                 default=None,
                 help='Specifies the %s for the superuser.' % field,
             )
+
+        parser.add_argument(
+            '--password',
+            default=None,
+            help='Specifies the password for the superuser, or - to read it from stdin.',
+        )
 
     def handle(self, *args, **options):
         username = options.get('username', None)
@@ -58,7 +75,12 @@ class Command(BaseCommand):
             if not is_valid_email(email):
                 raise CommandError("Invalid email address.")
 
-        password = ''
+        password = options.get('password', None)
+        if password == '-':
+            password = sys.stdin.read()
+
+        if password is not None and not is_valid_password(password):
+            raise CommandError(INVALID_PASSWORD_MESSAGE)
 
         # Try to determine the current system user's username to use as a default.
         try:
@@ -105,8 +127,8 @@ class Command(BaseCommand):
                             sys.stderr.write("Error: Your passwords didn't match.\n")
                             password = None
                             continue
-                    if password.strip() == '':
-                        sys.stderr.write("Error: Blank passwords aren't allowed.\n")
+                    if not is_valid_password(password):
+                        sys.stderr.write("Error: %s\n" % INVALID_PASSWORD_MESSAGE)
                         password = None
                         continue
                     break
