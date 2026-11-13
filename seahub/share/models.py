@@ -13,6 +13,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.hashers import check_password
+from django.utils.crypto import salted_hmac, constant_time_compare
 
 
 from seahub.signals import repo_deleted
@@ -48,13 +49,20 @@ def _get_link_key(token, is_upload_link=False):
         'visited_fs_' + token
 
 
+def get_share_link_password_version(sharelink):
+    return salted_hmac('share-link-password', sharelink.password or '', algorithm='sha256').hexdigest()
+
+
 def set_share_link_access(request, token, is_upload_link=False):
     """Remember which shared download/upload link user can access without
     providing password.
     """
-    if request.session:
+    if request.session is not None:
         link_key = _get_link_key(token, is_upload_link)
-        request.session[link_key] = True
+        model = UploadLinkShare if is_upload_link else FileShare
+        sharelink = model.objects.filter(token=token).first()
+        if sharelink:
+            request.session[link_key] = get_share_link_password_version(sharelink)
     else:
         # should never reach here in normal case
         logger.warning('Failed to remember shared link password, request.session'
@@ -66,10 +74,12 @@ def check_share_link_access(request, token, is_upload_link=False):
     providing password.
     """
     link_key = _get_link_key(token, is_upload_link)
-    if request.session.get(link_key, False):
-        return True
-    else:
+    version = request.session.get(link_key)
+    if not isinstance(version, str):
         return False
+    model = UploadLinkShare if is_upload_link else FileShare
+    sharelink = model.objects.filter(token=token).first()
+    return bool(sharelink and constant_time_compare(version, get_share_link_password_version(sharelink)))
 
 
 def check_share_link_access_by_scope(request, sharelink):

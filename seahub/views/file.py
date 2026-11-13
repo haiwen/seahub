@@ -45,7 +45,7 @@ from seahub.auth import SESSION_MOBILE_LOGIN_KEY
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.base.accounts import ANONYMOUS_EMAIL, User
 from seahub.base.templatetags.seahub_tags import file_icon_filter
-from seahub.share.models import FileShare, check_share_link_common
+from seahub.share.models import FileShare, check_share_link_common, check_share_link_access_by_scope
 from seahub.share.decorators import share_link_audit, share_link_login_required
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import Wiki, WikiDoesNotExist, WikiPageMissing
@@ -58,6 +58,8 @@ from seahub.utils import render_error, is_org_context, \
     normalize_cache_key, gen_file_get_url_by_sharelink, gen_file_get_url_new, \
     get_site_scheme_and_netloc, get_file_history_suffix, IS_EMAIL_CONFIGURED
 from seahub.utils.ip import get_remote_ip
+from seahub.utils.markdown import markdown_contains_image
+from seahub.utils.document_assets import get_share_upload_access
 from seahub.utils.file_types import (IMAGE, PDF, SVG, AUDIO,
                                      MARKDOWN, TEXT, VIDEO, SEADOC, EXCALIDRAW, EPUB)
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
@@ -1429,7 +1431,9 @@ def view_shared_file(request, fileshare):
         else:
             if not request.user.is_authenticated:
                 username = 'anon_%d' % int(time.time() * 1000)
-            ret_dict['seadoc_access_token'] = gen_share_seadoc_access_token(file_uuid, filename, username, name, permission=seadoc_perm)
+            ret_dict['seadoc_access_token'] = gen_share_seadoc_access_token(
+                file_uuid, filename, username, name, permission=seadoc_perm,
+                share_access=get_share_upload_access(request, fileshare, path))
 
         ret_dict['name'] = name
         ret_dict['share_link_username'] = username
@@ -1437,6 +1441,7 @@ def view_shared_file(request, fileshare):
         send_file_access_msg(request, repo, path, 'web')
         request.session['seadoc_share_session'] = {
             'file_uuid': file_uuid,
+            'share_token': fileshare.token,
             'permission': seadoc_perm,
             'seadoc_access_token': ret_dict['seadoc_access_token'],
         }
@@ -1453,13 +1458,16 @@ def view_shared_file(request, fileshare):
         if not can_edit:
             ret_dict['excalidraw_access_token'] = gen_exdraw_access_token(file_uuid, filename, username, permission=exdraw_perm)
         else:
-            ret_dict['excalidraw_access_token'] = gen_share_exdraw_access_token(file_uuid, filename, username, name, permission=exdraw_perm)
+            ret_dict['excalidraw_access_token'] = gen_share_exdraw_access_token(
+                file_uuid, filename, username, name, permission=exdraw_perm,
+                share_access=get_share_upload_access(request, fileshare, path))
 
         ret_dict['name'] = name
         ret_dict['share_link_username'] = username
         send_file_access_msg(request, repo, path, 'web')
         request.session['exdraw_share_session'] = {
             'file_uuid': file_uuid,
+            'share_token': fileshare.token,
             'permission': exdraw_perm,
             'excalidraw_access_token': ret_dict['excalidraw_access_token'],
         }
@@ -1733,11 +1741,15 @@ def view_file_via_shared_dir(request, fileshare):
         ret_dict['can_edit_file'] = can_edit
         seadoc_perm = 'rw' if can_edit else 'r'
         ret_dict['file_perm'] = seadoc_perm
-        ret_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, filename, username, permission=seadoc_perm)
+        ret_dict['seadoc_access_token'] = gen_seadoc_access_token(
+            file_uuid, filename, username, permission=seadoc_perm,
+            share_access=get_share_upload_access(request, fileshare, real_path))
 
         send_file_access_msg(request, repo, real_path, 'web')
         request.session['seadoc_share_session'] = {
             'file_uuid': file_uuid,
+            'share_token': fileshare.token,
+            'share_file_path': real_path,
             'permission': seadoc_perm,
             'seadoc_access_token': ret_dict['seadoc_access_token'],
         }
@@ -2106,6 +2118,14 @@ def view_media_file_via_share_link(request):
     if not image_path or not token:
         return HttpResponseBadRequest('invalid params')
 
+    if settings.SHARE_LINK_LOGIN_REQUIRED and not request.user.is_authenticated:
+        return render_permission_error(request, _('Permission denied'))
+
+    image_file_name = os.path.basename(image_path)
+    image_type, image_ext = get_file_type_and_ext(image_file_name)
+    if image_type != IMAGE:
+        return render_error(request, 'Invalid file type')
+
     file_share = FileShare.objects.get_valid_file_link_by_token(token)
 
     if not file_share:
@@ -2116,7 +2136,7 @@ def view_media_file_via_share_link(request):
         err_msg = 'Share link has expired'
         return render_error(request, err_msg)
 
-    if not check_share_link_user_access(file_share, request.user.username):
+    if not check_share_link_access_by_scope(request, file_share):
         err_msg = _('Permission denied')
         return render_error(request, err_msg)
 
@@ -2128,7 +2148,7 @@ def view_media_file_via_share_link(request):
     shared_file_name = os.path.basename(file_share.path)
     file_type, file_ext = get_file_type_and_ext(shared_file_name)
 
-    if file_type != MARKDOWN and file_type != EXCALIDRAW:
+    if file_type != MARKDOWN:
         err_msg = 'Invalid file type'
         return render_error(request, err_msg)
 
@@ -2148,19 +2168,10 @@ def view_media_file_via_share_link(request):
     if err_msg:
         return render_error(request, err_msg)
 
-    # If the image does not exist in markdown
-    serviceURL = get_service_url().rstrip('/')
-    image_file_name = os.path.basename(image_path)
-
-    # Translation ‘(’ ')'
-    image_file_name = image_file_name.replace('(', r'\(')
-    image_file_name = image_file_name.replace(')', r'\)')
-    encoded_image_file_name = urllib.parse.quote(image_file_name)
-
-    safe_pattern = f'({serviceURL})/lib/({repo_id})/file(.*?){re.escape(encoded_image_file_name)}\\?raw=1'
-    p = re.compile(safe_pattern)
-    result = re.search(p, file_content)
-    if not result:
+    # Only allow images referenced by their full URL in the shared Markdown.
+    image_url = '%s/lib/%s/file%s?raw=1' % (
+        get_service_url().rstrip('/'), repo_id, urllib.parse.quote(image_path))
+    if not markdown_contains_image(file_content, image_url):
         return render_error(request, 'Image does not exist')
 
     # get image

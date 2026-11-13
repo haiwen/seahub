@@ -379,6 +379,21 @@ class ShareLinkTest(BaseTestCase):
 
         self._remove_share_link(token)
 
+    def test_get_share_link_if_not_owner(self):
+        for path, is_dir in [(self.file_path, False), ('/', True)]:
+            with self.subTest(path=path):
+                create_link = (FileShare.objects.create_dir_link if is_dir
+                               else FileShare.objects.create_file_link)
+                link = create_link(self.user.username, self.repo_id, path, password='secret123')
+                self.login_as(self.admin)
+                url = reverse('api-v2.1-share-link', args=[link.token])
+                with patch('seahub.api2.endpoints.share_links.get_share_link_info') as get_info:
+                    resp = self.client.get(url)
+                    self.assertEqual(403, resp.status_code)
+                    get_info.assert_not_called()
+                self.assertNotIn(b'secret123', resp.content)
+                link.delete()
+
     def test_get_file_share_link_with_invalid_token(self):
 
         self.login_as(self.user)

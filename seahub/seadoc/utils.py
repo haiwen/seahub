@@ -13,10 +13,12 @@ from zipfile import ZipFile, is_zipfile
 from seaserv import seafile_api, USE_GO_FILESERVER
 
 from seahub.tags.models import FileUUIDMap
-from seahub.settings import SEADOC_PRIVATE_KEY, JWT_PRIVATE_KEY
+from seahub.settings import SEADOC_PRIVATE_KEY, JWT_PRIVATE_KEY, SHARE_LINK_LOGIN_REQUIRED
+from seahub.share.models import FileShare, check_share_link_common, check_share_link_access_by_scope
 from seahub.utils import gen_inner_file_upload_url, normalize_file_path, gen_file_get_url, gen_file_upload_url, gen_inner_file_get_url, \
     get_inner_fileserver_root
 from seahub.utils.auth import AUTHORIZATION_PREFIX
+from seahub.utils.document_assets import get_asset_path
 from seahub.views import check_folder_permission
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
@@ -29,7 +31,7 @@ logger = logging.getLogger(__name__)
 ZSDOC = 'sdoczip'
 
 
-def gen_seadoc_access_token(file_uuid, filename, username, permission='rw', default_title=None):
+def gen_seadoc_access_token(file_uuid, filename, username, permission='rw', default_title=None, share_access=None):
     name = email2nickname(username)
     url, is_default, date_uploaded = api_avatar_url(username)
     if default_title is None:
@@ -42,6 +44,7 @@ def gen_seadoc_access_token(file_uuid, filename, username, permission='rw', defa
         'avatar_url': url,
         'permission': permission,
         'default_title': default_title,
+        'share_access': share_access,
         'exp': int(time.time()) + 86400 * 3,  # 3 days
     },
         SEADOC_PRIVATE_KEY,
@@ -49,7 +52,7 @@ def gen_seadoc_access_token(file_uuid, filename, username, permission='rw', defa
     )
     return access_token
 
-def gen_share_seadoc_access_token(file_uuid, filename, username, name, permission='rw', default_title=None,):
+def gen_share_seadoc_access_token(file_uuid, filename, username, name, permission='rw', default_title=None, share_access=None):
     url, is_default, date_uploaded = api_avatar_url(username)
     if default_title is None:
         default_title = filename
@@ -61,6 +64,7 @@ def gen_share_seadoc_access_token(file_uuid, filename, username, name, permissio
         'avatar_url': url,
         'permission': permission,
         'default_title': default_title,
+        'share_access': share_access,
         'exp': int(time.time()) + 86400 * 3,  # 3 days
     },
         SEADOC_PRIVATE_KEY,
@@ -205,7 +209,9 @@ def import_sdoc_zip(repo_id, parent_dir, filename, file_uuid, username, local_fi
 
 
 def get_seadoc_asset_download_link(repo_id, parent_path, filename, username):
-    file_path = posixpath.join(parent_path, filename)
+    file_path = get_asset_path(parent_path, filename)
+    if not file_path:
+        return None
     obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
     if not obj_id:
         return None
@@ -221,18 +227,44 @@ def can_access_seadoc_asset(request, repo_id, path, file_uuid):
     # login user
     if request.user.username and check_folder_permission(request, repo_id, path):
         return True
-    # share link
-    seadoc_share_session = request.session.get('seadoc_share_session')
-    if seadoc_share_session and seadoc_share_session.get('file_uuid') == file_uuid:
-        return True
-    
-    thumbnail_access_token = request.COOKIES.get('thumbnail_access_token')
+    # Thumbnail generation uses its own signed, document-scoped credential.
+    thumbnail_access_token = getattr(request, 'COOKIES', {}).get('thumbnail_access_token')
     if thumbnail_access_token:
-        payload = jwt.decode(thumbnail_access_token, JWT_PRIVATE_KEY, algorithms=['HS256'])
+        try:
+            payload = jwt.decode(thumbnail_access_token, JWT_PRIVATE_KEY, algorithms=['HS256'])
+        except jwt.InvalidTokenError:
+            payload = {}
         if payload.get('file_uuid') == file_uuid:
             return True
 
-    return False
+    # share link
+    seadoc_share_session = request.session.get('seadoc_share_session')
+    if not seadoc_share_session or seadoc_share_session.get('file_uuid') != file_uuid:
+        return False
+    token = seadoc_share_session.get('share_token')
+    if not token or (SHARE_LINK_LOGIN_REQUIRED and not request.user.is_authenticated):
+        return False
+    share = FileShare.objects.get_valid_file_link_by_token(token)
+    if not share or not check_share_link_access_by_scope(request, share):
+        return False
+    password_check_passed, _ = check_share_link_common(request, share)
+    if not password_check_passed:
+        return False
+
+    shared_path = share.path
+    if share.is_dir_share_link():
+        shared_path = seadoc_share_session.get('share_file_path')
+        if not isinstance(shared_path, str) or not shared_path.startswith('/'):
+            return False
+        shared_path = posixpath.normpath(shared_path)
+        share_root = posixpath.normpath(share.path)
+        if posixpath.commonpath([share_root, shared_path]) != share_root:
+            return False
+
+    repo = seafile_api.get_repo(share.repo_id)
+    if not repo or not seafile_api.get_file_id_by_path(share.repo_id, shared_path):
+        return False
+    return get_seadoc_file_uuid(repo, shared_path) == file_uuid
 
 def is_seadoc_revision(doc_uuid, revision=None):
     info = {}
