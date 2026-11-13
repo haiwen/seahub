@@ -34,6 +34,12 @@ class FolderListingPermissionTest(TestCase):
         self.api.get_dir_id_by_path.assert_not_called()
         self.api.get_repo_status.assert_not_called()
 
+    def test_invisible_file_is_denied_even_in_readonly_repository(self):
+        self.api.check_permission_by_path.return_value = 'invisible'
+        self.api.get_repo_status.return_value = 1
+        self.assertIsNone(views.check_folder_permission(self.request, 'repo', '/bridge/secret.txt'))
+        self.api.get_repo_status.assert_not_called()
+
     def test_visible_permissions_and_readonly_repository(self):
         self.api.check_permission_by_path.return_value = 'rw'
         self.assertEqual(views.check_folder_permission(self.request, 'repo', '/visible'), 'rw')
@@ -94,7 +100,7 @@ class NavigationFileAccessTest(TestCase):
                 api.get_repo.return_value = SimpleNamespace(id='repo')
                 api.get_file_id_by_path.return_value = 'file-id'
                 api.check_permission_by_path.side_effect = lambda repo, path, username: (
-                    'navigate' if path == '/bridge' else None)
+                    'navigate' if path == '/bridge' else 'invisible')
                 # The legacy view uses get_repo; the v2.1 view uses seafile_api.
                 with patch.object(module, 'get_repo', create=True,
                                   return_value=SimpleNamespace(id='repo')):
