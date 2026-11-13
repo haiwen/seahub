@@ -1,7 +1,6 @@
 -r requirements.txt
 
 mock
-nose
 exam
 splinter
 pytest==7.4.4

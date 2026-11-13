@@ -24,11 +24,12 @@ if [[ ${TRAVIS} != "" ]]; then
 fi
 
 set -x
-SEAHUB_TESTSDIR=$(python -c "import os; print(os.path.dirname(os.path.realpath('$0')))")
+SEAHUB_TESTSDIR=$($PYTHON -c "import os; print(os.path.dirname(os.path.realpath('$0')))")
 SEAHUB_SRCDIR=$(dirname "${SEAHUB_TESTSDIR}")
+PYTHON_VERSION=$($PYTHON -c 'import sys; print("%s.%s" % sys.version_info[:2])')
 
 export SEAHUB_LOG_DIR='/tmp/logs'
-export PYTHONPATH="/usr/local/lib/python3.8/site-packages:/usr/local/lib/python3.8/dist-packages:/usr/lib/python3.8/site-packages:/usr/lib/python3.8/dist-packages:${SEAHUB_SRCDIR}/thirdpart:${PYTHONPATH}"
+export PYTHONPATH="/usr/local/lib/python${PYTHON_VERSION}/site-packages:/usr/local/lib/python${PYTHON_VERSION}/dist-packages:/usr/lib/python${PYTHON_VERSION}/site-packages:/usr/lib/python${PYTHON_VERSION}/dist-packages:${SEAHUB_SRCDIR}/thirdpart:${PYTHONPATH}"
 cd "$SEAHUB_SRCDIR"
 set +x
 
@@ -63,7 +64,7 @@ function make_dist() {
 
 function run_tests() {
     set +e
-    py.test $nose_opts tests
+    $PYTHON -m pytest $nose_opts tests
     rvalue=$?
 
     # ignore 120 exited code in python3.6
