@@ -5,6 +5,7 @@ import tempfile
 import uuid
 import stat
 import logging
+import mimetypes
 import requests
 import posixpath
 from urllib.parse import unquote, quote
@@ -26,7 +27,6 @@ from django.utils import timezone
 from django.db import transaction
 from django.urls import reverse
 from django.core.files.uploadhandler import TemporaryFileUploadHandler
-from django.utils.decorators import method_decorator
 from django.views.decorators.http import condition
 
 from seahub.search.utils import is_path_in_virtual_root
@@ -55,6 +55,7 @@ from seahub.utils import get_file_type_and_ext, normalize_file_path, \
         get_non_sdoc_file_exts
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
+from seahub.utils.document_assets import is_valid_asset_filename, get_asset_path, can_upload_document_asset
 from seahub.utils.repo import parse_repo_perm, get_related_users_by_repo
 from seahub.seadoc.models import SeadocHistoryName, SeadocRevision, SeadocCommentReply, SeadocNotification
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
@@ -419,6 +420,8 @@ class SeadocUploadImage(APIView):
         file_list = file_list[:10]
 
         for file in file_list:
+            if not is_valid_asset_filename(file.name):
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Image filename invalid.')
             file_type, ext = get_file_type_and_ext(file.name)
             if file_type != IMAGE:
                 error_msg = file_type_error_msg(ext, PREVIEW_FILEEXT.get('Image'))
@@ -428,6 +431,9 @@ class SeadocUploadImage(APIView):
         if not uuid_map:
             error_msg = 'seadoc uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_upload_document_asset(payload, uuid_map, get_seadoc_file_uuid):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         if check_quota(uuid_map.repo_id) < 0:
             error_msg = _("Out of quota.")
@@ -441,8 +447,7 @@ class SeadocUploadImage(APIView):
         upload_link = get_seadoc_asset_upload_link(repo_id, parent_path, username)
         relative_path = []
         for file in file_list:
-            file_path = posixpath.join(parent_path, file.name)
-            file_path = os.path.normpath(file_path)
+            file_path = get_asset_path(parent_path, file.name)
             files = {'file': file}
             data = {'parent_dir': parent_path, 'filename': file.name, 'target_file': file_path}
             resp = requests.post(upload_link, files=files, data=data)
@@ -456,14 +461,14 @@ class SeadocUploadImage(APIView):
 
 
 def latest_entry(request, file_uuid, filename):
+    if not is_valid_asset_filename(filename):
+        return None
     uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
     if uuid_map:
         try:
             repo_id = uuid_map.repo_id
-            username = request.user.username
-            parent_path = gen_seadoc_image_parent_path(file_uuid, repo_id, username)
-            filepath = os.path.join(parent_path, filename)
-            filepath = os.path.normpath(filepath)
+            parent_path = SDOC_IMAGES_DIR + file_uuid + '/'
+            filepath = get_asset_path(parent_path, filename)
             file_obj = seafile_api.get_dirent_by_path(repo_id, filepath)
             if not file_obj:
                 logger.warning(f'file {filepath} not found')
@@ -483,8 +488,16 @@ class SeadocDownloadImage(APIView):
     permission_classes = ()
     throttle_classes = (UserRateThrottle, )
 
-    @method_decorator(condition(last_modified_func=latest_entry))
     def get(self, request, file_uuid, filename):
+        if not is_valid_asset_filename(filename):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Asset filename invalid.')
+        filetype, fileext = get_file_type_and_ext(filename)
+        # Existing editors use this endpoint for both image and video assets.
+        if filetype not in (IMAGE, VIDEO):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Asset type not supported.')
+        content_type = mimetypes.guess_type(filename)[0] or (
+            ('video/' if filetype == VIDEO else 'image/') + fileext)
+
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
             error_msg = 'seadoc uuid %s not found.' % file_uuid
@@ -501,22 +514,25 @@ class SeadocDownloadImage(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        # main
-        parent_path = gen_seadoc_image_parent_path(file_uuid, repo_id, username)
-        download_link = get_seadoc_asset_download_link(repo_id, parent_path, filename, username)
-        if not download_link:
-            error_msg = 'file %s not found.' % filename
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        resp = requests.get(download_link)
-        if not resp.ok:
-            logger.error(resp.text)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        filetype, fileext = get_file_type_and_ext(filename)
-        response = HttpResponse(
-            content=resp.content, content_type='image/' + fileext)
-        response['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * 7)
-        return response
+        # Evaluate conditional requests only after resource authorization.
+        @condition(last_modified_func=latest_entry)
+        def download(request, file_uuid, filename):
+            parent_path = SDOC_IMAGES_DIR + file_uuid + '/'
+            download_link = get_seadoc_asset_download_link(repo_id, parent_path, filename, username)
+            if not download_link:
+                error_msg = 'file %s not found.' % filename
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            resp = requests.get(download_link)
+            if not resp.ok:
+                logger.error(resp.text)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            response = HttpResponse(
+                content=resp.content, content_type=content_type)
+            response['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * 7)
+            return response
+
+        return download(request, file_uuid, filename)
 
 
 class SeadocUploadVideo(APIView):
@@ -546,6 +562,8 @@ class SeadocUploadVideo(APIView):
         file_list = file_list[:10]
 
         for file in file_list:
+            if not is_valid_asset_filename(file.name):
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Video filename invalid.')
             file_type, ext = get_file_type_and_ext(file.name)
             if file_type != VIDEO:
                 error_msg = file_type_error_msg(ext, PREVIEW_FILEEXT.get('VIDEO'))
@@ -555,6 +573,9 @@ class SeadocUploadVideo(APIView):
         if not uuid_map:
             error_msg = 'seadoc uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_upload_document_asset(payload, uuid_map, get_seadoc_file_uuid):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         if check_quota(uuid_map.repo_id) < 0:
             error_msg = _("Out of quota.")
@@ -569,8 +590,7 @@ class SeadocUploadVideo(APIView):
 
         relative_path = []
         for file in file_list:
-            file_path = posixpath.join(parent_path, file.name)
-            file_path = os.path.normpath(file_path)
+            file_path = get_asset_path(parent_path, file.name)
             files = {'file': file}
             data = {'parent_dir': parent_path, 'filename': file.name, 'target_file': file_path}
             resp = requests.post(upload_link, files=files, data=data)
@@ -589,8 +609,13 @@ class SeadocDownloadVideo(APIView):
     permission_classes = ()
     throttle_classes = (UserRateThrottle, )
 
-    @method_decorator(condition(last_modified_func=latest_entry))
     def get(self, request, file_uuid, filename):
+        if not is_valid_asset_filename(filename):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Asset filename invalid.')
+        filetype, fileext = get_file_type_and_ext(filename)
+        if filetype != VIDEO:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Asset type not supported.')
+
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
             error_msg = 'seadoc uuid %s not found.' % file_uuid
@@ -607,22 +632,25 @@ class SeadocDownloadVideo(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        # main
-        parent_path = gen_seadoc_image_parent_path(file_uuid, repo_id, username)
-        download_link = get_seadoc_asset_download_link(repo_id, parent_path, filename, username)
-        if not download_link:
-            error_msg = 'file %s not found.' % filename
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        resp = requests.get(download_link)
-        if not resp.ok:
-            logger.error(resp.text)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        filetype, fileext = get_file_type_and_ext(filename)
-        response = HttpResponse(
-            content=resp.content, content_type='video/' + fileext)
-        response['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * 7)
-        return response
+        # Evaluate conditional requests only after resource authorization.
+        @condition(last_modified_func=latest_entry)
+        def download(request, file_uuid, filename):
+            parent_path = SDOC_IMAGES_DIR + file_uuid + '/'
+            download_link = get_seadoc_asset_download_link(repo_id, parent_path, filename, username)
+            if not download_link:
+                error_msg = 'file %s not found.' % filename
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            resp = requests.get(download_link)
+            if not resp.ok:
+                logger.error(resp.text)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            response = HttpResponse(
+                content=resp.content, content_type='video/' + fileext)
+            response['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * 7)
+            return response
+
+        return download(request, file_uuid, filename)
 
 
 class SeadocAsyncCopyImages(APIView):

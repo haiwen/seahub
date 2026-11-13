@@ -9,6 +9,9 @@ from seaserv import seafile_api
 
 from seahub.constants import PERMISSION_INVISIBLE
 from seahub.exdraw.settings import EXDRAW_IMAGES_DIR
+from seahub.utils.document_assets import get_asset_path
+from seahub.share.models import FileShare, check_share_link_common, check_share_link_access_by_scope
+from seahub.settings import SHARE_LINK_LOGIN_REQUIRED
 from seahub.tags.models import FileUUIDMap
 from seahub.settings import EXCALIDRAW_PRIVATE_KEY
 from seahub.utils import normalize_file_path, gen_file_get_url, gen_file_upload_url, gen_inner_file_get_url
@@ -21,7 +24,7 @@ from seahub.views import check_folder_permission
 logger = logging.getLogger(__name__)
 
 
-def gen_exdraw_access_token(file_uuid, filename, username, permission='rw'):
+def gen_exdraw_access_token(file_uuid, filename, username, permission='rw', share_access=None):
     name = email2nickname(username)
     url, is_default, date_uploaded = api_avatar_url(username)
     access_token = jwt.encode({
@@ -31,6 +34,7 @@ def gen_exdraw_access_token(file_uuid, filename, username, permission='rw'):
         'name': name,
         'avatar_url': url,
         'permission': permission,
+        'share_access': share_access,
         'exp': int(time.time()) + 86400 * 3,  # 3 days
     },
         EXCALIDRAW_PRIVATE_KEY,
@@ -38,7 +42,7 @@ def gen_exdraw_access_token(file_uuid, filename, username, permission='rw'):
     )
     return access_token
 
-def gen_share_exdraw_access_token(file_uuid, filename, username, name, permission='rw', default_title=None,):
+def gen_share_exdraw_access_token(file_uuid, filename, username, name, permission='rw', default_title=None, share_access=None):
     url, is_default, date_uploaded = api_avatar_url(username)
     if default_title is None:
         default_title = filename
@@ -50,6 +54,7 @@ def gen_share_exdraw_access_token(file_uuid, filename, username, name, permissio
         'avatar_url': url,
         'permission': permission,
         'default_title': default_title,
+        'share_access': share_access,
         'exp': int(time.time()) + 86400 * 3,  # 3 days
     },
         EXCALIDRAW_PRIVATE_KEY,
@@ -159,7 +164,9 @@ def get_exdraw_asset_upload_link(repo_id, parent_path, username):
     return upload_link
 
 def get_exdraw_asset_download_link(repo_id, parent_path, filename, username):
-    file_path = posixpath.join(parent_path, filename)
+    file_path = get_asset_path(parent_path, filename)
+    if not file_path:
+        return None
     obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
     if not obj_id:
         return None
@@ -176,7 +183,20 @@ def can_access_exdraw_asset(request, repo_id, path, file_uuid):
         return True
     # share link
     exdraw_share_session = request.session.get('exdraw_share_session')
-    if exdraw_share_session and exdraw_share_session.get('file_uuid') == file_uuid:
-        return True
-
-    return False
+    if not exdraw_share_session or exdraw_share_session.get('file_uuid') != file_uuid:
+        return False
+    token = exdraw_share_session.get('share_token')
+    if not token or (SHARE_LINK_LOGIN_REQUIRED and not request.user.is_authenticated):
+        return False
+    share = FileShare.objects.get_valid_file_link_by_token(token)
+    if not share or share.is_dir_share_link():
+        return False
+    if not check_share_link_access_by_scope(request, share):
+        return False
+    password_check_passed, _ = check_share_link_common(request, share)
+    if not password_check_passed:
+        return False
+    repo = seafile_api.get_repo(share.repo_id)
+    if not repo or not seafile_api.get_file_id_by_path(share.repo_id, share.path):
+        return False
+    return get_exdraw_file_uuid(repo, share.path) == file_uuid
