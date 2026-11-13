@@ -15,6 +15,13 @@ from seahub.api2.endpoints import share_links
 class MarkdownImageAccessTest(unittest.TestCase):
     url = 'https://example.com/lib/repo/file/shared/photo.png?raw=1'
 
+    def setUp(self):
+        # File classification reads database-backed Constance configuration.
+        # These unit tests exercise the built-in types, not dynamic settings.
+        text_ext = patch('seahub.utils.get_conf_text_ext', return_value=[])
+        text_ext.start()
+        self.addCleanup(text_ext.stop)
+
     def test_supported_images(self):
         for content in ['![image](%s)', '![image][ref]\n\n[ref]: %s', '<img src="%s" />']:
             with self.subTest(content=content):
@@ -50,6 +57,9 @@ class MarkdownImageAccessTest(unittest.TestCase):
 
 class SdocAssetAccessTest(unittest.TestCase):
     def setUp(self):
+        text_ext = patch('seahub.utils.get_conf_text_ext', return_value=[])
+        text_ext.start()
+        self.addCleanup(text_ext.stop)
         self.request = RequestFactory().get(
             '/asset', HTTP_IF_MODIFIED_SINCE='Fri, 01 Jan 2027 00:00:00 GMT')
         self.request.user = SimpleNamespace(username='user')
