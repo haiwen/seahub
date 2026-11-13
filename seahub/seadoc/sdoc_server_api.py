@@ -1,7 +1,10 @@
 import json
+import time
+
+import jwt
 import requests
 
-from seahub.settings import SEADOC_SERVER_URL
+from seahub.settings import SEADOC_PRIVATE_KEY, SEADOC_SERVER_URL
 from seahub.seadoc.utils import gen_seadoc_access_token
 
 
@@ -59,7 +62,14 @@ class SdocServerAPI(object):
             'origin_doc_uuid': origin_doc_uuid,
             'origin_doc_name': origin_doc_name,
         }
-        response = requests.post(url, json=data, headers=self.headers)
+        # Bind the publish notification to both documents with a short-lived token.
+        access_token = jwt.encode({
+            'file_uuid': self.doc_uuid,
+            'origin_doc_uuid': origin_doc_uuid,
+            'exp': int(time.time()) + 300,
+        }, SEADOC_PRIVATE_KEY, algorithm='HS256')
+        headers = {'Authorization': 'Token ' + access_token}
+        response = requests.post(url, json=data, headers=headers)
         return parse_response(response)
     
     def replace_doc(self):
