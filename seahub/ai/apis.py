@@ -743,7 +743,7 @@ class ChatMarkdownArtifactView(APIView):
 
         file_name = os.path.basename(file_path)
         file_type, _ = get_file_type_and_ext(file_name)
-        raw_path, inner_path, user_perm = get_file_view_path_and_perm(request, repo_id, obj_id, file_path)
+        _, inner_path, user_perm = get_file_view_path_and_perm(request, repo_id, obj_id, file_path)
         if user_perm is None:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
@@ -897,6 +897,7 @@ class ChatView(APIView):
                     repo_id,
                     request.user.username,
                     can_upload,
+                    request=request,
                 ),
                 content_type='text/event-stream',
                 headers={
