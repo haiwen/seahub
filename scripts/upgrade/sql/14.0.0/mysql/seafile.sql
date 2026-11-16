@@ -6,4 +6,4 @@ CREATE TABLE IF NOT EXISTS md_server_snapshots (
     version bigint NOT NULL,
     KEY index_snapshots_on_base_id (base_id),
     KEY index_snapshots_on_ctime (ctime)
-) ENGINE = InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
