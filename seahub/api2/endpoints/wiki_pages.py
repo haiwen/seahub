@@ -24,7 +24,8 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.wiki.models import Wiki, WikiPageMissing
 from seahub.wiki.utils import get_wiki_dirs_by_path
-from seahub.utils import gen_inner_file_get_url, normalize_dir_path
+from seahub.utils import gen_inner_file_get_url, normalize_dir_path, \
+    get_file_type_and_ext, is_textual_file
 from seahub.base.templatetags.seahub_tags import email2contact_email, email2nickname
 
 logger = logging.getLogger(__name__)
@@ -152,10 +153,15 @@ class WikiPageContentView(APIView):
         if not file_id:
             return api_error(status.HTTP_404_NOT_FOUND, "File not found")
 
+        file_name = os.path.basename(path)
+        file_type, _ = get_file_type_and_ext(file_name)
+        if not is_textual_file(file_type):
+            return api_error(status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+                             'Only text files are supported.')
+
         # send stats message
         send_file_access_msg(request, repo, path, 'api')
 
-        file_name = os.path.basename(path)
         token = seafile_api.get_fileserver_access_token(repo.repo_id,
                 file_id, 'download', '', 'False')
 
