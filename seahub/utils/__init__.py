@@ -296,7 +296,7 @@ def is_valid_dirent_name(name):
             return False
     if name == '..':
         return False
-    if '/' in name:
+    if '/' in name or '\\' in name:
         return False
     # `repo_id` parameter is not used in seafile api
     return seafile_api.is_valid_filename('fake_repo_id', name)
