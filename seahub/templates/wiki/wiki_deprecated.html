@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block sub_title %}{{ wiki.name }} - {% endblock %}
+
+{% block main_content %}
+<div class="text-panel">
+  <h2>{% translate "Old Wiki is no longer supported" %}</h2>
+  <p>{% translate "This is an old version of Wiki. Content rendering is no longer supported. Please convert it to the new Wiki." %}</p>
+</div>
+{% endblock %}
