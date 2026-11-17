@@ -14,7 +14,6 @@ from seahub.utils import is_pro_version, FILEEXT_TYPE_MAP, IMAGE, VIDEO
 from seahub.utils.file_tags import get_files_tags_in_dir
 from seahub.utils.repo import is_group_repo_staff, is_repo_owner
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.constants import PERMISSION_INVISIBLE
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -120,9 +119,6 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
         dir_list = [dirent for dirent in dir_file_list if stat.S_ISDIR(dirent.mode)]
 
         for dirent in dir_list:
-
-            if dirent.permission == PERMISSION_INVISIBLE:
-                continue
 
             dir_info = {}
             dir_info["type"] = "dir"

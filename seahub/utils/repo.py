@@ -9,7 +9,7 @@ import seaserv
 from seaserv import seafile_api, ccnet_api
 
 from seahub.constants import (
-    PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT, PERMISSION_INVISIBLE,
+    PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT, PERMISSION_INVISIBLE, PERMISSION_NAVIGATE,
     PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN,
     REPO_STATUS_NORMAL, REPO_STATUS_READ_ONLY, CUSTOM_PERMISSION_PREFIX
 )
@@ -93,7 +93,8 @@ def parse_repo_perm(perm):
         'can_generate_share_link',     # generate share link
     ])
 
-    if perm not in get_available_repo_perms():
+    # navigate is an effective access state, not a configurable share permission.
+    if perm not in (None, PERMISSION_NAVIGATE) and perm not in get_available_repo_perms():
         try:
             if CUSTOM_PERMISSION_PREFIX in perm:
                 perm = perm.split('-')[1]

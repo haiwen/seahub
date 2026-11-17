@@ -64,7 +64,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr, datetime_to_isoformat_timestr
 from seahub.base.models import FileComment
-from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_INVISIBLE
+from seahub.constants import PERMISSION_READ_WRITE
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
 from seahub.file_participants.models import FileParticipant
 from seahub.base.accounts import User
@@ -2702,9 +2702,6 @@ class SeadocDirView(APIView):
         uuid_map_queryset = FileUUIDMap.objects.get_fileuuidmaps_by_parent_path(repo_id, path)
         dir_list, file_list = [], []
         for dirent in dirs:
-            if dirent.permission == PERMISSION_INVISIBLE:
-                continue
-
             entry = {}
             if stat.S_ISDIR(dirent.mode):
                 dtype = "dir"

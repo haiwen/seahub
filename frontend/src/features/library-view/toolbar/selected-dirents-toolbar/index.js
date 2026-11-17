@@ -196,21 +196,21 @@ class SelectedDirentsToolbar extends React.Component {
         {selectedLen > 1 && (
           <>
             {this.renderIconButtons(iconOpsForMulti)}
-            <CustomDropdown
+            {menuOpsForMulti.length > 0 && <CustomDropdown
               target="selected-items-dropdown-menu"
               items={menuOpsForMulti}
               triggerClassName="cur-view-path-btn"
-            />
+            />}
           </>
         )}
         {selectedLen === 1 && (
           <>
             {this.renderIconButtons(iconOps)}
-            <CustomDropdown
+            {menuOps.length > 0 && <CustomDropdown
               target="selected-item-dropdown-menu"
               items={menuOps}
               triggerClassName="cur-view-path-btn"
-            />
+            />}
           </>
         )}
       </div>
