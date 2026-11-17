@@ -113,12 +113,6 @@ function reopen_monitor_log() {
     fi
 }
 
-if [[ ${SEAFILE_LOG_TO_STDOUT} != "true" ]]; then
-    MONITOR_LOG_FD_OPEN=false
-    reopen_monitor_log
-    trap reopen_monitor_log USR1
-fi
-
 # check process number
 # $1 : process name
 function check_process() {
@@ -228,6 +222,16 @@ function monitor_seafdav() {
 set_file_config
 
 set_env_config;
+
+if [[ ${SEAFILE_LOG_TO_STDOUT} != "true" ]]; then
+    MONITOR_LOG_FD_OPEN=false
+    reopen_monitor_log
+    trap reopen_monitor_log USR1
+fi
+
+if [[ ${SEAFILE_LOG_TO_STDOUT} != "true" ]]; then
+    exec >/dev/null 2>&1
+fi
 
 log "Start Monitor"
 
