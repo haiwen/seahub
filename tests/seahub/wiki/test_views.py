@@ -16,5 +16,13 @@ class SlugTest(BaseTestCase):
 
     def test_old_home_page(self, ):
         resp = self.client.get(reverse('wiki:slug', args=['new-wiki', 'home']))
-        self.assertEqual(302, resp.status_code)
-        self.assertRegex(resp['Location'], '/published/new-wiki/home.md')
+        self.assertEqual(200, resp.status_code)
+        self.assertTemplateUsed(resp, 'wiki/wiki_deprecated.html')
+        self.assertContains(resp, 'Old Wiki is no longer supported')
+
+    def test_old_wiki_shows_deprecated_notice(self):
+        resp = self.client.get(reverse('wiki:slug', args=['new-wiki', 'home.md']))
+        self.assertEqual(200, resp.status_code)
+        self.assertTemplateUsed(resp, 'wiki/wiki_deprecated.html')
+        self.assertContains(resp, 'Old Wiki is no longer supported')
+        self.assertContains(resp, 'Content rendering is no longer supported')
