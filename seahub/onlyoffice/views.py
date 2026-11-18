@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2017 Seafile Ltd.
 import os
+import re
 import jwt
 import json
 import logging
@@ -28,7 +29,8 @@ from seaserv import seafile_api
 
 
 from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE, \
-        ONLYOFFICE_JWT_SECRET, ONLYOFFICE_JWT_HEADER, ONLYOFFICE_FILE_EXTENSION
+        ONLYOFFICE_JWT_SECRET, ONLYOFFICE_JWT_HEADER, ONLYOFFICE_FILE_EXTENSION, \
+        ONLYOFFICE_APIJS_URL
 from seahub.onlyoffice.utils import get_onlyoffice_dict, get_doc_key_by_repo_id_file_path
 from seahub.onlyoffice.utils import delete_doc_key, get_file_info_by_doc_key
 from seahub.onlyoffice.converter_utils import get_file_name_without_ext, \
@@ -43,6 +45,45 @@ from seahub.views import check_folder_permission
 
 # Get an instance of a logger
 logger = logging.getLogger('onlyoffice')
+
+
+def get_safe_onlyoffice_callback_url(url):
+    """Return a callback URL constrained to the ONLYOFFICE server origin.
+
+    ONLYOFFICE supplies the document content URL in the callback. Rebuild the
+    URL with the scheme and netloc from ONLYOFFICE_APIJS_URL so a forged or
+    compromised callback cannot make Seahub request an arbitrary host.
+    """
+    if not isinstance(url, str) or not url:
+        return None
+
+    api_url = urllib.parse.urlparse(ONLYOFFICE_APIJS_URL or '')
+    if api_url.scheme not in ('http', 'https') or not api_url.hostname:
+        return None
+    if api_url.username or api_url.password:
+        return None
+
+    origin_pattern = re.escape('{}://{}'.format(api_url.scheme, api_url.netloc))
+    if not re.fullmatch(origin_pattern + r'/[^\s]*', url, re.IGNORECASE):
+        return None
+
+    try:
+        parsed = urllib.parse.urlparse(url)
+        parsed_port = parsed.port or (443 if parsed.scheme == 'https' else 80)
+        api_port = api_url.port or (443 if api_url.scheme == 'https' else 80)
+    except ValueError:
+        return None
+
+    if parsed.scheme not in ('http', 'https') or parsed.scheme != api_url.scheme:
+        return None
+    if not parsed.hostname or parsed.username or parsed.password:
+        return None
+    if parsed.hostname.lower() != api_url.hostname.lower() or parsed_port != api_port:
+        return None
+
+    return urllib.parse.urlunparse((api_url.scheme, api_url.netloc,
+                                    parsed.path or '/', parsed.params,
+                                    parsed.query, ''))
 
 
 def get_verified_callback_payload(request, body_data):
@@ -222,8 +263,12 @@ def onlyoffice_editor_callback(request):
         # Defines the link to the edited document to be saved with the document storage service.
         # The link is present when the status value is equal to 2 or 3 only.
         url = post_data.get('url')
+        safe_url = get_safe_onlyoffice_callback_url(url)
+        if not safe_url:
+            logger.error('[OnlyOffice] Invalid callback url: {}'.format(url))
+            return HttpResponse('{"error": 1}')
         try:
-            onlyoffice_resp = requests.get(url, verify=VERIFY_ONLYOFFICE_CERTIFICATE)
+            onlyoffice_resp = requests.get(safe_url, verify=VERIFY_ONLYOFFICE_CERTIFICATE)
         except requests.exceptions.RequestException as e:
             logger.error('[OnlyOffice] Failed to get file content: {}'.format(e))
             return HttpResponse('{"error": 1}')

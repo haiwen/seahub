@@ -22,6 +22,11 @@ class OnlyofficeEditorCallbackJwtTest(TestCase):
 
     def setUp(self):
         self.factory = RequestFactory()
+        api_js_url_patcher = patch(
+            'seahub.onlyoffice.views.ONLYOFFICE_APIJS_URL',
+            'http://docserver/web-apps/apps/api/documents/api.js')
+        api_js_url_patcher.start()
+        self.addCleanup(api_js_url_patcher.stop)
         OnlyOfficeDocKey.objects.create(
             doc_key=DOC_KEY,
             username=USERNAME,
@@ -303,6 +308,17 @@ class OnlyofficeEditorCallbackJwtTest(TestCase):
         self.assertEqual(resp.content, b'{"error": 1}')
         mock_delete_doc_key.assert_not_called()
         mock_seafile_api.unlock_file.assert_not_called()
+
+    @patch('seahub.onlyoffice.views.ONLYOFFICE_JWT_SECRET', SECRET)
+    @patch('seahub.onlyoffice.views.requests')
+    def test_callback_rejects_url_outside_onlyoffice_host(self, mock_requests):
+        token = self._encode(url='http://evil.example/cache/files/x')
+
+        resp = self._post({}, token=token, header=False)
+
+        self.assertEqual(resp.content, b'{"error": 1}')
+        mock_requests.get.assert_not_called()
+        mock_requests.post.assert_not_called()
 
 
 class OnlyofficeConvertTest(TestCase):
