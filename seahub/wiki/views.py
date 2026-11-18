@@ -36,23 +36,3 @@ def slug(request, slug, file_path="home.md"):
         return render_permission_error(request, _('Unable to view Wiki'))
 
     return render(request, "wiki/wiki_deprecated.html", {"wiki": wiki})
-
-
-'''
-@login_required
-def edit_page(request, slug, page_name="home"):
-
-    # get wiki object or 404
-    wiki = get_object_or_404(Wiki, slug=slug)
-
-    if request.user.username != wiki.username:
-        raise Http404
-
-    filepath = "/" + page_name + ".md"
-    url = "%s?p=%s&from=wikis_wiki_page_edit&wiki_slug=%s" % (
-            reverse('file_edit', args=[wiki.repo_id]),
-            urllib.parse.quote(filepath.encode('utf-8')),
-            slug)
-
-    return HttpResponseRedirect(url)
-'''
