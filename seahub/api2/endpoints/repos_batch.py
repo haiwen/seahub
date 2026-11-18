@@ -658,7 +658,6 @@ class ReposBatchCreateDirView(APIView):
             path = normalize_dir_path(path)
             obj_name_list = path.strip('/').split('/')
 
-            invalid_path = False
             for obj_name in obj_name_list:
                 try:
                     # check if path is valid
@@ -670,8 +669,7 @@ class ReposBatchCreateDirView(APIView):
                     }
                     common_dict.update(error_dict)
                     result['failed'].append(common_dict)
-                    invalid_path = True
-                    break
+                    continue
 
                 if not is_valid_name:
                     error_dict = {
@@ -679,11 +677,7 @@ class ReposBatchCreateDirView(APIView):
                     }
                     common_dict.update(error_dict)
                     result['failed'].append(common_dict)
-                    invalid_path = True
-                    break
-
-            if invalid_path:
-                continue
+                    continue
 
             if seafile_api.get_dir_id_by_path(repo_id, path):
                 error_dict = {
