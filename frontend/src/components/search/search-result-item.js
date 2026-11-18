@@ -78,6 +78,7 @@ class SearchResultItem extends React.Component {
             symbol="close"
             className="search-icon-right"
             onClick={this.deleteItem}
+            onKeyDown={(e) => e.stopPropagation()}
             aria-label={gettext('Delete')}
           />
         )}
