@@ -13,6 +13,7 @@ class TipMessage extends React.Component {
       lastSavedAt: '',
     };
     this.saveTimer = null;
+    this.isTokenExpired = false;
   }
 
   componentDidMount() {
@@ -71,6 +72,8 @@ class TipMessage extends React.Component {
   };
 
   onTokenExpiredError = (msg) => {
+    if (this.isTokenExpired) return;
+    this.isTokenExpired = true;
     const copyright = 'Token expired. Please refresh the page.';
     const message = gettext(copyright);
     toaster.closeAll();
@@ -78,6 +81,7 @@ class TipMessage extends React.Component {
   };
 
   onPendingOpExceedLimit = () => {
+    if (this.isTokenExpired) return;
     toaster.closeAll();
     const copyright = 'Your changes are still syncing. Please wait a moment and try again when this message disappears.';
     const message = gettext(copyright);
@@ -85,12 +89,14 @@ class TipMessage extends React.Component {
   };
 
   onDisconnect = () => {
+    if (this.isTokenExpired) return;
     const copyright = 'Server is not connected. Operation will be sent to server later.';
     const message = gettext(copyright);
     toaster.warning(message, { hasCloseButton: true, duration: null });
   };
 
   onReconnectError = () => {
+    if (this.isTokenExpired) return;
     if (!this.isConnectError) {
       this.isConnectError = true;
       const copyright = 'Server is disconnected. Reconnecting...';
@@ -101,6 +107,7 @@ class TipMessage extends React.Component {
   };
 
   onReconnect = () => {
+    if (this.isTokenExpired) return;
     this.isConnectError = false;
     const copyright = 'Server is reconnected.';
     const message = gettext(copyright);

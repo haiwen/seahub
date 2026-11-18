@@ -32,7 +32,8 @@ from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_READ, \
         PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW
-from seahub.share.models import FileShare, UploadLinkShare, check_share_link_access, check_share_link_access_by_scope
+from seahub.share.models import FileShare, UploadLinkShare, check_share_link_access, \
+    check_share_link_common, check_share_link_access_by_scope
 from seahub.share.decorators import check_share_link_count
 from seahub.share.utils import VALID_SHARE_LINK_SCOPE, SCOPE_SPECIFIC_USERS, SCOPE_SPECIFIC_EMAILS
 from seahub.utils import gen_shared_link, is_org_context, normalize_file_path, \
@@ -1262,6 +1263,34 @@ class ShareLinkUploadDone(APIView):
         return Response({'success': True})
 
 
+def _check_share_link_access(request, share_link):
+    if share_link.is_expired():
+        return api_error(status.HTTP_403_FORBIDDEN, 'Share link is expired.')
+
+    if SHARE_LINK_LOGIN_REQUIRED and not request.user.is_authenticated:
+        return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+    password_check_passed, _ = check_share_link_common(request, share_link)
+    if not password_check_passed:
+        return api_error(status.HTTP_403_FORBIDDEN, 'Share link is encrypted.')
+
+    if not check_share_link_access_by_scope(request, share_link):
+        return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+
+def _is_tagged_file_in_share_link(share_link, tagged_file):
+    parent_path = tagged_file.get('parent_path')
+    if not parent_path:
+        return False
+
+    path = posixpath.join(parent_path, tagged_file['filename']).rstrip('/')
+    share_path = share_link.path.rstrip('/')
+    if share_link.is_file_share_link():
+        return path == share_path
+
+    return path == share_path or path.startswith(share_path + '/')
+
+
 class ShareLinkSaveFileToRepo(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -1287,6 +1316,10 @@ class ShareLinkSaveFileToRepo(APIView):
         except FileShare.DoesNotExist:
             error_msg = 'Share link %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        access_error = _check_share_link_access(request, share_link)
+        if access_error is not None:
+            return access_error
 
         if not seafile_api.get_repo(dst_repo_id):
             error_msg = 'Library %s not found.' % dst_repo_id
@@ -1319,6 +1352,10 @@ class ShareLinkSaveFileToRepo(APIView):
 
             src_dirent_path = posixpath.join(share_link.path,
                                              path.strip('/'))
+            src_dirent_path = posixpath.normpath(src_dirent_path)
+            share_link_path = posixpath.normpath(share_link.path)
+            if not src_dirent_path.startswith(normalize_dir_path(share_link_path)):
+                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         src_repo_id = share_link.repo_id
         src_parent_dir = os.path.dirname(src_dirent_path)
@@ -1362,6 +1399,10 @@ class ShareLinkSaveItemsToRepo(APIView):
         except FileShare.DoesNotExist:
             error_msg = 'Share link %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        access_error = _check_share_link_access(request, share_link)
+        if access_error is not None:
+            return access_error
 
         if not seafile_api.get_repo(dst_repo_id):
             error_msg = 'Library %s not found.' % dst_repo_id
@@ -1410,6 +1451,14 @@ class ShareLinkSaveItemsToRepo(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             src_parent_dir = posixpath.join(share_link.path, src_parent_dir.strip('/'))
+            src_parent_dir = posixpath.normpath(src_parent_dir)
+            share_link_path = posixpath.normpath(share_link.path)
+            if (src_parent_dir != share_link_path and
+                    not src_parent_dir.startswith(normalize_dir_path(share_link_path))):
+                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+            if any(name in ('.', '..') or '/' in name for name in src_dirents):
+                return api_error(status.HTTP_400_BAD_REQUEST, 'src_dirents invalid.')
         try:
             res = seafile_api.copy_file(src_repo_id, src_parent_dir,
                                         json.dumps(src_dirents),
@@ -1446,6 +1495,10 @@ class ShareLinkRepoTags(APIView):
             error_msg = 'Token %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        access_error = _check_share_link_access(request, share_link)
+        if access_error is not None:
+            return access_error
+
         repo_id = share_link.repo_id
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -1461,7 +1514,7 @@ class ShareLinkRepoTags(APIView):
             tagged_files = get_tagged_files(repo, repo_tag.pk)['tagged_files']
             tagged_files = [
                 item for item in tagged_files
-                if item.get('parent_path') and item.get('parent_path').startswith(share_link.path.rstrip('/'))
+                if _is_tagged_file_in_share_link(share_link, item)
             ]
             tag_id_file_list_dict[repo_tag.pk] = tagged_files
 
@@ -1471,6 +1524,9 @@ class ShareLinkRepoTags(APIView):
         }
 
         for repo_tag in repo_tags:
+
+            if not tag_id_file_list_dict.get(repo_tag.pk):
+                continue
 
             repo_tag_info = repo_tag.to_dict()
             repo_tag_id = repo_tag_info["repo_tag_id"]
@@ -1495,6 +1551,10 @@ class ShareLinkRepoTagsTaggedFiles(APIView):
             error_msg = 'Token %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        access_error = _check_share_link_access(request, share_link)
+        if access_error is not None:
+            return access_error
+
         repo_id = share_link.repo_id
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -1502,11 +1562,12 @@ class ShareLinkRepoTagsTaggedFiles(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_tag = RepoTags.objects.get_repo_tag_by_id(tag_id)
-        if not repo_tag:
+        if not repo_tag or repo_tag.repo_id != repo_id:
             error_msg = 'repo_tag %s not found.' % tag_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        share_link_path = share_link.path.rstrip('/') if share_link.path != '/' else '/'
+        share_link_path = (share_link.path if share_link.is_dir_share_link()
+                           else posixpath.dirname(share_link.path))
 
         filtered_tagged_files = []
         tagged_files = get_tagged_files(repo, tag_id)
@@ -1515,11 +1576,10 @@ class ShareLinkRepoTagsTaggedFiles(APIView):
             if tagged_file.get('file_deleted', False):
                 continue
 
-            tagged_file_parent_path = tagged_file.get('parent_path', '')
-            if share_link_path == '/':
-                filtered_tagged_files.append(tagged_file)
-            elif tagged_file_parent_path.startswith(share_link_path):
-                tagged_file['parent_path'] = '/' + tagged_file_parent_path.lstrip(share_link_path)
+            if _is_tagged_file_in_share_link(share_link, tagged_file):
+                relative_path = posixpath.relpath(tagged_file['parent_path'], share_link_path)
+                tagged_file['parent_path'] = ('/' if relative_path in ('.', '..')
+                                               else normalize_dir_path(relative_path))
                 filtered_tagged_files.append(tagged_file)
 
         return Response({'tagged_files': filtered_tagged_files})
