@@ -38,5 +38,8 @@ class ShareLinkZipTaskViewTest(BaseTestCase):
 
         url = self.url + '?share_link_token=%s&path=/' % share_link_token
 
-        resp = self.client.get(url)
+        with patch('seahub.api2.endpoints.share_link_zip_task.seafile_api.get_fileserver_access_token') as get_token:
+            resp = self.client.get(url)
+
         self.assertEqual(403, resp.status_code)
+        get_token.assert_not_called()
