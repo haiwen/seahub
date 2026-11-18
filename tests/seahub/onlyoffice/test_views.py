@@ -1,11 +1,11 @@
 import json
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import jwt
 from django.test import RequestFactory, TestCase
 
 from seahub.onlyoffice.models import OnlyOfficeDocKey
-from seahub.onlyoffice.views import onlyoffice_editor_callback
+from seahub.onlyoffice.views import OnlyofficeConvert, onlyoffice_editor_callback
 
 SECRET = 'test-onlyoffice-secret-0123456789abcdef'
 CALLBACK_URL = '/onlyoffice/editor-callback/'
@@ -284,3 +284,53 @@ class OnlyofficeEditorCallbackJwtTest(TestCase):
         self.assertEqual(resp.content, b'{"error": 1}')
         mock_requests.get.assert_not_called()
         mock_requests.post.assert_not_called()
+
+    @patch('seahub.onlyoffice.views.gen_inner_file_upload_url', return_value='http://inner/update')
+    @patch('seahub.onlyoffice.views.delete_doc_key')
+    @patch('seahub.onlyoffice.views.cache')
+    @patch('seahub.onlyoffice.views.seafile_api')
+    @patch('seahub.onlyoffice.views.requests')
+    @patch('seahub.onlyoffice.views.ONLYOFFICE_JWT_SECRET', SECRET)
+    def test_callback_returns_error_and_keeps_doc_key_when_update_fails(
+            self, mock_requests, mock_seafile_api, mock_cache, mock_delete_doc_key, mock_upload_url):
+        mock_seafile_api.get_fileserver_access_token.return_value = 'update_token'
+        mock_requests.get.return_value.content = b'changed content'
+        mock_requests.post.return_value.status_code = 500
+        token = self._encode()
+
+        resp = self._post({'key': DOC_KEY, 'status': 2, 'url': FILE_URL}, token=token)
+
+        self.assertEqual(resp.content, b'{"error": 1}')
+        mock_delete_doc_key.assert_not_called()
+        mock_seafile_api.unlock_file.assert_not_called()
+
+
+class OnlyofficeConvertTest(TestCase):
+
+    def _request(self):
+        request = Mock()
+        request.data = {'repo_id': REPO_ID, 'file_path': FILE_PATH}
+        request.user.username = USERNAME
+        return request
+
+    @patch('seahub.onlyoffice.views.gen_inner_file_upload_url', return_value='http://inner/upload')
+    @patch('seahub.onlyoffice.views.check_filename_with_rename', return_value='oo-jwt-test.xlsx')
+    @patch('seahub.onlyoffice.views.seafile_api')
+    @patch('seahub.onlyoffice.views.get_onlyoffice_dict')
+    @patch('seahub.onlyoffice.views.get_converter_uri', return_value='http://converter')
+    @patch('seahub.onlyoffice.views.requests')
+    def test_returns_error_when_upload_fails(
+            self, mock_requests, mock_get_converter_uri, mock_get_onlyoffice_dict,
+            mock_seafile_api, mock_check_filename, mock_upload_url):
+        mock_seafile_api.get_fileserver_access_token.return_value = 'upload_token'
+        mock_get_onlyoffice_dict.return_value = {
+            'doc_url': 'http://doc',
+            'doc_key': DOC_KEY,
+        }
+        mock_requests.get.return_value.content = b'converted content'
+        mock_requests.post.return_value.status_code = 500
+
+        resp = OnlyofficeConvert().post(self._request())
+
+        self.assertEqual(resp.status_code, 500)
+        self.assertEqual(resp.data['error_msg'], 'Internal Server Error')

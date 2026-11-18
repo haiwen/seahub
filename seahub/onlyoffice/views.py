@@ -222,7 +222,11 @@ def onlyoffice_editor_callback(request):
         # Defines the link to the edited document to be saved with the document storage service.
         # The link is present when the status value is equal to 2 or 3 only.
         url = post_data.get('url')
-        onlyoffice_resp = requests.get(url, verify=VERIFY_ONLYOFFICE_CERTIFICATE)
+        try:
+            onlyoffice_resp = requests.get(url, verify=VERIFY_ONLYOFFICE_CERTIFICATE)
+        except requests.exceptions.RequestException as e:
+            logger.error('[OnlyOffice] Failed to get file content: {}'.format(e))
+            return HttpResponse('{"error": 1}')
         if not onlyoffice_resp:
             logger.error('[OnlyOffice] No response from file content url.')
             return HttpResponse('{"error": 1}')
@@ -243,12 +247,17 @@ def onlyoffice_editor_callback(request):
 
         # update file
         update_url = gen_inner_file_upload_url('update-api', update_token)
-        resp = requests.post(update_url, files=files, data=data)
+        try:
+            resp = requests.post(update_url, files=files, data=data)
+        except requests.exceptions.RequestException as e:
+            logger.error('[OnlyOffice] Failed to update file: {}'.format(e))
+            return HttpResponse('{"error": 1}')
         if resp.status_code != 200:
             logger.error('update_url: {}'.format(update_url))
             logger.error('repo_id: {}, file_path: {}, content size: {}'.format(
                 repo_id, file_path, len(onlyoffice_resp.content)))
             logger.error('response: {}'.format(resp.__dict__))
+            return HttpResponse('{"error": 1}')
 
         # 2 - document is ready for saving,
         if status == 2:
@@ -364,8 +373,10 @@ class OnlyofficeConvert(APIView):
         if resp.status_code != 200:
             logger.error('upload_url: {}'.format(upload_url))
             logger.error('content size: {}'.format(len(onlyoffice_resp.content)))
-            logger.error('parameter parent_dir: {}'.format(files['parent_dir']))
+            logger.error('parameter parent_dir: {}'.format(parent_dir))
             logger.error('response: {}'.format(resp.__dict__))
+            error_msg = 'Internal Server Error'
+            return api_error(500, error_msg)
 
         result = {}
         result['parent_dir'] = parent_dir
