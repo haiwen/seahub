@@ -58,6 +58,14 @@ class ShareLinkZipTaskView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        if not fileshare.get_permissions()['can_download']:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if SHARE_LINK_LOGIN_REQUIRED and not request.user.is_authenticated:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         if req_path[-1] != '/':
             req_path += '/'
 
