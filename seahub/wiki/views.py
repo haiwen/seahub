@@ -1,10 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-from seaserv import seafile_api
-
 from django.conf import settings
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from seahub.utils import render_permission_error
@@ -17,17 +14,6 @@ def slug(request, slug, file_path="home.md"):
         raise Http404
 
     wiki = get_object_or_404(Wiki, slug=slug)
-
-    # Keep the old URL pattern working for links without the .md suffix.
-    file_path = "/" + file_path
-    is_dir = None
-    if seafile_api.get_file_id_by_path(wiki.repo_id, file_path):
-        is_dir = False
-    if seafile_api.get_dir_id_by_path(wiki.repo_id, file_path):
-        is_dir = True
-    if is_dir is None and len(file_path.split('.')) == 1:
-        new_path = file_path[1:] + '.md'
-        return HttpResponseRedirect(reverse('wiki:slug', args=[slug, new_path]))
 
     req_user = request.user.username
     if not req_user and not wiki.has_read_perm(request):
