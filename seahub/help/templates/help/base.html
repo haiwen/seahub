@@ -173,7 +173,12 @@ sideNavToggle.on('click', function() {
 });
 
 $(window).on('resize', function() {
-    setSideNavOpen(sideNavToggle.attr('aria-expanded') === 'true');
+    var isOpen = sideNavToggle.attr('aria-expanded') === 'true';
+    var focusIsInSideNav = sideNav.contains(document.activeElement);
+    setSideNavOpen(isOpen);
+    if (mobileViewport.matches && !isOpen && focusIsInSideNav) {
+        sideNavToggle.trigger('focus');
+    }
 });
 
 $('.seafile-mask').on('click', function() {
