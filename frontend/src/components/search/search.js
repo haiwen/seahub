@@ -271,6 +271,7 @@ class Search extends Component {
         this.inputRef && this.inputRef.current && this.inputRef.current.blur();
         this.resetToDefault();
       } else if (isEnter(e)) {
+        if (e.target.closest('.search-types button')) return;
         this.onEnter(e);
       } else if (isUp(e)) {
         this.onUp(e);
