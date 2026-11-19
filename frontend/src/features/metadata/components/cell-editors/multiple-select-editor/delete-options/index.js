@@ -33,7 +33,13 @@ const DeleteOption = ({ value, options, onDelete }) => {
         return (
           <div key={id} className="sf-metadata-delete-select-option" style={style}>
             <span className="sf-metadata-delete-select-option-name text-truncate" title={name} aria-label={name}>{name}</span>
-            <IconBtn className="sf-metadata-delete-select-remove" onClick={(event) => onDelete(id, event)} symbol="close" aria-label={gettext('Remove')} />
+            <IconBtn
+              className="sf-metadata-delete-select-remove"
+              data-sf-metadata-option-remove="true"
+              onClick={(event) => onDelete(id, event)}
+              symbol="close"
+              aria-label={gettext('Remove')}
+            />
           </div>
         );
       })}
