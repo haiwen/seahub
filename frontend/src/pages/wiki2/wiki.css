@@ -26,6 +26,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: var(--bs-body-bg);
   /* sdoc-outline z-index is 102, wiki header should higher than sdoc-outline */
   z-index: 103;
 }
