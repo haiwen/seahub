@@ -156,14 +156,24 @@ $('.help-side-nav .tab a').on('click', function() {
 $('#logo').addClass('d-none d-md-block');
 
 var sideNavToggle = $('#js-toggle-side-nav');
+var sideNav = document.getElementById('help-side-nav');
+var mobileViewport = window.matchMedia('(max-width: 767px)');
 var setSideNavOpen = function(isOpen) {
-    $('.side-nav').toggleClass('side-nav-shown', isOpen);
-    $('.seafile-mask').toggleClass('seafile-mask__shown', isOpen);
-    sideNavToggle.attr('aria-expanded', String(isOpen));
+    var isVisible = mobileViewport.matches && isOpen;
+    $('.side-nav').toggleClass('side-nav-shown', isVisible);
+    $('.seafile-mask').toggleClass('seafile-mask__shown', isVisible);
+    sideNavToggle.attr('aria-expanded', String(isVisible));
+    sideNav.inert = mobileViewport.matches && !isOpen;
 };
+
+setSideNavOpen(false);
 
 sideNavToggle.on('click', function() {
     setSideNavOpen(sideNavToggle.attr('aria-expanded') !== 'true');
+});
+
+$(window).on('resize', function() {
+    setSideNavOpen(sideNavToggle.attr('aria-expanded') === 'true');
 });
 
 $('.seafile-mask').on('click', function() {
