@@ -220,16 +220,9 @@ class Item extends Component {
 
   render() {
     let { item } = this.props;
-    let isUserStatusLog = item.operation == 'user_activate' || item.operation == 'user_deactivate';
-    let contactEmail = isUserStatusLog ? (item.contact_email || item.email) : item.email;
-    let userPageUrl = siteRoot + 'sys/users/' + encodeURIComponent(item.email) + '/';
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td>
-          {isUserStatusLog ?
-            <a href={userPageUrl}>{contactEmail}</a> :
-            <UserLink email={item.email} name={item.name} />}
-        </td>
+        <td><UserLink email={item.email} name={item.name} /></td>
         <td>{this.getOperationText(item.operation)}</td>
         <td>
           <span dangerouslySetInnerHTML={{ __html: this.getOperationDetail(item) }}></span>
