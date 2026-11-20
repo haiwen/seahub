@@ -121,10 +121,10 @@ class SocialAuthUserManager(models.Manager):
             # MySQL string comparison follows the column's collation (case & accent insensitive by default),
             # which can match records with different letter cases or diacritical marks.
             # This ensures the result matches exactly at the character level.
-            if social_auth_user and (
-                social_auth_user.provider != provider or social_auth_user.uid != str(uid)
-            ):
-                return None
+            # if social_auth_user and (
+            #     social_auth_user.provider != provider or social_auth_user.uid != str(uid)
+            # ):
+            #     return None
             return social_auth_user
         except self.model.DoesNotExist:
             return None
