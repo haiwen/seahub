@@ -27,7 +27,7 @@ def token_view(request, token):
     """Show form to let user set password.
     """
     i = get_object_or_404(Invitation, token=token)
-    if i.is_expired():
+    if i.is_expired() or i.invite_type not in (GUEST_USER, DEFAULT_USER):
         raise Http404
 
     vid = get_virtual_id_by_email(i.accepter)
@@ -56,7 +56,7 @@ def token_view(request, token):
             else:
                 # A guest invitation must not activate an existing regular
                 # account.  Default invitations are created by administrators.
-                if i.is_guest() and user.role != GUEST_USER:
+                if i.invite_type != DEFAULT_USER and user.role != GUEST_USER:
                     messages.error(request, _('An (inactive) regular account already exists for this mail address, can not proceed to accept the invitation.'))
                     return render(request, 'invitations/token_view.html', {'iv': i, })
 
