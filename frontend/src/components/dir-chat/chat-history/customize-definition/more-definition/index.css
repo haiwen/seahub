@@ -1,5 +1,11 @@
 .sea-ai-chat-customize-more-definition {
   width: 20px;
+  appearance: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: pointer;
 }
 
 .sea-ai-chat-customize-more-definition .more-definition-content {

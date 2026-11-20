@@ -52,13 +52,15 @@ const MoreDefinition = ({ sources, onOpen }) => {
 
   return (
     <>
-      <div
+      <button
+        type="button"
         className={classNames('sea-ai-chat-customize-definition sea-ai-chat-customize-more-definition')}
+        aria-expanded={isShowMore}
         onClick={openShowMore}
         ref={moreRef}
       >
         <span className="more-definition-content">+{count}</span>
-      </div>
+      </button>
       {isShowMore && (
         <CustomizePopover
           target={moreRef}
