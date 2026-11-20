@@ -139,7 +139,8 @@ $('#info-bar .close').on('keydown', function(event) {
 {% else %} {# for non-logged-in user #}
 (function() {
     var lang_context = $('#lang-context'),
-        lang_selector = $('#lang-context-selector');
+        lang_selector = $('#lang-context-selector'),
+        lang_root = $('#lang');
 
     // for pages without '#lang', such as 'help' pages
     if ($('#lang').length == 0) {
@@ -176,6 +177,11 @@ $('#info-bar .close').on('keydown', function(event) {
         }
     };
 
+    var isLangSelectorFocused = function() {
+        var activeElement = document.activeElement;
+        return lang_context.is(activeElement) || lang_selector[0].contains(activeElement);
+    };
+
     lang_context.on('click', function() {
         var isExpanded = lang_context.attr('aria-expanded') === 'true';
         lang_selector.toggleClass('hide', isExpanded);
@@ -192,8 +198,17 @@ $('#info-bar .close').on('keydown', function(event) {
         }
     });
 
+    lang_root.on('focusout', function() {
+        var lang_root_element = this;
+        setTimeout(function() {
+            if (!lang_root_element.contains(document.activeElement)) {
+                closeLangSelector(false);
+            }
+        }, 0);
+    });
+
     $(document).on('keydown', function(e) {
-        if ((e.which === 27 || e.key === 'Escape') && lang_context.attr('aria-expanded') === 'true') {
+        if ((e.which === 27 || e.key === 'Escape') && lang_context.attr('aria-expanded') === 'true' && isLangSelectorFocused()) {
             e.preventDefault();
             closeLangSelector(true);
         }
