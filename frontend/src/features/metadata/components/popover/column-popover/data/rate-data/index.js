@@ -73,12 +73,16 @@ const RateData = ({ value, onChange, updatePopoverState }) => {
   }, [closeStylePopover]);
 
   const onStyleTriggerKeyDown = useCallback((event) => {
-    if (event.key !== 'Tab' || event.shiftKey || !isShowStylePopover) return;
+    if (event.key !== 'Tab' || !isShowStylePopover) return;
+    if (event.shiftKey) {
+      closeStylePopover();
+      return;
+    }
     const firstStyleOption = styleOptionsRef.current?.querySelector('button');
     if (!firstStyleOption) return;
     event.preventDefault();
     firstStyleOption.focus();
-  }, [isShowStylePopover]);
+  }, [isShowStylePopover, closeStylePopover]);
 
   const onStyleOptionsKeyDown = useCallback((event) => {
     if (event.key !== 'Tab') return;

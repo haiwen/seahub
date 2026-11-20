@@ -32,9 +32,24 @@ class CustomizePopover extends React.Component {
     document.removeEventListener('keydown', this.onKeyDown);
   }
 
+  isFocusInsidePopover = () => {
+    const activeElement = document.activeElement;
+    if (this.popoverRef?.contains(activeElement)) return true;
+
+    let target = this.props.target?.current || this.props.target;
+    if (typeof target === 'string') {
+      target = document.getElementById(target) || document.querySelector(target);
+    }
+    const targetElements = target && typeof target.length === 'number' && !target.nodeType
+      ? Array.from(target)
+      : [target];
+    return targetElements.some(element => element?.contains?.(activeElement));
+  };
+
   onKeyDown = (e) => {
     const { canHidePopover = true, hidePopoverWithEsc } = this.props;
     if (e.keyCode === KeyCodes.Escape && typeof hidePopoverWithEsc === 'function' && !this.isSelectOpen) {
+      if (!this.isFocusInsidePopover()) return;
       e.preventDefault();
       hidePopoverWithEsc();
     } else if (e.keyCode === KeyCodes.Enter) {
