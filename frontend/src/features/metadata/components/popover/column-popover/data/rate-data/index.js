@@ -65,8 +65,11 @@ const RateData = ({ value, onChange, updatePopoverState }) => {
   }, [updatePopoverState]);
 
   const closeStylePopoverWithEsc = useCallback(() => {
+    const activeElement = document.activeElement;
+    const shouldRestoreFocus = selectedBtnRef.current?.contains(activeElement) ||
+      styleOptionsRef.current?.contains(activeElement);
     closeStylePopover();
-    selectedBtnRef.current?.focus();
+    if (shouldRestoreFocus) selectedBtnRef.current?.focus();
   }, [closeStylePopover]);
 
   const onStyleTriggerKeyDown = useCallback((event) => {
