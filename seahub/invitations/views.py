@@ -27,7 +27,8 @@ def token_view(request, token):
     """Show form to let user set password.
     """
     i = get_object_or_404(Invitation, token=token)
-    if i.is_expired() or i.invite_type not in (GUEST_USER, DEFAULT_USER):
+    if (i.is_expired() or i.accept_time is not None or
+            i.invite_type not in (GUEST_USER, DEFAULT_USER)):
         raise Http404
 
     vid = get_virtual_id_by_email(i.accepter)

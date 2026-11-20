@@ -952,31 +952,15 @@ class AdminInviteUsers(APIView):
 
             vid = get_virtual_id_by_email(email)
             try:
-                user = User.objects.get(email=vid)
-                if user.is_active:
-                    result['failed'].append({
-                        'email': email,
-                        'error_msg': _('User %s already exists.') % email,
-                    })
-                    continue
-
-                pending_invitations = Invitation.objects.filter(
-                    accepter=email, accept_time__isnull=True)
-                if pending_invitations.filter(
-                        expire_time__gt=timezone.now()).exists():
-                    result['failed'].append({
-                        'email': email,
-                        'error_msg': _('%s is already invited.') % email,
-                    })
-                    continue
-
-                pending_invitations.delete()
+                User.objects.get(email=vid)
+                result['failed'].append({
+                    'email': email,
+                    'error_msg': _('User %s already exists.') % email,
+                })
+                continue
             except User.DoesNotExist:
                 user = User.objects.create_user(
                     email, None, is_staff=False, is_active=False)
-                user = User.objects.update_role(user.username, DEFAULT_USER)
-
-            if not user.role:
                 user = User.objects.update_role(user.username, DEFAULT_USER)
 
             invitation = Invitation.objects.add(

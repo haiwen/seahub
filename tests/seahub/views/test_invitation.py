@@ -36,12 +36,16 @@ class InvitationActivationTest(SimpleTestCase):
         patcher = patch.object(views.User.objects, 'get', return_value=self.user)
         self.get_user = patcher.start()
         self.addCleanup(patcher.stop)
+
         patcher = patch.object(views.User.objects, 'update_role')
         self.update_role = patcher.start()
         self.addCleanup(patcher.stop)
 
+    def accept_invitation(self):
+        return views.token_view(self.request, 'invitation-token')
+
     def assert_activation_succeeds(self):
-        response = views.token_view(self.request, 'invitation-token')
+        response = self.accept_invitation()
 
         self.assertEqual(response.status_code, 302)
         self.user.set_password.assert_called_once_with('test-password')
@@ -52,7 +56,7 @@ class InvitationActivationTest(SimpleTestCase):
         self.mocks['messages'].error.assert_not_called()
 
     def assert_activation_rejected(self):
-        self.assertEqual(views.token_view(self.request, 'invitation-token'), 'rejected')
+        self.assertEqual(self.accept_invitation(), 'rejected')
         self.user.set_password.assert_not_called()
         self.user.save.assert_not_called()
         self.invitation.accept.assert_not_called()
@@ -90,7 +94,7 @@ class InvitationActivationTest(SimpleTestCase):
     def test_expired_invitation_is_rejected(self):
         self.invitation.is_expired.return_value = True
         with self.assertRaises(Http404):
-            views.token_view(self.request, 'invitation-token')
+            self.accept_invitation()
         self.get_user.assert_not_called()
 
     def test_non_user_invitation_is_rejected(self):
@@ -98,7 +102,14 @@ class InvitationActivationTest(SimpleTestCase):
             with self.subTest(invite_type=invite_type):
                 self.invitation.invite_type = invite_type
                 with self.assertRaises(Http404):
-                    views.token_view(self.request, 'invitation-token')
+                    self.accept_invitation()
         self.get_user.assert_not_called()
         self.user.set_password.assert_not_called()
         self.mocks['auth_login'].assert_not_called()
+
+    def test_used_invitation_cannot_reactivate_disabled_user(self):
+        self.invitation.accept_time = 'already accepted'
+        with self.assertRaises(Http404):
+            self.accept_invitation()
+        self.get_user.assert_not_called()
+        self.user.set_password.assert_not_called()
