@@ -1,5 +1,6 @@
 import React from 'react';
 import { SDocViewer } from '@seafile/seafile-sdoc-editor';
+import { mediaUrl } from '@/utils/constants';
 
 import './index.css';
 
@@ -11,7 +12,11 @@ class FileContent extends React.Component {
     const document = fileContent ? JSON.parse(fileContent) : null;
     return (
       <div className="file-view-content flex-1 o-auto sdoc-file-view p-0 d-flex flex-column">
-        <SDocViewer document={document} />
+        <SDocViewer
+          document={document}
+          enableMathJax={true}
+          mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
+        />
       </div>
     );
   }

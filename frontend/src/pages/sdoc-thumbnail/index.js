@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { SDocViewer } from '@seafile/seafile-sdoc-editor';
 import axios from 'axios';
 import Loading from '@/components/loading';
+import { mediaUrl } from '@/utils/constants';
 
 import './index.css';
 
@@ -45,7 +46,11 @@ export default function SdocThumbnail() {
     <div className='sdoc-thumbnail-container'>
       {content.elements.length === 0 ?
         <div id="sdoc-editor-print-wrapper" className="empty-sdoc-thumbnail" /> :
-        <SDocViewer document={content}/>
+        <SDocViewer
+          document={content}
+          enableMathJax={true}
+          mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
+        />
       }
     </div>
   );
