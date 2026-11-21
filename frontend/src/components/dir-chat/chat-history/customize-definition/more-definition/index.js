@@ -1,6 +1,7 @@
 import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import { gettext } from '@/utils/constants';
 import CustomizePopover from '../../../../customize-popover';
 import Icon from '../../../../icon';
 import Definition from '../definition';
