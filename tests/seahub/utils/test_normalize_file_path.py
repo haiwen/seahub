@@ -29,3 +29,8 @@ class NormalizeDirPathTest(BaseTestCase):
         assert normalize_file_path(path_starts_with_random_slash) == correct_path
         assert normalize_file_path(path_ends_with_random_slash) == correct_path
         assert normalize_file_path(path_with_slash) == correct_path
+
+    def test_normalize_file_path_collapses_repeated_slashes(self):
+
+        assert normalize_file_path('/folder1//folder2///file.txt') == '/folder1/folder2/file.txt'
+        assert normalize_file_path('folder1//folder2/file.txt') == '/folder1/folder2/file.txt'

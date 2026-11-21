@@ -13,7 +13,7 @@ from seaserv import seafile_api
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.utils import get_file_type_and_ext, gen_file_get_url, \
-        get_site_scheme_and_netloc
+        get_site_scheme_and_netloc, normalize_file_path
 
 from seahub.onlyoffice.models import OnlyOfficeDocKey
 
@@ -96,13 +96,15 @@ def delete_doc_key(doc_key):
 def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
                         can_edit=False, can_download=True, can_copy=True):
 
+    file_path = normalize_file_path(file_path)
+
     logger.info('{} open file {} in repo {} with can_edit {}'.format(username, file_path, repo_id, can_edit))
 
     repo = seafile_api.get_repo(repo_id)
     if repo.is_virtual:
         origin_repo_id = repo.origin_repo_id
-        origin_file_path = posixpath.join(repo.origin_path,
-                                          file_path.strip('/'))
+        origin_file_path = normalize_file_path(posixpath.join(repo.origin_path,
+                                                              file_path.strip('/')))
     else:
         origin_repo_id = repo_id
         origin_file_path = file_path

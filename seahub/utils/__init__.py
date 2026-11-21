@@ -263,7 +263,7 @@ def normalize_file_path(path):
     And make sure path starts with '/'
     """
 
-    path = path.strip('/')
+    path = re.sub(r'/+', '/', path.strip('/'))
     if path == '':
         return ''
     else:
