@@ -11,8 +11,9 @@ from rest_framework.views import APIView
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+from seahub.api2.endpoints.ocm import is_remote_server_url
 from seahub.ocm.models import OCMShareReceived
-from seahub.ocm.settings import VIA_REPO_TOKEN_URL
+from seahub.ocm.settings import ENABLE_OCM, VIA_REPO_TOKEN_URL
 from seahub.constants import PERMISSION_READ_WRITE
 
 
@@ -20,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 def send_get_request(url, params=None, headers=None):
-    response = requests.get(url, params=params, headers=headers)
+    response = requests.get(url, params=params, headers=headers, timeout=30)
     return json.loads(response.text)
 
 
@@ -33,6 +34,9 @@ class OCMReposDirView(APIView):
         """
         Send request to Provider to get repo item list
         """
+        if not ENABLE_OCM:
+            error_msg = 'feature not enabled.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         path = request.GET.get('path', '/')
 
@@ -46,6 +50,10 @@ class OCMReposDirView(APIView):
                                                              repo_id=repo_id,
                                                              to_user=username)
         if not ocm_share_received:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not is_remote_server_url(ocm_share_received[0].from_server_url):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -74,6 +82,9 @@ class OCMReposDownloadLinkView(APIView):
         """
         Send request to Provider to get download link
         """
+        if not ENABLE_OCM:
+            error_msg = 'feature not enabled.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         path = request.GET.get('path', '/')
         username = request.user.username
@@ -81,6 +92,10 @@ class OCMReposDownloadLinkView(APIView):
                                                              repo_id=repo_id,
                                                              to_user=username)
         if not ocm_share_received:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not is_remote_server_url(ocm_share_received[0].from_server_url):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -107,6 +122,9 @@ class OCMReposUploadLinkView(APIView):
         """
         Send request to Provider to get upload link
         """
+        if not ENABLE_OCM:
+            error_msg = 'feature not enabled.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         path = request.GET.get('path', '/')
 
@@ -120,6 +138,10 @@ class OCMReposUploadLinkView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if ocm_share_received[0].permission != PERMISSION_READ_WRITE:
+            error_msg = 'permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not is_remote_server_url(ocm_share_received[0].from_server_url):
             error_msg = 'permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
