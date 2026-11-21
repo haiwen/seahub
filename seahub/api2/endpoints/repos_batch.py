@@ -1193,6 +1193,10 @@ class ReposAsyncBatchCopyItemView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        if not res:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         result = {}
         result['task_id'] = res.task_id if res.background else ''
 
@@ -1336,6 +1340,10 @@ class ReposAsyncBatchMoveItemView(APIView):
                                         need_progress=1, synchronous=0)
         except Exception as e:
             logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not res:
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
