@@ -49,8 +49,8 @@ def gen_shared_secret(length=23):
     return ''.join(random.choice(string.ascii_lowercase + string.digits) for i in range(length))
 
 
-def get_remote_protocol(url):
-    response = requests.get(url, timeout=30)
+def get_remote_protocol(server_url):
+    response = requests.get(server_url + OCM_PROTOCOL_URL, timeout=30)
     return json.loads(response.text)
 
 
@@ -68,11 +68,12 @@ def check_url_slash(url):
     return url
 
 
-def is_remote_server_url(url):
+def get_remote_server_url(url):
     for name_domain_dict in OCM_REMOTE_SERVERS:
-        if url.startswith(check_url_slash(name_domain_dict['server_url'])):
-            return True
-    return False
+        server_url = check_url_slash(name_domain_dict['server_url'])
+        if url.startswith(server_url):
+            return server_url
+    return None
 
 
 class OCMProtocolView(APIView):
@@ -196,7 +197,7 @@ class OCMSharesView(APIView):
             repo_id = protocol['options']['repoId']
             from_server_url = protocol['options']['seafileServiceURL']
 
-            if not is_remote_server_url(from_server_url):
+            if not get_remote_server_url(from_server_url):
                 error_msg = 'seafileServiceURL %s not allowed.' % from_server_url
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -273,7 +274,7 @@ class OCMNotificationsView(APIView):
             except OCMShareReceived.DoesNotExist:
                 return Response(request.data)
 
-            if not is_remote_server_url(ocm_share_received.from_server_url):
+            if not get_remote_server_url(ocm_share_received.from_server_url):
                 error_msg = 'permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -293,7 +294,7 @@ class OCMNotificationsView(APIView):
             except OCMShareReceived.DoesNotExist:
                 return Response(request.data)
 
-            if not is_remote_server_url(ocm_share.to_server_url):
+            if not get_remote_server_url(ocm_share.to_server_url):
                 error_msg = 'permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -358,7 +359,8 @@ class OCMSharesPrepareView(APIView):
             error_msg = 'to_server_url %s invalid.' % to_server_url
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if not is_remote_server_url(to_server_url):
+        server_url = get_remote_server_url(to_server_url)
+        if not server_url:
             error_msg = 'to_server_url %s not allowed.' % to_server_url
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -402,8 +404,8 @@ class OCMSharesPrepareView(APIView):
         ).exists():
             return api_error(status.HTTP_400_BAD_REQUEST, 'same share already exists.')
 
-        consumer_protocol = get_remote_protocol(to_server_url + OCM_PROTOCOL_URL)
-        if not is_remote_server_url(consumer_protocol['endPoint']):
+        consumer_protocol = get_remote_protocol(server_url)
+        if not get_remote_server_url(consumer_protocol['endPoint']):
             error_msg = 'endPoint %s not allowed.' % consumer_protocol['endPoint']
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -479,12 +481,13 @@ class OCMSharePrepareView(APIView):
         to_server_url = ocm_share.to_server_url
         shared_secret = ocm_share.shared_secret
 
-        if not is_remote_server_url(to_server_url):
+        server_url = get_remote_server_url(to_server_url)
+        if not server_url:
             error_msg = 'to_server_url %s not allowed.' % to_server_url
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        consumer_protocol = get_remote_protocol(to_server_url + OCM_PROTOCOL_URL)
-        if not is_remote_server_url(consumer_protocol['endPoint']):
+        consumer_protocol = get_remote_protocol(server_url)
+        if not get_remote_server_url(consumer_protocol['endPoint']):
             error_msg = 'endPoint %s not allowed.' % consumer_protocol['endPoint']
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -573,10 +576,11 @@ class OCMShareReceivedView(APIView):
         }
 
         # the local record is deleted even if the remote server can not be reached
-        if is_remote_server_url(from_server_url):
+        server_url = get_remote_server_url(from_server_url)
+        if server_url:
             try:
-                provider_protocol = get_remote_protocol(from_server_url + OCM_PROTOCOL_URL)
-                if is_remote_server_url(provider_protocol['endPoint']):
+                provider_protocol = get_remote_protocol(server_url)
+                if get_remote_server_url(provider_protocol['endPoint']):
                     url = provider_protocol['endPoint'] + OCM_NOTIFICATION_URL
                     requests.post(url, json=post_data, timeout=30)
             except Exception as e:

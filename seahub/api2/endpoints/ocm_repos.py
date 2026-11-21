@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.api2.endpoints.ocm import is_remote_server_url
+from seahub.api2.endpoints.ocm import get_remote_server_url
 from seahub.ocm.models import OCMShareReceived
 from seahub.ocm.settings import ENABLE_OCM, VIA_REPO_TOKEN_URL
 from seahub.constants import PERMISSION_READ_WRITE
@@ -53,11 +53,12 @@ class OCMReposDirView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if not is_remote_server_url(ocm_share_received[0].from_server_url):
+        server_url = get_remote_server_url(ocm_share_received[0].from_server_url)
+        if not server_url:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        url = ocm_share_received[0].from_server_url + VIA_REPO_TOKEN_URL['DIR']
+        url = server_url + VIA_REPO_TOKEN_URL['DIR']
         params = {
             'path': path,
             'with_thumbnail': with_thumbnail,
@@ -95,11 +96,12 @@ class OCMReposDownloadLinkView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if not is_remote_server_url(ocm_share_received[0].from_server_url):
+        server_url = get_remote_server_url(ocm_share_received[0].from_server_url)
+        if not server_url:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        url = ocm_share_received[0].from_server_url + VIA_REPO_TOKEN_URL['DOWNLOAD_LINK']
+        url = server_url + VIA_REPO_TOKEN_URL['DOWNLOAD_LINK']
         params = {
             'path': path,
         }
@@ -141,11 +143,12 @@ class OCMReposUploadLinkView(APIView):
             error_msg = 'permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if not is_remote_server_url(ocm_share_received[0].from_server_url):
+        server_url = get_remote_server_url(ocm_share_received[0].from_server_url)
+        if not server_url:
             error_msg = 'permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        url = ocm_share_received[0].from_server_url + VIA_REPO_TOKEN_URL['UPLOAD_LINK']
+        url = server_url + VIA_REPO_TOKEN_URL['UPLOAD_LINK']
         params = {
             'path': path,
             'from': 'web',

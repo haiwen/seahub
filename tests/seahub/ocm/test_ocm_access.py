@@ -270,9 +270,8 @@ class OCMSharesPrepareViewTest(OCMViewTestCase):
         self.patch_endpoint(ocm_endpoint, 'seafile_api').get_repo.return_value = Mock()
         self.patch_endpoint(ocm_endpoint, 'get_repo_owner',
                             lambda request, repo_id: USER.username)
-        self.patch_endpoint(
-            ocm_endpoint, 'OCMShare'
-        ).objects.filter.return_value.exists.return_value = False
+        self.shares = self.patch_endpoint(ocm_endpoint, 'OCMShare')
+        self.shares.objects.filter.return_value.exists.return_value = False
         self.protocol = self.patch_endpoint(ocm_endpoint, 'get_remote_protocol')
         self.posted = self.patch_endpoint(ocm_endpoint, 'requests').post
 
@@ -300,3 +299,22 @@ class OCMSharesPrepareViewTest(OCMViewTestCase):
 
         self.assertEqual(response.status_code, 403)
         self.posted.assert_not_called()
+
+    def test_share_is_prepared_against_the_registered_peer(self):
+        self.patch_endpoint(ocm_endpoint, 'email2contact_email',
+                            lambda username: 'someone@example.org')
+        self.patch_endpoint(ocm_endpoint, 'email2nickname', lambda username: 'someone')
+        share = self.shares.objects.add.return_value
+        share.to_dict.return_value = {}
+        share.to_server_url = PEER
+        self.protocol.return_value = {
+            'endPoint': PEER,
+            'resourceTypes': {'name': 'library', 'shareTypes': ['user']},
+        }
+
+        response = self.prepare(PEER)
+
+        self.assertEqual(response.status_code, 200)
+        # the request goes to the configured peer URL, not to the request value
+        self.assertEqual(self.protocol.call_args.args[0], PEER)
+        self.assertEqual(self.posted.call_args.args[0], PEER + 'shares/')
