@@ -23,9 +23,7 @@
       <label for="password">{% trans "Password" %}</label>
       <input type="password" name="password" id="password" class="form-control" autofocus />
     </div>
-    {% if err_msg %}
-    <p class="error">{{ err_msg }}</p>
-    {% endif %}
+    <p class="error{% if not err_msg %} hide{% endif %}" role="alert">{{ err_msg }}</p>
     <button type="submit" class="btn btn-primary sf-btn-submit">{% trans "Submit" %}</button>
   </form>
 </div>

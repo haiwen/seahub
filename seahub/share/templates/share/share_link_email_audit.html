@@ -46,9 +46,9 @@ html, body, #wrapper { height:100%; }
       <input id="code" type="text" class="input d-block" name="code" placeholder="{% trans "Paste the verification code here" %}" />
 
       {% if err_msg %}
-      <p class="error">{{ err_msg }}</p>
+      <p class="error" role="alert">{{ err_msg }}</p>
       {% else %}
-      <p class="error hide"></p>
+      <p class="error hide" role="alert"></p>
       {% endif %}
 
       <button type="submit" class="submit btn btn-primary btn-block h-auto">{% trans "Submit" %}</button>

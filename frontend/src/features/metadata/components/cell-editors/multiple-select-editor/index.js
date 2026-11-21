@@ -59,11 +59,11 @@ const MultipleSelectEditor = forwardRef(({
   const style = useMemo(() => {
     return {
       width: column.width,
-      top: '-1px',
+      top: typeof height === 'number' ? '-1px' : undefined,
       left: isBeyondScreen ? 'unset' : '-1px',
       right: isBeyondScreen ? 0 : 'unset',
     };
-  }, [column, isBeyondScreen]);
+  }, [column, height, isBeyondScreen]);
 
   const blur = useCallback(() => {
     onCommit && onCommit(value);
@@ -180,6 +180,9 @@ const MultipleSelectEditor = forwardRef(({
 
   const onHotKey = useCallback((event) => {
     if (event.keyCode === KeyCodes.Enter) {
+      if (event.target instanceof Element && event.target.closest('[data-sf-metadata-option-remove="true"]')) {
+        return;
+      }
       onEnter(event);
     } else if (event.keyCode === KeyCodes.UpArrow) {
       onUpArrow(event);

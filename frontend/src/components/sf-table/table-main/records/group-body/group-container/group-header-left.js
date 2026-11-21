@@ -33,6 +33,8 @@ class GroupHeaderLeft extends Component {
         <IconBtn
           className={classnames('group-toggle-btn', { 'hide': !isExpanded })}
           symbol="down"
+          aria-label={isExpanded ? gettext('Fold') : gettext('Unfold')}
+          aria-expanded={isExpanded}
           onClick={this.props.onExpandGroupToggle}
         />
         <GroupTitle

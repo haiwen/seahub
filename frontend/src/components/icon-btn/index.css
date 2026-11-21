@@ -20,6 +20,14 @@
   width: 32px;
 }
 
-.seafile-multicolor-icon-btn:hover {
+button.seafile-multicolor-icon-btn {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+button.seafile-multicolor-icon-btn:not(:disabled) {
   cursor: pointer;
 }

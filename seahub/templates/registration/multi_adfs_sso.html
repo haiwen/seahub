@@ -53,9 +53,9 @@ html, body, #wrapper { height:100%; }
 
         <input type="hidden" name="next" value="{% if next %}{{ next|escape }}{% else %}{{ SITE_ROOT }}{% endif %}" />
         {% if error_msg %}
-        <p class="error">{{ error_msg }}</p>
+        <p class="error" role="alert">{{ error_msg }}</p>
         {% else %}
-        <p class="error hide"></p>
+        <p class="error hide" role="alert"></p>
         {% endif %}
 
         <button type="submit" class="submit btn btn-primary btn-block h-auto mb-3">{% trans "Log In" %}</button>

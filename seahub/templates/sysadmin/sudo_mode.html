@@ -44,9 +44,9 @@ html, body, #wrapper { height:100%; }
         <button type="button" id="toggle-show-password" class="password-visibility-icon" title="{% trans 'Show password' %}" aria-label="{% trans 'Show password' %}" data-show-label="{% trans 'Show password' %}" data-hide-label="{% trans 'Hide password' %}" aria-pressed="false"></button>
       </div>
       {% if password_error %}
-      <p class="error mt-1">{% trans "Incorrect password" %}</p>
+      <p class="error mt-1" role="alert">{% trans "Incorrect password" %}</p>
       {% else %}
-      <p class="error mt-1 hide"></p>
+      <p class="error mt-1 hide" role="alert"></p>
       {% endif %}
 
       <button type="submit" class="submit btn btn-primary btn-block h-auto mb-3">{% trans "Confirm Password" %}</button>

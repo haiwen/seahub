@@ -1,5 +1,5 @@
 {% load i18n %}
-<li class="wiki-page-item-wrapper" role="treeitem" aria-expanded="{% if item.has_children %}{% if item.is_expanded %}true{% else %}false{% endif %}{% else %}false{% endif %}">
+<li class="wiki-page-item-wrapper" role="treeitem"{% if item.has_children %} aria-expanded="{% if item.is_expanded %}true{% else %}false{% endif %}"{% endif %}>
   <div class="wiki-page-item readonly{% if item.is_current %} selected-page{% endif %}">
     {% if item.has_children %}
     <button type="button" class="wiki-nav-item-icon{% if item.is_expanded %} expanded{% endif %}" aria-label="{% trans 'Toggle navigation section' %}" aria-expanded="{% if item.is_expanded %}true{% else %}false{% endif %}"{% if item.depth > 0 %} style="margin-left: {% widthratio item.depth 1 24 %}px;"{% endif %}>
