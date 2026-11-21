@@ -49,8 +49,8 @@ def gen_shared_secret(length=23):
     return ''.join(random.choice(string.ascii_lowercase + string.digits) for i in range(length))
 
 
-def get_remote_protocol(url):
-    response = requests.get(url)
+def get_remote_protocol(server_url):
+    response = requests.get(server_url + OCM_PROTOCOL_URL, timeout=30)
     return json.loads(response.text)
 
 
@@ -66,6 +66,14 @@ def check_url_slash(url):
     if not url.endswith('/'):
         url += '/'
     return url
+
+
+def get_remote_server_url(url):
+    for name_domain_dict in OCM_REMOTE_SERVERS:
+        server_url = check_url_slash(name_domain_dict['server_url'])
+        if url.startswith(server_url):
+            return server_url
+    return None
 
 
 class OCMProtocolView(APIView):
@@ -104,6 +112,9 @@ class OCMSharesView(APIView):
         """
         create ocm in consumer server
         """
+        if not ENABLE_OCM:
+            error_msg = 'feature not enabled.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # argument check
         share_with = request.data.get('shareWith', '')
@@ -186,6 +197,10 @@ class OCMSharesView(APIView):
             repo_id = protocol['options']['repoId']
             from_server_url = protocol['options']['seafileServiceURL']
 
+            if not get_remote_server_url(from_server_url):
+                error_msg = 'seafileServiceURL %s not allowed.' % from_server_url
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         if OCMShareReceived.objects.filter(
             from_user=sender,
             to_user=share_with,
@@ -222,6 +237,10 @@ class OCMNotificationsView(APIView):
     def post(self, request):
         """ Handle notifications from remote server
         """
+        if not ENABLE_OCM:
+            error_msg = 'feature not enabled.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         notification_type = request.data.get('notificationType', '')
         if not notification_type:
             error_msg = 'notificationType %s invalid.' % notification_type
@@ -255,6 +274,10 @@ class OCMNotificationsView(APIView):
             except OCMShareReceived.DoesNotExist:
                 return Response(request.data)
 
+            if not get_remote_server_url(ocm_share_received.from_server_url):
+                error_msg = 'permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
             if ocm_share_received:
                 try:
                     ocm_share_received.delete()
@@ -270,6 +293,10 @@ class OCMNotificationsView(APIView):
                 ocm_share = OCMShare.objects.get(shared_secret=shared_secret)
             except OCMShareReceived.DoesNotExist:
                 return Response(request.data)
+
+            if not get_remote_server_url(ocm_share.to_server_url):
+                error_msg = 'permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             if ocm_share:
                 try:
@@ -290,6 +317,10 @@ class OCMSharesPrepareView(APIView):
         """
         list ocm shares of request user, filt by repo_id
         """
+        if not ENABLE_OCM:
+            error_msg = 'feature not enabled.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         repo_id = request.GET.get('repo_id', '')
         if repo_id:
             ocm_shares = OCMShare.objects.filter(repo_id=repo_id, from_user=request.user.username)
@@ -313,6 +344,9 @@ class OCMSharesPrepareView(APIView):
         ocm_share_received table
         3. store a recored in local ocm_share table
         """
+        if not ENABLE_OCM:
+            error_msg = 'feature not enabled.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # argument check
         to_user = request.data.get('to_user', '')
@@ -324,6 +358,11 @@ class OCMSharesPrepareView(APIView):
         if not to_server_url or not is_valid_url(to_server_url):
             error_msg = 'to_server_url %s invalid.' % to_server_url
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        server_url = get_remote_server_url(to_server_url)
+        if not server_url:
+            error_msg = 'to_server_url %s not allowed.' % to_server_url
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         repo_id = request.data.get('repo_id', '')
         if not repo_id:
@@ -365,7 +404,10 @@ class OCMSharesPrepareView(APIView):
         ).exists():
             return api_error(status.HTTP_400_BAD_REQUEST, 'same share already exists.')
 
-        consumer_protocol = get_remote_protocol(to_server_url + OCM_PROTOCOL_URL)
+        consumer_protocol = get_remote_protocol(server_url)
+        if not get_remote_server_url(consumer_protocol['endPoint']):
+            error_msg = 'endPoint %s not allowed.' % consumer_protocol['endPoint']
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         shared_secret = gen_shared_secret()
         post_data = {
@@ -391,7 +433,7 @@ class OCMSharesPrepareView(APIView):
         }
         url = consumer_protocol['endPoint'] + OCM_CREATE_SHARE_URL
         try:
-            requests.post(url, json=post_data)
+            requests.post(url, json=post_data, timeout=30)
         except Exception as e:
             logging.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
@@ -422,6 +464,10 @@ class OCMSharePrepareView(APIView):
         """
         delete an share received record
         """
+        if not ENABLE_OCM:
+            error_msg = 'feature not enabled.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         try:
             ocm_share = OCMShare.objects.get(pk=pk)
         except OCMShareReceived.DoesNotExist:
@@ -435,7 +481,15 @@ class OCMSharePrepareView(APIView):
         to_server_url = ocm_share.to_server_url
         shared_secret = ocm_share.shared_secret
 
-        consumer_protocol = get_remote_protocol(to_server_url + OCM_PROTOCOL_URL)
+        server_url = get_remote_server_url(to_server_url)
+        if not server_url:
+            error_msg = 'to_server_url %s not allowed.' % to_server_url
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        consumer_protocol = get_remote_protocol(server_url)
+        if not get_remote_server_url(consumer_protocol['endPoint']):
+            error_msg = 'endPoint %s not allowed.' % consumer_protocol['endPoint']
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # send unshare notification to consumer
         post_data = {
@@ -450,7 +504,7 @@ class OCMSharePrepareView(APIView):
 
         url = consumer_protocol['endPoint'] + OCM_NOTIFICATION_URL
         try:
-            requests.post(url, json=post_data)
+            requests.post(url, json=post_data, timeout=30)
         except Exception as e:
             logging.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
@@ -473,6 +527,10 @@ class OCMSharesReceivedView(APIView):
         """
         list ocm shares received
         """
+        if not ENABLE_OCM:
+            error_msg = 'feature not enabled.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         ocm_share_received_list = []
         ocm_shares_received = OCMShareReceived.objects.filter(to_user=request.user.username)
         for ocm_share_received in ocm_shares_received:
@@ -489,6 +547,10 @@ class OCMShareReceivedView(APIView):
         """
         delete an share received record
         """
+        if not ENABLE_OCM:
+            error_msg = 'feature not enabled.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         try:
             ocm_share_received = OCMShareReceived.objects.get(pk=pk)
         except OCMShareReceived.DoesNotExist:
@@ -502,8 +564,6 @@ class OCMShareReceivedView(APIView):
         from_server_url = ocm_share_received.from_server_url
         shared_secret = ocm_share_received.shared_secret
 
-        provider_protocol = get_remote_protocol(from_server_url + OCM_PROTOCOL_URL)
-
         # send unshare notification to consumer
         post_data = {
             'notificationType': OCM_NOTIFICATION_SHARE_DECLINED,
@@ -515,12 +575,16 @@ class OCMShareReceivedView(APIView):
             },
         }
 
-        url = provider_protocol['endPoint'] + OCM_NOTIFICATION_URL
-        try:
-            requests.post(url, json=post_data)
-        except Exception as e:
-            logging.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+        # the local record is deleted even if the remote server can not be reached
+        server_url = get_remote_server_url(from_server_url)
+        if server_url:
+            try:
+                provider_protocol = get_remote_protocol(server_url)
+                if get_remote_server_url(provider_protocol['endPoint']):
+                    url = provider_protocol['endPoint'] + OCM_NOTIFICATION_URL
+                    requests.post(url, json=post_data, timeout=30)
+            except Exception as e:
+                logger.error(e)
 
         try:
             ocm_share_received.delete()
