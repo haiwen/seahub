@@ -50,6 +50,7 @@ class ShibbolethRemoteUserBackend(RemoteUserBackend):
         object with the given username is not found in the database.
         """
         if not remote_user:
+            logger.warning("remote user not found.")
             return
 
         remote_user = self.clean_username(remote_user)

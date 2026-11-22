@@ -65,12 +65,14 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
 
         # Locate the remote user header.
         # import pprint; pprint.pprint(request.META)
+        logger.info('request header in meta list: %s' % request.META)
         try:
             remote_user = request.META[SHIB_USER_HEADER]
         except KeyError:
             # If specified header doesn't exist then return (leaving
             # request.user set to AnonymousUser by the
             # AuthenticationMiddleware).
+            logger.warning('Header %s does not exists in meta.' % SHIB_USER_HEADER)
             return
 
         second_uid = request.META.get(SHIB_USER_HEADER_SECOND_UID, '')
@@ -79,6 +81,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
         # getting passed in the headers, then the correct user is already
         # persisted in the session and we don't need to continue.
         if request.user.is_authenticated:
+            logger.info('user is authenticated')
             return
 
         # Make sure we have all required Shiboleth elements before proceeding.
@@ -86,6 +89,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
         # Add parsed attributes to the session.
         request.session['shib'] = shib_meta
         if error:
+            logger.error("All required Shibboleth elements not found.  %s" % shib_meta)
             raise ShibbolethValidationError("All required Shibboleth elements"
                                             " not found.  %s" % shib_meta)
 
@@ -96,6 +100,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
                                  second_uid=second_uid)
         if user:
             if not user.is_active:
+                logger.warning('user is not activated')
                 return HttpResponseRedirect(reverse('shib_complete'))
 
             # User is valid.  Set request.user and persist user in the session
