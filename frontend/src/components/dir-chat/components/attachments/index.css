@@ -88,3 +88,54 @@
   min-height: 8px;
   min-width: 8px;
 }
+
+.sea-ai-chat-message-attachments-item-image {
+  align-items: center;
+  height: 64px;
+  justify-content: center;
+  padding: 0;
+  width: 64px;
+}
+
+.sea-ai-chat-message-attachments-item-img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.sea-ai-chat-message-attachments-item-mask {
+  align-items: center;
+  background-color: var(--bs-bg-overlay);
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.sea-ai-chat-message-attachments-item-failed {
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sea-ai-chat-message-attachments-item-retry {
+  align-items: center;
+  background: transparent;
+  border: none;
+  color: var(--bs-body-color);
+  display: flex;
+  height: 16px;
+  justify-content: center;
+  padding: 0;
+  width: 16px;
+}
+
+.sea-ai-chat-message-attachments-item-failed-tip {
+  color: var(--bs-body-secondary-color);
+  font-size: 12px;
+  line-height: 16px;
+}

@@ -20,6 +20,9 @@ class URLDecorator {
       case 'open_with_default':
         url = siteRoot + 'lib/' + options.repoID + '/file' + Utils.encodePath(options.filePath);
         break;
+      case 'raw_file':
+        url = siteRoot + 'lib/' + options.repoID + '/file' + Utils.encodePath(options.filePath) + '?raw=1';
+        break;
       case 'open_via_client':
         url = 'seafile://openfile?repo_id=' + options.repoID + '&path=' + Utils.encodePath(options.filePath);
         break;

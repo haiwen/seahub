@@ -1,12 +1,22 @@
 import React, { useCallback, useRef, useEffect } from 'react';
 import { seafileAPI } from '@/api/seafile-api';
+import toaster from '@/components/toast';
 import { gettext } from '@/utils/constants';
+import Icon from '../../icon';
 import SyncSelector from '../components/selector/sync-selector';
+import { CHAT_ATTACHMENT_TYPE, CHAT_IMAGE_ATTACHMENT_EXTENSIONS, CHAT_IMAGE_ATTACHMENT_MAX_COUNT } from '../constants';
 import AttachmentObject from '../models/attachment_object';
 
-const CHAT_ATTACHMENT_EXTENSIONS = 'md,sdoc,docx,pdf,pptx';
+const CHAT_ATTACHMENT_EXTENSIONS = ['md', 'sdoc', 'docx', 'pdf', 'pptx', ...CHAT_IMAGE_ATTACHMENT_EXTENSIONS].join(',');
 
-const LibraryFilesSelector = ({ repoID, value: attachments = [], onChange: propsOnChange, disabled }) => {
+const LibraryFilesSelector = ({
+  repoID,
+  value: attachments = [],
+  onChange: propsOnChange,
+  disabled,
+  imageCount = 0,
+  onFileInputClick,
+}) => {
   const searchResultsRef = useRef(new Map());
 
   // Cache existing attachments so we can find them if they are toggled
@@ -71,16 +81,29 @@ const LibraryFilesSelector = ({ repoID, value: attachments = [], onChange: props
       updatedAttachments = updatedAttachments.filter((att) => !removedKeys.includes(att.key));
     }
 
+    let rejectedImage = false;
     if (addedKeys.length > 0) {
       for (const key of addedKeys) {
         const file = searchResultsRef.current.get(key);
         if (file) {
           const path = file.fullpath || file.path;
           const name = file.name || path.substr(path.lastIndexOf('/') + 1);
+          if (updatedAttachments.some((att) => att.repo_id === repoID && att.path === path)) {
+            continue;
+          }
+          const extension = name.split('.').pop().toLowerCase();
+          const type = CHAT_IMAGE_ATTACHMENT_EXTENSIONS.includes(extension)
+            ? CHAT_ATTACHMENT_TYPE.IMAGE : CHAT_ATTACHMENT_TYPE.FILE;
+          if (type === CHAT_ATTACHMENT_TYPE.IMAGE &&
+            updatedAttachments.filter((att) => att.type === CHAT_ATTACHMENT_TYPE.IMAGE).length >= CHAT_IMAGE_ATTACHMENT_MAX_COUNT) {
+            rejectedImage = true;
+            continue;
+          }
           const newAtt = new AttachmentObject({
             repo_id: repoID,
             path,
             name: name,
+            type,
           });
           if (!updatedAttachments.some((att) => att.key === newAtt.key)) {
             updatedAttachments.push(newAtt);
@@ -89,18 +112,51 @@ const LibraryFilesSelector = ({ repoID, value: attachments = [], onChange: props
       }
     }
 
+    if (rejectedImage) {
+      toaster.danger(gettext('Each message can contain at most %1$s image').replace('%1$s', CHAT_IMAGE_ATTACHMENT_MAX_COUNT));
+    }
     propsOnChange && propsOnChange(updatedAttachments);
   }, [attachments, repoID, propsOnChange]);
+
+  const renderMenu = useCallback(({ closeMenu, openSearch }) => {
+    return (
+      <div className="sea-ai-chat-attach-menu">
+        <button
+          type="button"
+          className="sea-ai-chat-attach-menu-item"
+          onClick={openSearch}
+        >
+          <Icon symbol="plus" className="sea-ai-chat-attach-menu-icon" />
+          <span>{gettext('Add docs')}</span>
+        </button>
+        {!disabled && (
+          <button
+            type="button"
+            className="sea-ai-chat-attach-menu-item"
+            disabled={imageCount >= CHAT_IMAGE_ATTACHMENT_MAX_COUNT}
+            onClick={() => {
+              closeMenu();
+              onFileInputClick && onFileInputClick();
+            }}
+          >
+            <Icon symbol="gallery" className="sea-ai-chat-attach-menu-icon" />
+            <span>{gettext('Upload image')}</span>
+          </button>
+        )}
+      </div>
+    );
+  }, [disabled, imageCount, onFileInputClick]);
 
   return (
     <SyncSelector
       icon="plus"
       className="attach-files-btn"
-      title={gettext('Search files in this library')}
+      title={gettext('Add')}
       value={attachments.map((att) => att.key)}
       onChange={onChange}
       onSearch={onSearch}
       disabled={disabled}
+      menu={renderMenu}
     />
   );
 };
