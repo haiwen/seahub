@@ -48,6 +48,10 @@ class TreeViewItem extends React.Component {
 
   onItemClick = (e) => {
     e.stopPropagation(); // need prevent event popup
+    if (this.props.node.object.permission === 'navigate') {
+      this.onToggleClick(e);
+      return;
+    }
     let isCurrentRepo = false;
     if (this.props.selectedRepo) {
       isCurrentRepo = this.props.selectedRepo.repo_id === this.props.repo.repo_id;

@@ -123,7 +123,7 @@ class FileView(APIView):
 
         # permission check
         parent_dir = os.path.dirname(path)
-        if check_folder_permission(request, repo_id, parent_dir) is None:
+        if check_folder_permission(request, repo_id, path) is None:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
