@@ -172,6 +172,7 @@ def login(request, org_id=None):
     except Exception as e:
         logger.warning(e)
         redirect_url = None
+    logger.info("[Session_check][saml2_login] %s" % request.session.get('shib_device_id'))
 
     return HttpResponseRedirect(redirect_url)
 
@@ -199,6 +200,8 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
             return render_error(request, internal_server_error_msg)
     else:
         org_id = -1
+
+    logger.info("[Session_check][saml2_acs] %s" % request.session.get('shib_device_id'))
 
     if 'SAMLResponse' not in request.POST:
         logger.error('Missing "SAMLResponse" parameter in POST data.')
@@ -533,6 +536,7 @@ def auth_complete(request):
         'client_version',
         'platform_version',
     )
+    logger.info("[Session_check][saml2_complete] %s" % request.session.get('shib_device_id'))
     if all(['shib_' + key in request.GET for key in keys]):
         platform = request.GET['shib_platform']
         device_id = request.GET['shib_device_id']
