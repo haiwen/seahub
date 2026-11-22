@@ -38,6 +38,18 @@ msgstr ""
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+#: frontend/src/components/dir-chat/chat-history/seadoc.js
+msgid "Permission denied."
+msgstr "权限不足。"
+
+#: frontend/src/components/dir-chat/chat-history/seadoc.js
+msgid "SeaDoc is not enabled."
+msgstr "尚未启用 SeaDoc。"
+
+#: frontend/src/components/dir-chat/chat-history/seadoc.js
+msgid "Failed to create the document."
+msgstr "创建文档失败。"
+
 #: frontend/src/components/account/index.js:76
 msgid "Exit System Admin"
 msgstr "退出系统管理"
@@ -11270,6 +11282,10 @@ msgstr "群组成员"
 #: frontend/src/pages/sys-admin/terms-and-conditions/content.js:52
 msgid "Created"
 msgstr "已创建"
+
+#: frontend/src/components/dir-chat/chat-history/seadoc.js
+msgid "Open document"
+msgstr "打开文档"
 
 #: frontend/src/pages/sys-admin/terms-and-conditions/index.js:62
 msgid "Update succeeded."
