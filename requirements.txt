@@ -11,8 +11,6 @@ pyjwt==2.15.*
 pycryptodome==3.23.*
 python-cas==1.7.*
 pysaml2==7.5.*
-cryptography==50.0.*
-pyOpenSSL==26.4.*
 requests==2.34.*
 requests_oauthlib==2.0.*
 future==1.0.*
