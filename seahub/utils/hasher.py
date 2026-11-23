@@ -2,6 +2,7 @@
 import base64
 try:
     from Crypto.Cipher import AES
+    from Crypto.Util.Padding import pad, unpad
 except ImportError:
     AES = None
 
@@ -16,18 +17,30 @@ class AESPasswordDecodeError(Exception):
 # the block size for the cipher object; must be 16, 24, or 32 for AES
 BLOCK_SIZE = 32
 
-# the character used for padding--with a block cipher such as AES, the value
-# you encrypt must be a multiple of BLOCK_SIZE in length.  This character is
-# used to ensure that your value is always a multiple of BLOCK_SIZE
+# AES encrypts data in 16-byte blocks. Legacy values used PADDING as the
+# padding character; values written now use PKCS#7 padding.
 PADDING = '{'
+# Values written before the switch to PKCS#7 padding always end their
+# plaintext with PADDING, which distinguishes them from values padded with
+# PKCS#7 (whose last byte is in the range 0x01-0x10).
+LEGACY_PADDING = PADDING.encode('utf-8')
 
-# one-liner to sufficiently pad the text to be encrypted
-pad = lambda s: s + (16 - len(s) % 16) * PADDING
-
-# one-liners to encrypt/encode and decrypt/decode a string
 # encrypt with AES, encode with base64
-EncodeAES = lambda c, s: base64.b64encode(c.encrypt(pad(s).encode('utf-8'))).decode('utf-8')
-DecodeAES = lambda c, e: c.decrypt(base64.b64decode(e)).decode('utf-8').rstrip(PADDING)
+def EncodeAES(c, s):
+    return base64.b64encode(c.encrypt(pad(s.encode('utf-8'), 16))).decode('utf-8')
+
+
+def DecodeAES(c, e):
+    data = c.decrypt(base64.b64decode(e))
+    if data.endswith(LEGACY_PADDING):
+        # Older values used PADDING as the padding character, so keep the old
+        # decoding behavior for them. Genuine trailing PADDING characters are
+        # still lost for those values; they cannot be told apart from padding.
+        data = data.rstrip(LEGACY_PADDING)
+    else:
+        data = unpad(data, 16)
+    return data.decode('utf-8')
+
 
 class AESPasswordHasher:
     algorithm = 'aes'
