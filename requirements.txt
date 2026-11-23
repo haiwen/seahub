@@ -4,8 +4,8 @@ django_webpack_loader==1.7.*
 django_picklefield==3.4.*
 django_formtools==2.5.*
 django_simple_captcha==0.6.*
-djangosaml2==1.11.*
-djangorestframework==3.16.*
+djangosaml2==1.13.*
+djangorestframework==3.18.*
 python-dateutil==2.9.*
 pyjwt==2.15.*
 pycryptodome==3.23.*
@@ -25,8 +25,8 @@ openpyxl==3.1.*
 Markdown==3.10.*
 python-ldap==3.4.*
 pypinyin==0.55.*
-dnspython==2.8.*
-pillow-heif==1.2.*
+dnspython==2.9.*
+pillow-heif==1.8.*
 redis==7.1.*
 cairosvg==2.9.*
 pyyaml==6.0.*
