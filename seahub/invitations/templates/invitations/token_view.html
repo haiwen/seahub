@@ -6,7 +6,7 @@
 {% block main_content %}
 <div class="page-form-panel invisible">
   <h2 class="hd text-center">{% trans "Set your password" %}</h2>
-  <form action="" method="post" class="form">{% csrf_token %}
+  <form action="" method="post" class="form" id="invitation-form">{% csrf_token %}
     <div class="mb-3">
       <label for="invitation-email" class="form-label">{% trans "Email" %} </label>
       <input id="invitation-email" type="text" disabled="disabled" value="{{ iv.accepter }}" class="form-control" />
@@ -25,7 +25,7 @@
         <button type="button" class="btn btn-secondary" title="{% trans 'Show password' %}" aria-label="{% trans 'Show password' %}" data-show-label="{% trans 'Show password' %}" data-hide-label="{% trans 'Hide password' %}" aria-pressed="false"></button>
       </div>
     </div>
-    <p class="error hide" role="alert"></p>
+    <p class="error hide" role="alert" id="invitation-form-error" data-form-error></p>
     <div class="form-foot text-center">
       <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
     </div>
@@ -42,6 +42,7 @@
   {% include "snippets/password_strength_js.html" %}
   $(function () {
     setupPasswordField("password", passwd_tip, template);
+    formValidation.setup(document.getElementById('invitation-form'));
   });
 
   $('form').on('submit', function() {
@@ -49,21 +50,17 @@
         pwd2 = $('input[name="password2"]').val().trim();
 
     if (!pwd1) {
-      $('.error').html("{% trans "Password cannot be blank" %}").removeClass('hide');
-      return false;
+      return formValidation.showError(this, 'password', "{% trans "Password cannot be blank" %}");
     }
 
     if (!pwd2) {
-      $('.error').html("{% trans "Please enter the password again" %}").removeClass('hide');
-      return false;
+      return formValidation.showError(this, 'password2', "{% trans "Please enter the password again" %}");
     }
     if (pwd1 != pwd2) {
-      $('.error').html("{% trans "Passwords don't match" %}").removeClass('hide');
-      return false;
+      return formValidation.showError(this, ['password2', 'password'], "{% trans "Passwords don't match" %}");
     }
     if (!checkPasswordStrength(pwd1, {{strong_pwd_required}})) {
-      $('.error').html(passwd_tip).removeClass('hide');
-      return false;
+      return formValidation.showError(this, 'password', passwd_tip);
     }
   });
 </script>
