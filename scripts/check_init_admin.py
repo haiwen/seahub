@@ -346,7 +346,13 @@ def main():
         with open(password_file, 'r') as fp:
             pwinfo = json.load(fp)
         email = pwinfo['email']
-        passwd = pwinfo['password']
+        passwd = pwinfo['password'].strip()
+        if not passwd:
+            print('Warning: Admin password in admin.txt is empty. Skip creating admin account.')
+            return
+        if '\r' in passwd or '\n' in passwd or passwd == '!':
+            print('Warning: Admin password in admin.txt is invalid. Skip creating admin account.')
+            return
         os.unlink(password_file)
     else:
         email = ask_admin_email()
