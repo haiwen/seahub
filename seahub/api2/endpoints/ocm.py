@@ -217,10 +217,14 @@ class OCMSharesView(APIView):
             permission = PERMISSION_READ
 
         share_with_ccnet_email = Profile.objects.get_username_by_contact_email(share_with)
+        if not share_with_ccnet_email:
+            error_msg = 'user %s not found on this server.' % share_with
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         OCMShareReceived.objects.add(
             shared_secret=shared_secret,
             from_user=sender,
-            to_user=share_with_ccnet_email or share_with,
+            to_user=share_with_ccnet_email,
             from_server_url=from_server_url,
             repo_id=repo_id,
             repo_name=repo_name,
@@ -433,10 +437,19 @@ class OCMSharesPrepareView(APIView):
         }
         url = consumer_protocol['endPoint'] + OCM_CREATE_SHARE_URL
         try:
-            requests.post(url, json=post_data, timeout=30)
+            resp = requests.post(url, json=post_data, timeout=30)
         except Exception as e:
             logging.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        if resp.status_code != status.HTTP_201_CREATED:
+            try:
+                consumer_error = resp.json().get('error_msg', resp.text)
+            except Exception:
+                consumer_error = resp.text
+            logging.warning('Consumer rejected OCM share: %s', consumer_error)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                             'Remote server rejected this share request.')
 
         ocm_share = OCMShare.objects.add(
             shared_secret=shared_secret,
@@ -470,7 +483,7 @@ class OCMSharePrepareView(APIView):
 
         try:
             ocm_share = OCMShare.objects.get(pk=pk)
-        except OCMShareReceived.DoesNotExist:
+        except OCMShare.DoesNotExist:
             error_msg = 'OCMShare %s not found.' % pk
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
