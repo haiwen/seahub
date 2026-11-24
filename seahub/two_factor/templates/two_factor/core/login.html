@@ -10,16 +10,17 @@
       {% if wizard.steps.current == 'token' %}
 
       {% if device.method == 'call' %}
-      <p>We are calling your phone right now, please enter the
+      <p id="token-instructions">We are calling your phone right now, please enter the
       digits you hear.</p>
       {% elif device.method == 'sms' %}
-      <p>We sent you a text message, please enter the tokens we
+      <p id="token-instructions">We sent you a text message, please enter the tokens we
       sent.</p>
       {% else %}
-      <p>{% trans "Open the two-factor authentication app on your device to view your authentication token and verify your identify." %}</p>
+      <p id="token-instructions">{% trans "Open the two-factor authentication app on your device to view your authentication token and verify your identify." %}</p>
       {% endif %}
 
-      <input id="token" type="text" name="{{form_prefix}}otp_token" placeholder="{% trans "Authentication token" %}" value="" class="input two-factor-auth-login-token-input" autocomplete="off" autofocus="autofocus" />
+      <label for="token" class="sr-only">{% trans "Authentication token" %}</label>
+      <input id="token" type="text" name="{{form_prefix}}otp_token" placeholder="{% trans "Authentication token" %}" value="" class="input two-factor-auth-login-token-input" autocomplete="one-time-code" autofocus="autofocus" aria-describedby="token-instructions{% if form.errors %} token-error{% endif %}"{% if form.errors %} aria-invalid="true"{% endif %} />
 
       {% if remember_days > 0 %}
       <label class="checkbox-label mt-3 mb-0 remember-me">
@@ -29,9 +30,9 @@
       {% endif %}
 
       {% if form.errors %}
-      <p class="error" role="alert">{% trans "Incorrect code" %}</p>
+      <p id="token-error" class="error" role="alert">{% trans "Incorrect code" %}</p>
       {% else %}
-      <p class="error hide" role="alert"></p>
+      <p id="token-error" class="error hide" role="alert"></p>
       {% endif %}
       <button type="submit" class="submit btn btn-primary btn-block h-auto mb-3">{% trans "Verify" %}</button>
 
@@ -45,13 +46,14 @@
       {% endif %}
 
       {% elif wizard.steps.current == 'backup' %}
-      <input id="token" type="text" name="{{form_prefix}}otp_token" placeholder="{% trans "Backup code" %}" value="" class="input" autocomplete="off" />
-      <p class="tip">{% trans "You can enter one of your backup codes in case you lost access to your mobile device." %}</p>
+      <label for="token" class="sr-only">{% trans "Backup code" %}</label>
+      <input id="token" type="text" name="{{form_prefix}}otp_token" placeholder="{% trans "Backup code" %}" value="" class="input" autocomplete="off" aria-describedby="token-instructions{% if form.errors %} token-error{% endif %}"{% if form.errors %} aria-invalid="true"{% endif %} />
+      <p id="token-instructions" class="tip">{% trans "You can enter one of your backup codes in case you lost access to your mobile device." %}</p>
 
       {% if form.errors %}
-      <p class="error" role="alert">{% trans "Incorrect code" %}</p>
+      <p id="token-error" class="error" role="alert">{% trans "Incorrect code" %}</p>
       {% else %}
-      <p class="error hide" role="alert"></p>
+      <p id="token-error" class="error hide" role="alert"></p>
       {% endif %}
 
       <button type="submit" class="submit btn btn-primary btn-block h-auto mb-5">{% trans "Verify" %}</button>

@@ -8,8 +8,8 @@
   <h2 class="hd text-center">{% trans "Set your password" %}</h2>
   <form action="" method="post" class="form">{% csrf_token %}
     <div class="mb-3">
-      <label class="form-label">{% trans "Email" %} </label>
-      <input type="text" disabled="disabled" value="{{ iv.accepter }}" class="form-control" />
+      <label for="invitation-email" class="form-label">{% trans "Email" %} </label>
+      <input id="invitation-email" type="text" disabled="disabled" value="{{ iv.accepter }}" class="form-control" />
     </div>
     <div class="mb-3">
       <label for="password" class="form-label">{% trans "Password" %}</label>

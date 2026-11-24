@@ -3,14 +3,14 @@
 {% load i18n %}
 
 {% block main_panel %}
-<div class="wide-panel">
-    <h3>{% trans "Please choose how to view encrypted libraries online:" %}</h3>
+<div class="wide-panel" role="radiogroup" aria-labelledby="encryption-options-title" aria-describedby="encryption-options-tip">
+    <h3 id="encryption-options-title">{% trans "Please choose how to view encrypted libraries online:" %}</h3>
     <form method="post" action="{% url 'options_save' %}">{% csrf_token %}
-        <input type="radio" name="repo-enc" value="server-crypto" class="vam" />
-        <span class="vam bold">{% trans "Send passwords to the server." %}</span> <span class="vam">{% trans "Files will be decrypted in the server before being sent to you." %}</span><br />
-        <input type="radio" name="repo-enc" value="client-crypto" class="vam" />
-        <span class="vam bold">{% trans "Save passwords in your browser." %}</span> <span class="vam">{% trans "Files will be decrypted in your browser when you download them." %}</span>
-        <p>{% trans "Tip: the latter way is more secure, but it is not supported well by all browsers. We advise you to use the latest version of Chrome or Firefox." %}</p>
+        <input type="radio" name="repo-enc" value="server-crypto" class="vam" aria-labelledby="server-crypto-label" aria-describedby="server-crypto-description" />
+        <span id="server-crypto-label" class="vam bold">{% trans "Send passwords to the server." %}</span> <span id="server-crypto-description" class="vam">{% trans "Files will be decrypted in the server before being sent to you." %}</span><br />
+        <input type="radio" name="repo-enc" value="client-crypto" class="vam" aria-labelledby="client-crypto-label" aria-describedby="client-crypto-description" />
+        <span id="client-crypto-label" class="vam bold">{% trans "Save passwords in your browser." %}</span> <span id="client-crypto-description" class="vam">{% trans "Files will be decrypted in your browser when you download them." %}</span>
+        <p id="encryption-options-tip">{% trans "Tip: the latter way is more secure, but it is not supported well by all browsers. We advise you to use the latest version of Chrome or Firefox." %}</p>
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
     </form>
 </div>
