@@ -346,7 +346,7 @@ def main():
         with open(password_file, 'r') as fp:
             pwinfo = json.load(fp)
         email = pwinfo['email']
-        passwd = pwinfo['password']
+        passwd = pwinfo['password'].strip()
         os.unlink(password_file)
     else:
         email = ask_admin_email()
