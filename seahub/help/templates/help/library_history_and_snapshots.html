@@ -3,7 +3,7 @@
 
 {% block help_con %}
 
-<h3 class="hd">{% trans "Library history and snapshots" %}</h3>
+<h3 class="hd" id="help-page-title">{% trans "Library history and snapshots" %}</h3>
 <p>{% blocktrans %}Seafile tracks modification history for the entire library. Whenever a file operation applies to a library (file update, file deletion etc.), Seafile creates a "snapshot" of the previous state of the library. The snapshot contains the complete file and folder structure of the library.{% endblocktrans %}</p>
 <p>{% blocktrans %}In some cases, you have changed a lot of files in the library, and find that you want to revert all these changes. Restoring many files to their old versions can be tedious. At this time, the snapshot feature becomes very handy. You can restore the entire library to any point in the past. All the files in the library will be restored to that point of time, all at once. It works like a "time machine" for the library.{% endblocktrans %}</p>
 <p>{% trans "To view library history and snapshots:" %}</p>

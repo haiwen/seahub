@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block help_con %}
-<h3 class="hd">{% trans "File locking" %}</h3>
+<h3 class="hd" id="help-page-title">{% trans "File locking" %}</h3>
 <p>{% blocktrans %}When more than one person collaborate on a file, it's likely that more than one person modify the file at about the same time. Seafile handles this situation nicely with conflict files. But it's often more convenient to lock the file when one person wants to exclusively modify the file. Seafile Professional Edition supports file locking.{% endblocktrans %}</p>
 <p>{% trans "File locking works on both the web app and the desktop syncing client. We'll introduce them one by one." %}</p>
 <h4>{% trans "File locking on the Web App" %}</h4>
