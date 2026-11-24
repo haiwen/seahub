@@ -48,13 +48,13 @@ except ImportError:
 
 from seahub.utils.ldap import ENABLE_LDAP, LDAP_USER_FIRST_NAME_ATTR, LDAP_USER_LAST_NAME_ATTR, \
     LDAP_USER_NAME_REVERSE, LDAP_FILTER, LDAP_CONTACT_EMAIL_ATTR, LDAP_USER_ROLE_ATTR, \
-    ENABLE_SASL, SASL_MECHANISM, SASL_AUTHC_ID_ATTR, \
+    ENABLE_SASL, SASL_MECHANISM, SASL_AUTHC_ID_ATTR, LDAP_USER_BIND_ENABLE_SASL, \
     LDAP_PROVIDER, LDAP_SERVER_URL, LDAP_BASE_DN, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD, LDAP_LOGIN_ATTR, \
     ENABLE_MULTI_LDAP, MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_BASE_DN, MULTI_LDAP_1_ADMIN_DN, \
     MULTI_LDAP_1_ADMIN_PASSWORD, MULTI_LDAP_1_LOGIN_ATTR, \
     MULTI_LDAP_1_PROVIDER, MULTI_LDAP_1_FILTER, MULTI_LDAP_1_CONTACT_EMAIL_ATTR, \
     MULTI_LDAP_1_USER_ROLE_ATTR, MULTI_LDAP_1_ENABLE_SASL, MULTI_LDAP_1_SASL_MECHANISM, \
-    MULTI_LDAP_1_SASL_AUTHC_ID_ATTR, LDAP_UPDATE_USER_WHEN_LOGIN, \
+    MULTI_LDAP_1_SASL_AUTHC_ID_ATTR, MULTI_LDAP_1_USER_BIND_ENABLE_SASL, LDAP_UPDATE_USER_WHEN_LOGIN, \
     LDAP_FOLLOW_REFERRALS, MULTI_LDAP_1_FOLLOW_REFERRALS
 
 logger = logging.getLogger(__name__)
@@ -913,48 +913,77 @@ class CustomLDAPBackend(object):
 
     def search_user(self, server_url, admin_dn, admin_password, enable_sasl, sasl_mechanism,
                     sasl_authc_id_attr, base_dn, login_attr_conf, login_attr, password, serch_filter,
-                    contact_email_attr, role_attr, follow_referrals):
+                    contact_email_attr, role_attr, follow_referrals, user_bind_enable_sasl=None):
+        # Password authentication must not accept empty or non-password credentials.
+        if not isinstance(password, (str, bytes)) or not password:
+            raise Exception('LDAP user password must not be empty')
+
+        if user_bind_enable_sasl is None:
+            user_bind_enable_sasl = enable_sasl
+        if not isinstance(user_bind_enable_sasl, bool):
+            raise Exception('Invalid LDAP user bind configuration')
+
+        mechanism = sasl_mechanism.upper() if isinstance(sasl_mechanism, str) else ''
+        if enable_sasl and not mechanism:
+            raise Exception('LDAP service SASL mechanism must not be empty')
+
+        # Only mechanisms that verify the supplied password are allowed here.
+        # EXTERNAL/GSSAPI may authenticate the service rather than the user.
+        # Require an explicit simple user bind instead of silently downgrading.
+        password_mechanisms = {
+            'PLAIN', 'LOGIN', 'CRAM-MD5', 'DIGEST-MD5',
+            'SCRAM-SHA-1', 'SCRAM-SHA-1-PLUS',
+            'SCRAM-SHA-256', 'SCRAM-SHA-256-PLUS',
+            'SCRAM-SHA-512', 'SCRAM-SHA-512-PLUS',
+        }
+        if user_bind_enable_sasl and mechanism not in password_mechanisms:
+            raise Exception('LDAP user SASL mechanism cannot verify a password; '
+                            'configure a password-based user bind')
+
         try:
             admin_bind = self.ldap_bind(server_url, admin_dn, admin_dn,
                                         admin_password, enable_sasl,
-                                        sasl_mechanism, follow_referrals)
+                                        mechanism, follow_referrals)
         except Exception as e:
             raise Exception(e)
 
-        filterstr = filter.filter_format(f'(&({login_attr_conf}=%s))', [login_attr])
-        if serch_filter:
-            filterstr = filterstr[:-1] + '(' + serch_filter + '))'
+        try:
+            filterstr = filter.filter_format(f'(&({login_attr_conf}=%s))', [login_attr])
+            if serch_filter:
+                filterstr = filterstr[:-1] + '(' + serch_filter + '))'
 
-        result_data = None
-        base_list = base_dn.split(';')
-        for base in base_list:
-            if base == '':
-                continue
-            try:
-                result_data = admin_bind.search_s(base, ldap.SCOPE_SUBTREE, filterstr)
-                if result_data:
-                    break
-            except Exception as e:
-                raise Exception('ldap user search failed: %s' % e)
+            result_data = None
+            base_list = base_dn.split(';')
+            for base in base_list:
+                if base == '':
+                    continue
+                try:
+                    result_data = admin_bind.search_s(base, ldap.SCOPE_SUBTREE, filterstr)
+                    if result_data:
+                        break
+                except Exception as e:
+                    raise Exception('ldap user search failed: %s' % e)
 
-        # user not found in ldap
-        if not result_data:
-            raise Exception('ldap user %s not found.' % login_attr)
-
-        # delete old ldap bind_conn instance and create new, if not, some err will occur
-        admin_bind.unbind_s()
-        del admin_bind
+            if not result_data:
+                raise Exception('ldap user %s not found.' % login_attr)
+            if len(result_data) != 1 or not result_data[0][0]:
+                raise Exception('LDAP user search must return one entry with a DN')
+        finally:
+            admin_bind.unbind_s()
 
         try:
             dn, nickname, contact_email, user_role, authc_id = parse_ldap_res(
-                result_data, enable_sasl, sasl_mechanism, sasl_authc_id_attr, contact_email_attr, role_attr)
+                result_data, user_bind_enable_sasl, mechanism, sasl_authc_id_attr, contact_email_attr, role_attr)
         except Exception as e:
             raise Exception('parse ldap result failed: %s' % e)
 
+        if not dn or (user_bind_enable_sasl and not authc_id):
+            raise Exception('LDAP user bind identity must not be empty')
+
         try:
             user_bind = self.ldap_bind(server_url, dn, authc_id,
-                                       password, enable_sasl,
-                                       sasl_mechanism, follow_referrals)
+                                       password, user_bind_enable_sasl,
+                                       mechanism, follow_referrals)
         except Exception as e:
             raise Exception(e)
 
@@ -976,7 +1005,7 @@ class CustomLDAPBackend(object):
             nickname, contact_email, user_role = self.search_user(
                 LDAP_SERVER_URL, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD, ENABLE_SASL, SASL_MECHANISM,
                 SASL_AUTHC_ID_ATTR, LDAP_BASE_DN, LDAP_LOGIN_ATTR, login_attr, password, LDAP_FILTER,
-                LDAP_CONTACT_EMAIL_ATTR, LDAP_USER_ROLE_ATTR, LDAP_FOLLOW_REFERRALS)
+                LDAP_CONTACT_EMAIL_ATTR, LDAP_USER_ROLE_ATTR, LDAP_FOLLOW_REFERRALS, LDAP_USER_BIND_ENABLE_SASL)
             ldap_provider = LDAP_PROVIDER
         except Exception as e:
             if ENABLE_MULTI_LDAP:
@@ -991,7 +1020,7 @@ class CustomLDAPBackend(object):
                         MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_ADMIN_DN, MULTI_LDAP_1_ADMIN_PASSWORD,
                         MULTI_LDAP_1_ENABLE_SASL, MULTI_LDAP_1_SASL_MECHANISM, MULTI_LDAP_1_SASL_AUTHC_ID_ATTR,
                         MULTI_LDAP_1_BASE_DN, MULTI_LDAP_1_LOGIN_ATTR, login_attr, password, MULTI_LDAP_1_FILTER,
-                        MULTI_LDAP_1_CONTACT_EMAIL_ATTR, MULTI_LDAP_1_USER_ROLE_ATTR, MULTI_LDAP_1_FOLLOW_REFERRALS)
+                        MULTI_LDAP_1_CONTACT_EMAIL_ATTR, MULTI_LDAP_1_USER_ROLE_ATTR, MULTI_LDAP_1_FOLLOW_REFERRALS, MULTI_LDAP_1_USER_BIND_ENABLE_SASL)
                     ldap_provider = MULTI_LDAP_1_PROVIDER
                 except Exception as e:
                     logger.error(e)
