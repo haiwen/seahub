@@ -1507,7 +1507,6 @@ def view_shared_file(request, fileshare):
             shared_file_download_url = ''
 
     accessible_repos = get_unencry_rw_repos_by_user(request)
-    save_to_link = reverse('save_shared_link') + '?t=' + token
 
     permissions = fileshare.get_permissions()
 
@@ -1536,7 +1535,6 @@ def view_shared_file(request, fileshare):
             'file_encoding_list': ret_dict['file_encoding_list'],
             'filetype': ret_dict['filetype'],
             'accessible_repos': accessible_repos,
-            'save_to_link': save_to_link,
             'traffic_over_limit': False,
             'permissions': permissions,
             'enable_watermark': ENABLE_WATERMARK,

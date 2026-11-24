@@ -5,9 +5,8 @@ import json
 import logging
 
 from django.core.cache import cache
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse
 from django.utils.translation import gettext as _
-from django.contrib import messages
 
 import seaserv
 from seaserv import seafile_api
@@ -18,14 +17,13 @@ from seahub.share.signals import share_repo_to_user_successful
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.base.decorators import require_POST
 from seahub.contacts.signals import mail_sended
-from seahub.views import is_registered_user, check_folder_permission
-from seahub.utils import string2list, check_filename_with_rename, \
-    is_valid_username, is_valid_email, is_org_context, \
-    gen_token, normalize_cache_key, gen_shared_link
+from seahub.views import is_registered_user
+from seahub.utils import string2list, is_valid_username, is_valid_email, \
+    is_org_context, gen_token, normalize_cache_key, gen_shared_link
 from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils.ms_excel import write_xls
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
-from seahub.settings import SITE_ROOT, SHARE_LINK_AUDIT_CODE_TIMEOUT
+from seahub.settings import SHARE_LINK_AUDIT_CODE_TIMEOUT
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -114,48 +112,6 @@ def share_to_user(request, repo, to_user, permission):
                                            to_user=to_user, repo=repo,
                                            path='/', org_id=org_id)
         return True
-
-
-@login_required
-def save_shared_link(request):
-    """Save public share link to one's library.
-    """
-    username = request.user.username
-    token = request.GET.get('t', '')
-    dst_repo_id = request.POST.get('dst_repo', '')
-    dst_path = request.POST.get('dst_path', '')
-
-    next_page = request.headers.get('referer', None)
-    if not next_page:
-        next_page = SITE_ROOT
-
-    if not dst_repo_id or not dst_path:
-        messages.error(request, _('Please choose a folder.'))
-        return HttpResponseRedirect(next_page)
-
-    if check_folder_permission(request, dst_repo_id, dst_path) != 'rw':
-        messages.error(request, _('Permission denied'))
-        return HttpResponseRedirect(next_page)
-
-    try:
-        fs = FileShare.objects.get(token=token)
-    except FileShare.DoesNotExist:
-        raise Http404
-
-    src_repo_id = fs.repo_id
-    src_path = os.path.dirname(fs.path)
-    obj_name = os.path.basename(fs.path)
-
-    new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
-
-    seafile_api.copy_file(src_repo_id, src_path,
-                          json.dumps([obj_name]),
-                          dst_repo_id, dst_path,
-                          json.dumps([new_obj_name]),
-                          username, need_progress=0)
-
-    messages.success(request, _('Successfully saved.'))
-    return HttpResponseRedirect(next_page)
 
 
 # share link
