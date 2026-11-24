@@ -14,7 +14,6 @@ import '../../css/file-uploader.css';
 
 const propTypes = {
   token: PropTypes.string.isRequired,
-  repoID: PropTypes.string.isRequired,
   // direntList: PropTypes.array.isRequired,
   filetypes: PropTypes.array,
   chunkSize: PropTypes.number,
@@ -180,6 +179,9 @@ class FileUploader extends React.Component {
     }
     const lastModified = resumableFile.file.lastModified;
     resumableFile.formData['file_mtime'] = dayjs(lastModified).format('YYYY-MM-DDTHH:mm:ssZ');
+    if (resumableFile.isPaused() && this.resumable.files.includes(resumableFile)) {
+      this.resumableUpload(resumableFile);
+    }
   };
 
   onFileAdded = (resumableFile, files) => {
@@ -211,16 +213,7 @@ class FileUploader extends React.Component {
         });
       } else {
         this.setUploadFileList(this.resumable.files);
-        let { token, relativePath } = this.props;
-        const sessionAtRequest = this.uploadSession;
-        seafileAPI.sharedLinkGetFileUploadUrl(token, relativePath).then(res => {
-          if (this.isCancellingAll || this.suppressAdds || this.uploadSession !== sessionAtRequest) return;
-          this.resumable.opts.target = res.data.upload_link + '?ret-json=1';
-          this.resumableUpload(resumableFile);
-        }).catch(error => {
-          let errMessage = Utils.getErrorMsg(error);
-          toaster.danger(errMessage);
-        });
+        this.resumableUpload(resumableFile);
       }
     } else {
       this.setUploadFileList(this.resumable.files);
@@ -241,19 +234,23 @@ class FileUploader extends React.Component {
   };
 
   resumableUpload = (resumableFile) => {
-    let { repoID, path } = this.props;
-    const sessionAtRequest = this.uploadSession;
-    seafileAPI.getFileUploadedBytes(repoID, path, resumableFile.fileName, resumableFile.formData.file_mtime).then(res => {
-      if (this.isCancellingAll || this.suppressAdds || this.uploadSession !== sessionAtRequest) return;
-      let uploadedBytes = res.data.uploadedBytes;
-      let blockSize = parseInt(resumableUploadFileBlockSize) * 1024 * 1024 || 1024 * 1024;
-      let offset = Math.floor(uploadedBytes / blockSize);
-      resumableFile.markChunksCompleted(offset);
-      if (this.isCancellingAll || this.suppressAdds || this.uploadSession !== sessionAtRequest) return;
+    const { relativePath, formData } = resumableFile;
+    resumableFile.pause(true);
+    const path = this.getUploadRelativePath(resumableFile);
+    const session = this.uploadSession;
+    seafileAPI.sharedLinkGetFileUploadUrl(this.props.token, path, relativePath, formData.file_mtime).then(({ data }) => {
+      if (this.uploadSession !== session || !this.resumable.files.includes(resumableFile)) return;
+      resumableFile.uploadLink = data.upload_link + '?ret-json=1';
+      this.uploadLinkCache[path] = resumableFile.uploadLink;
+      resumableFile.markChunksCompleted(Math.floor(data.uploadedBytes / this.resumable.opts.chunkSize));
+      resumableFile.pause(false);
       this.resumable.upload();
     }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+      if (!this.resumable.files.includes(resumableFile)) return;
+      const message = Utils.getErrorMsg(error);
+      resumableFile.error = message;
+      this.setState(({ retryFileList }) => ({ retryFileList: [...retryFileList, resumableFile] }));
+      toaster.danger(message);
     });
   };
 
@@ -524,6 +521,64 @@ class FileUploader extends React.Component {
     return formData;
   };
 
+  freezeUploadContext = (resumableFile) => {
+    if (!resumableFile.uploadParentDir) {
+      resumableFile.uploadParentDir = this.props.path;
+    }
+    if (!resumableFile.uploadRelativePath) {
+      resumableFile.uploadRelativePath = this.props.relativePath;
+    }
+  };
+
+  getUploadParentDir = (resumableFile) => {
+    return resumableFile.uploadParentDir || this.props.path;
+  };
+
+  getUploadRelativePath = (resumableFile) => {
+    return resumableFile.uploadRelativePath || this.props.relativePath;
+  };
+
+  getUploadLinkKey = (resumableFile) => {
+    return this.getUploadRelativePath(resumableFile);
+  };
+
+  clearUploadLinkContext = () => {
+    this.uploadLinkPromises = {};
+    this.uploadLinkCache = {};
+  };
+
+  ensureUploadLink = (resumableFile) => {
+    this.freezeUploadContext(resumableFile);
+
+    if (resumableFile.uploadLink) {
+      return Promise.resolve(resumableFile.uploadLink);
+    }
+
+    let { token } = this.props;
+    let relativePath = this.getUploadRelativePath(resumableFile);
+    let cacheKey = this.getUploadLinkKey(resumableFile);
+
+    if (this.uploadLinkCache[cacheKey]) {
+      resumableFile.uploadLink = this.uploadLinkCache[cacheKey];
+      return Promise.resolve(resumableFile.uploadLink);
+    }
+
+    if (!this.uploadLinkPromises[cacheKey]) {
+      this.uploadLinkPromises[cacheKey] = seafileAPI.sharedLinkGetFileUploadUrl(token, relativePath).then(res => {
+        let uploadLink = res.data.upload_link + '?ret-json=1';
+        this.uploadLinkCache[cacheKey] = uploadLink;
+        return uploadLink;
+      }).finally(() => {
+        delete this.uploadLinkPromises[cacheKey];
+      });
+    }
+
+    return this.uploadLinkPromises[cacheKey].then(uploadLink => {
+      resumableFile.uploadLink = uploadLink;
+      return uploadLink;
+    });
+  };
+
   generateUniqueIdentifier = (file) => {
     let relativePath = file.webkitRelativePath || file.relativePath || file.fileName || file.name;
     return MD5(relativePath + new Date()) + relativePath;
@@ -602,83 +657,15 @@ class FileUploader extends React.Component {
   };
 
   onUploadRetry = (resumableFile) => {
-
-    let { token, relativePath } = this.props;
-    seafileAPI.sharedLinkGetFileUploadUrl(token, relativePath).then(res => {
-      this.resumable.opts.target = res.data.upload_link + '?ret-json=1';
-
-      let retryFileList = this.state.retryFileList.filter(item => {
-        return item.uniqueIdentifier !== resumableFile.uniqueIdentifier;
-      });
-      let uploadFileList = this.state.uploadFileList.map(item => {
-        if (item.uniqueIdentifier === resumableFile.uniqueIdentifier) {
-          item.error = null;
-          this.retryUploadFile(item);
-        }
-        return item;
-      });
-
-      this.setState({
-        retryFileList: retryFileList,
-        uploadFileList: uploadFileList
-      });
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
+    if (!resumableFile.error) return;
+    resumableFile.error = null;
+    this.setState(({ retryFileList }) => ({ retryFileList: retryFileList.filter(file => file !== resumableFile) }));
+    resumableFile.pause(true);
+    resumableFile.bootstrap();
   };
 
   onUploadRetryAll = () => {
-
-    let { token, relativePath } = this.props;
-    seafileAPI.sharedLinkGetFileUploadUrl(token, relativePath).then(res => {
-      this.resumable.opts.target = res.data.upload_link + '?ret-json=1';
-      this.state.retryFileList.forEach(item => {
-        item.error = false;
-        this.retryUploadFile(item);
-      });
-
-      let uploadFileList = this.state.uploadFileList.slice(0);
-      this.setState({
-        retryFileList: [],
-        uploadFileList: uploadFileList
-      });
-
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  retryUploadFile = (resumableFile) => {
-    let { repoID, path } = this.props;
-    let fileName = resumableFile.fileName;
-    let isFile = resumableFile.fileName === resumableFile.relativePath;
-    if (!isFile) {
-      let relative_path = resumableFile.formData.relative_path;
-      let prefix = path === '/' ? (path + relative_path) : (path + '/' + relative_path);
-      fileName = prefix + fileName;
-    }
-
-    resumableFile.bootstrap();
-    var firedRetry = false;
-    resumableFile.resumableObj.on('chunkingComplete', () => {
-      if (!firedRetry) {
-        seafileAPI.getFileUploadedBytes(repoID, path, fileName, resumableFile.formData.file_mtime).then(res => {
-          let uploadedBytes = res.data.uploadedBytes;
-          let blockSize = parseInt(resumableUploadFileBlockSize) * 1024 * 1024 || 1024 * 1024;
-          let offset = Math.floor(uploadedBytes / blockSize);
-          resumableFile.markChunksCompleted(offset);
-
-          resumableFile.resumableObj.upload();
-
-        }).catch(error => {
-          let errMessage = Utils.getErrorMsg(error);
-          toaster.danger(errMessage);
-        });
-      }
-      firedRetry = true;
-    });
+    this.state.retryFileList.forEach(this.onUploadRetry);
   };
 
   uploadFile = () => {

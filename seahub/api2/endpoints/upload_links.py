@@ -23,6 +23,7 @@ from seahub.api2.utils import api_error
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import AnonRateThrottle, UserRateThrottle
 from seahub.api2.permissions import CanGenerateUploadLink
+from seahub.api2.endpoints.repo_file_uploaded_bytes import get_file_uploaded_bytes
 
 from seahub.share.models import UploadLinkShare, check_share_link_common
 from seahub.utils import gen_shared_upload_link, gen_file_upload_url, \
@@ -470,10 +471,10 @@ class UploadLinkUpload(APIView):
     throttle_classes = (AnonRateThrottle, )
 
     def get(self, request, token):
-        """ Get file upload url according to upload link token.
+        """Get a seafhttp upload URL and optional resumable upload offset for an upload link.
 
         Permission checking:
-        1. anyone has the upload link token can perform this action;
+        1. anyone with a valid upload link token;
         """
 
         try:
@@ -499,13 +500,18 @@ class UploadLinkUpload(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         path = uls.path
-        dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
-        if not dir_id:
+
+        def can_upload(directory):
+            return (not repo.encrypted and
+                    seafile_api.check_permission_by_path(repo_id, directory, uls.username) == 'rw')
+
+        result = {}
+        if 'file_name' in request.GET:
+            result['uploadedBytes'] = get_file_uploaded_bytes(request, repo_id, path, can_upload)
+        elif not seafile_api.get_dir_id_by_path(repo_id, path):
             error_msg = 'Folder %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if repo.encrypted or \
-                seafile_api.check_permission_by_path(repo_id, path, uls.username) != 'rw':
+        elif not can_upload(path):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -543,7 +549,6 @@ class UploadLinkUpload(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        result = {}
         result['upload_link'] = gen_file_upload_url(token, 'upload-api')
         return Response(result)
 
