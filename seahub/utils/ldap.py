@@ -12,7 +12,8 @@ LDAP_ADMIN_DN = getattr(settings, 'LDAP_ADMIN_DN', '')
 LDAP_ADMIN_PASSWORD = getattr(settings, 'LDAP_ADMIN_PASSWORD', '')
 LDAP_LOGIN_ATTR = getattr(settings, 'LDAP_LOGIN_ATTR', '')
 
-# None keeps the legacy user bind mode; False selects password-based simple bind.
+# None inherits the service bind mode, subject to password-authentication checks.
+# False explicitly selects simple user bind; passwordless SASL user binds are rejected.
 LDAP_USER_BIND_ENABLE_SASL = getattr(settings, 'LDAP_USER_BIND_ENABLE_SASL', None)
 
 LDAP_PROVIDER = getattr(settings, 'LDAP_PROVIDER', 'ldap')
