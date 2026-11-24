@@ -28,6 +28,7 @@ from seahub.api2.utils import api_error, send_share_link_emails
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import CanGenerateShareLink, IsProVersion
+from seahub.api2.endpoints.repo_file_uploaded_bytes import get_file_uploaded_bytes, resolve_upload_path
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_READ, \
@@ -1048,7 +1049,7 @@ class ShareLinkUpload(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, token):
-        """ Only used for get seafhttp upload link for a folder share link.
+        """Get a seafhttp upload URL and optional resumable upload offset for a folder share link.
         Permission checking:
         1, If enable SHARE_LINK_LOGIN_REQUIRED, user must have been authenticated.
         2, If enable SHARE_LINK_SCOPE, user must have been authenticated by specific scope.
@@ -1063,34 +1064,14 @@ class ShareLinkUpload(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # resource check
-        try:
-            share_link = FileShare.objects.get_valid_dir_link_by_token(token=token)
-        except FileShare.DoesNotExist:
+        share_link = FileShare.objects.get_valid_dir_link_by_token(token=token)
+        if not share_link:
             error_msg = 'Share link %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if not share_link.is_dir_share_link():
             error_msg = 'Share link %s is not a folder share link.' % token
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        repo_id = share_link.repo_id
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        share_link_path = share_link.path
-        request_path = request.GET.get('path', '/')
-        if request_path == '/':
-            path = share_link_path
-        else:
-            path = posixpath.join(share_link_path, request_path.strip('/'))
-
-        path = normalize_dir_path(path)
-        dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
-        if not dir_id:
-            error_msg = 'Folder %s not found.' % request_path
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if share_link.is_encrypted() and not check_share_link_access(request, token):
             error_msg = 'Permission denied.'
@@ -1103,6 +1084,30 @@ class ShareLinkUpload(APIView):
         if not share_link.get_permissions()['can_upload']:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo_id = share_link.repo_id
+        request_path = request.GET.get('path', '/')
+        path = resolve_upload_path(share_link.path, request_path.strip('/'))
+        if not path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid.')
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        path = normalize_dir_path(path)
+
+        result = {}
+        if 'file_name' in request.GET:
+            def can_upload(directory):
+                permission = seafile_api.check_permission_by_path(repo_id, directory, share_link.username)
+                return permission and parse_repo_perm(permission).can_upload
+
+            result['uploadedBytes'] = get_file_uploaded_bytes(request, repo_id, path, can_upload)
+        elif not seafile_api.get_dir_id_by_path(repo_id, path):
+            error_msg = 'Folder %s not found.' % request_path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # generate token
         obj_id = json.dumps({'parent_dir': path})
@@ -1129,7 +1134,6 @@ class ShareLinkUpload(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        result = {}
         result['upload_link'] = gen_file_upload_url(token, 'upload-api')
         return Response(result)
 

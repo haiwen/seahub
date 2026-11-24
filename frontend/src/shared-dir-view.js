@@ -946,7 +946,6 @@ class SharedDirView extends React.Component {
                   token={token}
                   path={dirPath === '/' ? dirPath : dirPath.replace(/\/+$/, '')}
                   relativePath={path === '/' ? path : path.replace(/\/+$/, '')}
-                  repoID={repoID}
                   onFileUploadSuccess={this.onFileUploadSuccess}
                 />
               )}

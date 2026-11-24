@@ -1167,9 +1167,9 @@ class SeafileAPI {
   }
 
   // for shared folder link with 'can_upload' permission
-  sharedLinkGetFileUploadUrl(token, path) {
-    const url = this.server + '/api/v2.1/share-links/' + token + '/upload/?path=' + encodeURIComponent(path);
-    return this.req.get(url);
+  sharedLinkGetFileUploadUrl(token, path, fileName, fileMtime) {
+    const url = this.server + '/api/v2.1/share-links/' + token + '/upload/';
+    return this.req.get(url, { params: { path, file_name: fileName, file_mtime: fileMtime } });
   }
 
   getFileUploadedBytes(repoID, filePath, fileName, fileMtime) {
@@ -1182,9 +1182,9 @@ class SeafileAPI {
     return this.req.get(url, { params: params });
   }
 
-  sharedUploadLinkGetFileUploadUrl(token) {
+  sharedUploadLinkGetFileUploadUrl(token, fileName, fileMtime) {
     const url = this.server + '/api/v2.1/upload-links/' + token + '/upload/';
-    return this.req.get(url);
+    return this.req.get(url, { params: { file_name: fileName, file_mtime: fileMtime } });
   }
 
   shareLinksUploadDone(token, filePath, isDir) {
