@@ -1220,7 +1220,7 @@ class RegistrationForm(forms.Form):
     """
     attrs_dict = {'class': 'input'}
 
-    email = forms.CharField(widget=forms.TextInput(attrs=dict(attrs_dict, maxlength=75)),
+    email = forms.CharField(widget=forms.TextInput(attrs=dict(attrs_dict, maxlength=75, autocomplete='email')),
                             label=_("Email address"))
 
     userid = forms.RegexField(regex=r'^\w+$',
@@ -1230,9 +1230,9 @@ class RegistrationForm(forms.Form):
                               label=_("Username"),
                               error_messages={'invalid': _("This value must be of length 40")})
 
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs=dict(attrs_dict, autocomplete='new-password'), render_value=False),
                                 label=_("Password"))
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs=dict(attrs_dict, autocomplete='new-password'), render_value=False),
                                 label=_("Password (again)"))
 
     @classmethod
@@ -1308,13 +1308,13 @@ class DetailedRegistrationForm(RegistrationForm):
         name_required = dept_required = tele_required = note_required = True
 
     name = forms.CharField(widget=forms.TextInput(
-            attrs=dict(attrs_dict, maxlength=64)), label=_("name"),
+            attrs=dict(attrs_dict, maxlength=64, autocomplete='name')), label=_("name"),
                            required=name_required)
     department = forms.CharField(widget=forms.TextInput(
             attrs=dict(attrs_dict, maxlength=512)), label=_("department"),
                                  required=dept_required)
     telephone = forms.CharField(widget=forms.TextInput(
-            attrs=dict(attrs_dict, maxlength=100)), label=_("telephone"),
+            attrs=dict(attrs_dict, maxlength=100, autocomplete='tel')), label=_("telephone"),
                                 required=tele_required)
     note = forms.CharField(widget=forms.TextInput(
             attrs=dict(attrs_dict, maxlength=100)), label=_("note"),
