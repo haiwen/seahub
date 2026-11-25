@@ -186,6 +186,20 @@ class UploadLinksTest(BaseTestCase):
         self.assertEqual('Permission denied.', resp.json()['error_msg'])
         mock_get_upload_link_info.assert_not_called()
 
+    def test_update_upload_link_as_owner(self):
+        self.login_as(self.user)
+        token = self._add_upload_link()
+        now = timezone.now().replace(microsecond=0)
+
+        url = reverse('api-v2.1-upload-link', args=[token])
+        data = json.dumps({'expire_days': 1})
+        with patch('seahub.api2.endpoints.upload_links.timezone.now', return_value=now):
+            resp = self.client.put(url, data, content_type='application/json')
+
+        self.assertEqual(200, resp.status_code, resp.content)
+        expire_date = UploadLinkShare.objects.get(token=token).expire_date
+        self.assertEqual(now + relativedelta(days=1), expire_date)
+
     def test_update_upload_link_if_not_owner(self):
         self.login_as(self.admin)
         token = self._add_upload_link()
