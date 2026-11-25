@@ -1076,23 +1076,22 @@ class ShareLinkUpload(APIView):
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid.')
 
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
         path = normalize_dir_path(path)
-
         result = {}
         if 'file_name' in request.GET:
-            def can_upload(directory):
-                permission = seafile_api.check_permission_by_path(repo_id, directory, share_link.username)
+            def can_upload(repo, directory):
+                permission = seafile_api.check_permission_by_path(repo.id, directory, share_link.username)
                 return permission and parse_repo_perm(permission).can_upload
 
             result['uploadedBytes'] = get_file_uploaded_bytes(request, repo_id, path, can_upload)
-        elif not seafile_api.get_dir_id_by_path(repo_id, path):
-            error_msg = 'Folder %s not found.' % request_path
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        else:
+            if not seafile_api.get_repo(repo_id):
+                error_msg = 'Library %s not found.' % repo_id
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            if not seafile_api.get_dir_id_by_path(repo_id, path):
+                error_msg = 'Folder %s not found.' % request_path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # generate token
         obj_id = json.dumps({'parent_dir': path})

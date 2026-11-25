@@ -494,26 +494,28 @@ class UploadLinkUpload(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_id = uls.repo_id
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
         path = uls.path
 
-        def can_upload(directory):
+        def can_upload(repo, directory):
             return (not repo.encrypted and
-                    seafile_api.check_permission_by_path(repo_id, directory, uls.username) == 'rw')
+                    seafile_api.check_permission_by_path(repo.id, directory, uls.username) == 'rw')
 
         result = {}
         if 'file_name' in request.GET:
             result['uploadedBytes'] = get_file_uploaded_bytes(request, repo_id, path, can_upload)
-        elif not seafile_api.get_dir_id_by_path(repo_id, path):
-            error_msg = 'Folder %s not found.' % path
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        elif not can_upload(path):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        else:
+            repo = seafile_api.get_repo(repo_id)
+            if not repo:
+                error_msg = 'Library %s not found.' % repo_id
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            if not seafile_api.get_dir_id_by_path(repo_id, path):
+                error_msg = 'Folder %s not found.' % path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            if not can_upload(repo, path):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         obj_id = json.dumps({'parent_dir': path})
 

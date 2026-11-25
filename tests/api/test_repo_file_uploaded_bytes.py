@@ -25,7 +25,7 @@ class RepoFileUploadedBytesTest(SimpleTestCase):
             patcher = patch.object(module, 'seafile_api', self.api)
             patcher.start()
             self.addCleanup(patcher.stop)
-        self.api.get_repo.return_value = SimpleNamespace(encrypted=False)
+        self.api.get_repo.return_value = SimpleNamespace(id=self.repo_id, encrypted=False)
         self.api.get_repo_status.return_value = 0
         self.api.get_dir_id_by_path.return_value = 'dir'
         self.api.check_permission_by_path.return_value = 'rw'
@@ -49,6 +49,7 @@ class RepoFileUploadedBytesTest(SimpleTestCase):
             for headers, code in (({}, 403), ({'HTTP_AUTHORIZATION': 'Token invalid'}, 401)):
                 with self.subTest(headers=headers):
                     self.assertEqual(self.request(self.repo_url, self.params, **headers).status_code, code)
+                    self.api.get_repo.assert_not_called()
                     self.api.check_permission_by_path.assert_not_called()
                     self.api.get_dir_id_by_path.assert_not_called()
                     self.api.get_upload_tmp_file_offset.assert_not_called()
@@ -61,6 +62,14 @@ class RepoFileUploadedBytesTest(SimpleTestCase):
             response = self.request(self.repo_url, self.params, HTTP_AUTHORIZATION='Token test-token')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, {'uploadedBytes': 1024})
+
+    def test_hides_missing_repo_before_directory_or_permission_lookup(self):
+        self.api.get_repo.return_value = None
+        response = self.get_response(self.params)
+        self.assertEqual((response.status_code, response.data), (404, {'error_msg': 'Not found.'}))
+        self.api.get_dir_id_by_path.assert_not_called()
+        self.api.check_permission_by_path.assert_not_called()
+        self.api.get_upload_tmp_file_offset.assert_not_called()
 
     def test_hides_missing_or_nonwritable_targets(self):
         for directory, permission in ((None, None), (None, 'rw'), ('dir', None), ('dir', 'r'), ('dir', 'invisible')):
@@ -182,6 +191,7 @@ class RepoFileUploadedBytesTest(SimpleTestCase):
                 self.assertEqual(response.data, {
                     'error_msg': 'file_mtime invalid, should be ISO 8601 format with timezone.',
                 })
+                self.api.get_repo.assert_not_called()
                 self.api.check_permission_by_path.assert_not_called()
                 self.api.get_upload_tmp_file_offset.assert_not_called()
 

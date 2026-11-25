@@ -234,14 +234,12 @@ class FileUploader extends React.Component {
   };
 
   resumableUpload = (resumableFile) => {
-    const { relativePath, formData } = resumableFile;
+    const { token, relativePath } = this.props;
+    const { relativePath: fileName, formData } = resumableFile;
     resumableFile.pause(true);
-    const path = this.getUploadRelativePath(resumableFile);
-    const session = this.uploadSession;
-    seafileAPI.sharedLinkGetFileUploadUrl(this.props.token, path, relativePath, formData.file_mtime).then(({ data }) => {
-      if (this.uploadSession !== session || !this.resumable.files.includes(resumableFile)) return;
-      resumableFile.uploadLink = data.upload_link + '?ret-json=1';
-      this.uploadLinkCache[path] = resumableFile.uploadLink;
+    seafileAPI.sharedLinkGetFileUploadUrl(token, relativePath, fileName, formData.file_mtime).then(({ data }) => {
+      if (!this.resumable.files.includes(resumableFile)) return;
+      this.resumable.opts.target = data.upload_link + '?ret-json=1';
       resumableFile.markChunksCompleted(Math.floor(data.uploadedBytes / this.resumable.opts.chunkSize));
       resumableFile.pause(false);
       this.resumable.upload();
@@ -519,64 +517,6 @@ class FileUploader extends React.Component {
   setQuery = (resumableFile) => {
     let formData = resumableFile.formData;
     return formData;
-  };
-
-  freezeUploadContext = (resumableFile) => {
-    if (!resumableFile.uploadParentDir) {
-      resumableFile.uploadParentDir = this.props.path;
-    }
-    if (!resumableFile.uploadRelativePath) {
-      resumableFile.uploadRelativePath = this.props.relativePath;
-    }
-  };
-
-  getUploadParentDir = (resumableFile) => {
-    return resumableFile.uploadParentDir || this.props.path;
-  };
-
-  getUploadRelativePath = (resumableFile) => {
-    return resumableFile.uploadRelativePath || this.props.relativePath;
-  };
-
-  getUploadLinkKey = (resumableFile) => {
-    return this.getUploadRelativePath(resumableFile);
-  };
-
-  clearUploadLinkContext = () => {
-    this.uploadLinkPromises = {};
-    this.uploadLinkCache = {};
-  };
-
-  ensureUploadLink = (resumableFile) => {
-    this.freezeUploadContext(resumableFile);
-
-    if (resumableFile.uploadLink) {
-      return Promise.resolve(resumableFile.uploadLink);
-    }
-
-    let { token } = this.props;
-    let relativePath = this.getUploadRelativePath(resumableFile);
-    let cacheKey = this.getUploadLinkKey(resumableFile);
-
-    if (this.uploadLinkCache[cacheKey]) {
-      resumableFile.uploadLink = this.uploadLinkCache[cacheKey];
-      return Promise.resolve(resumableFile.uploadLink);
-    }
-
-    if (!this.uploadLinkPromises[cacheKey]) {
-      this.uploadLinkPromises[cacheKey] = seafileAPI.sharedLinkGetFileUploadUrl(token, relativePath).then(res => {
-        let uploadLink = res.data.upload_link + '?ret-json=1';
-        this.uploadLinkCache[cacheKey] = uploadLink;
-        return uploadLink;
-      }).finally(() => {
-        delete this.uploadLinkPromises[cacheKey];
-      });
-    }
-
-    return this.uploadLinkPromises[cacheKey].then(uploadLink => {
-      resumableFile.uploadLink = uploadLink;
-      return uploadLink;
-    });
   };
 
   generateUniqueIdentifier = (file) => {

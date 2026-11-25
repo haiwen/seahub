@@ -58,7 +58,8 @@ def get_file_uploaded_bytes(request, repo_id, parent_dir, can_upload):
             error_msg = 'file_mtime invalid, should be ISO 8601 format with timezone.'
             raise ValidationError({'error_msg': error_msg})
 
-    if not can_upload(parent_dir) or not seafile_api.get_dir_id_by_path(repo_id, parent_dir):
+    repo = seafile_api.get_repo(repo_id)
+    if not repo or not seafile_api.get_dir_id_by_path(repo_id, parent_dir) or not can_upload(repo, parent_dir):
         raise NotFound({'error_msg': 'Not found.'})
 
     # Resumable uploads can have staged bytes before creating their subdirectories.
@@ -68,7 +69,7 @@ def get_file_uploaded_bytes(request, repo_id, parent_dir, can_upload):
         if not seafile_api.get_dir_id_by_path(repo_id, subdirectory):
             break
         directory = subdirectory
-    if directory != parent_dir and not can_upload(directory):
+    if directory != parent_dir and not can_upload(repo, directory):
         raise NotFound({'error_msg': 'Not found.'})
 
     try:
@@ -85,8 +86,8 @@ class RepoFileUploadedBytesView(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, repo_id):
-        def can_upload(directory):
-            permission = check_folder_permission(request, repo_id, directory)
+        def can_upload(repo, directory):
+            permission = check_folder_permission(request, repo.id, directory)
             return permission and parse_repo_perm(permission).can_upload
 
         uploaded_bytes = get_file_uploaded_bytes(request, repo_id, request.GET.get('parent_dir'), can_upload)
