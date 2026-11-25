@@ -159,6 +159,43 @@ class UploadLinksTest(BaseTestCase):
         resp = self.client.post(self.url, data)
         self.assertEqual(403, resp.status_code)
 
+    def test_get_upload_link_detail(self):
+        self.login_as(self.user)
+        token = self._add_upload_link()
+
+        url = reverse('api-v2.1-upload-link', args=[token])
+        resp = self.client.get(url)
+        self.assertEqual(200, resp.status_code)
+        self.assertEqual(token, resp.json()['token'])
+
+    def test_get_upload_link_detail_with_invalid_token(self):
+        self.login_as(self.user)
+
+        url = reverse('api-v2.1-upload-link', args=['00000000000000000000'])
+        resp = self.client.get(url)
+        self.assertEqual(404, resp.status_code)
+
+    @patch('seahub.api2.endpoints.upload_links.get_upload_link_info')
+    def test_get_upload_link_detail_if_not_owner(self, mock_get_upload_link_info):
+        self.login_as(self.admin)
+        token = self._add_upload_link()
+
+        url = reverse('api-v2.1-upload-link', args=[token])
+        resp = self.client.get(url)
+        self.assertEqual(403, resp.status_code)
+        self.assertEqual('Permission denied.', resp.json()['error_msg'])
+        mock_get_upload_link_info.assert_not_called()
+
+    def test_update_upload_link_if_not_owner(self):
+        self.login_as(self.admin)
+        token = self._add_upload_link()
+
+        url = reverse('api-v2.1-upload-link', args=[token])
+        resp = self.client.put(url, {'expire_days': 1}, content_type='application/json')
+        self.assertEqual(403, resp.status_code)
+        self.assertEqual('Permission denied.', resp.json()['error_msg'])
+        self.assertIsNone(UploadLinkShare.objects.get(token=token).expire_date)
+
     def test_delete_upload_link(self):
         self.login_as(self.user)
         token = self._add_upload_link()
