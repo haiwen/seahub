@@ -1,0 +1,35 @@
+{% load i18n %}
+(function() {
+    var form = document.getElementById('two-factor-setup-form');
+    if (!form) return;
+    var instructions = document.getElementById('two-factor-setup-instructions');
+    if (instructions) {
+        function describe(element) {
+            var descriptions = (element.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+            if (!descriptions.includes(instructions.id)) descriptions.push(instructions.id);
+            element.setAttribute('aria-describedby', descriptions.join(' '));
+        }
+        describe(form);
+        form.querySelectorAll('input:not([type="hidden"]), select, textarea').forEach(describe);
+    }
+
+    var generatorToken = document.getElementById('id_generator-token');
+    if (generatorToken) {
+        var previous = generatorToken.previousElementSibling;
+        if (previous) previous.classList.add('sr-only');
+        generatorToken.classList.add('form-control');
+        generatorToken.setAttribute('placeholder', '{% trans "Token" %}');
+    }
+
+    formValidation.setup(form);
+    var summary = form.querySelector('.errorlist.nonfield, [data-server-error]');
+    var invalid = form.querySelector('[aria-invalid="true"]:not([type="hidden"]):not(:disabled)');
+    if ((summary && summary.textContent.trim()) || invalid) return;
+    if (instructions && instructions.getAttribute('role') === 'alert') {
+        instructions.setAttribute('tabindex', '-1');
+        instructions.focus();
+        return;
+    }
+    var input = form.querySelector('input[type="text"]:not(:disabled), input[type="number"]:not(:disabled)');
+    if (input) input.focus();
+})();
