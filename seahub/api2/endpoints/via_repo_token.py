@@ -1983,11 +1983,11 @@ class ViaRepoMetadataTags(APIView):
         exist_tags = []
         new_tags = []
         tags_names = [tag_data.get(TAGS_TABLE.columns.name.name, '') for tag_data in tags_data]
-        tags_names_str = ', '.join([f'"{tag_name}"' for tag_name in tags_names])
-        sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.name.name}` in ({tags_names_str})'
+        placeholders = ', '.join(['?'] * len(tags_names))
+        sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.name.name}` in ({placeholders})'
 
         try:
-            exist_rows = metadata_server_api.query_rows(sql)
+            exist_rows = metadata_server_api.query_rows(sql, tags_names)
             exist_tags = exist_rows.get('results', [])
         except Exception as e:
             logger.exception(e)
@@ -2014,10 +2014,10 @@ class ViaRepoMetadataTags(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         row_ids = resp.get('row_ids', [])
-        row_ids_str = ', '.join([f'"{id}"' for id in row_ids])
-        sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.id.name}` in ({row_ids_str})'
+        placeholders = ', '.join(['?'] * len(row_ids))
+        sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.id.name}` in ({placeholders})'
         try:
-            query_new_rows = metadata_server_api.query_rows(sql)
+            query_new_rows = metadata_server_api.query_rows(sql, row_ids)
             new_tags_data = query_new_rows.get('results', [])
             tags.extend(new_tags_data)
         except Exception as e:
@@ -2539,9 +2539,9 @@ class ViaRepoMetadataTagFiles(APIView):
 
         from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
 
-        tag_files_record_sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.id.name}` = "{tag_id}"'
+        tag_files_record_sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.id.name}` = ?'
         try:
-            tag_query = metadata_server_api.query_rows(tag_files_record_sql)
+            tag_query = metadata_server_api.query_rows(tag_files_record_sql, [tag_id])
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -2555,13 +2555,14 @@ class ViaRepoMetadataTagFiles(APIView):
         if not tag_files_record_ids:
             return Response({'metadata': [], 'results': []})
 
+        parameters = [record.get('row_id') for record in tag_files_record_ids]
         tag_files_sql = 'SELECT `%s`, `%s`, `%s`, `%s`, `%s`, `%s` FROM %s WHERE `%s` IN (%s)' % (METADATA_TABLE.columns.id.name, METADATA_TABLE.columns.file_name.name, \
                                                                                     METADATA_TABLE.columns.parent_dir.name, METADATA_TABLE.columns.size.name, \
                                                                                     METADATA_TABLE.columns.file_mtime.name, METADATA_TABLE.columns.tags.name, \
                                                                                     METADATA_TABLE.name, METADATA_TABLE.columns.id.name, \
-                                                                                    ', '.join(["'%s'" % id.get('row_id') for id in tag_files_record_ids]))
+                                                                                    ', '.join(['?'] * len(parameters)))
         try:
-            tag_files_query = metadata_server_api.query_rows(tag_files_sql)
+            tag_files_query = metadata_server_api.query_rows(tag_files_sql, parameters)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -2599,10 +2600,10 @@ class ViaRepoMetadataTagsFiles(APIView):
 
         from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
 
-        tags_ids_str = ', '.join([f'"{id}"' for id in tags_ids])
-        sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.id.name}` in ({tags_ids_str})'
+        placeholders = ', '.join(['?'] * len(tags_ids))
+        sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.id.name}` in ({placeholders})'
         try:
-            query_new_rows = metadata_server_api.query_rows(sql)
+            query_new_rows = metadata_server_api.query_rows(sql, tags_ids)
             found_tags = query_new_rows.get('results', [])
         except Exception as e:
             logger.error(e)
@@ -2619,13 +2620,14 @@ class ViaRepoMetadataTagsFiles(APIView):
         if not tags_files_ids:
             return Response([])
 
+        parameters = [record.get('row_id') for record in tags_files_ids]
         tags_files_sql = 'SELECT `%s`, `%s`, `%s`, `%s`, `%s`, `%s` FROM %s WHERE `%s` IN (%s)' % (METADATA_TABLE.columns.id.name, METADATA_TABLE.columns.file_name.name, \
                                                                                     METADATA_TABLE.columns.parent_dir.name, METADATA_TABLE.columns.size.name, \
                                                                                     METADATA_TABLE.columns.file_mtime.name, METADATA_TABLE.columns.tags.name, \
                                                                                     METADATA_TABLE.name, METADATA_TABLE.columns.id.name, \
-                                                                                    ', '.join(["'%s'" % id.get('row_id') for id in tags_files_ids]))
+                                                                                    ', '.join(['?'] * len(parameters)))
         try:
-            tags_files_query = metadata_server_api.query_rows(tags_files_sql)
+            tags_files_query = metadata_server_api.query_rows(tags_files_sql, parameters)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -2689,10 +2691,10 @@ class ViaRepoMetadataMergeTags(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         op_tags_ids = [target_tag_id] + merged_tags_ids
-        op_tags_ids_str = ', '.join([f'"{id}"' for id in op_tags_ids])
-        sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.id.name}` in ({op_tags_ids_str})'
+        placeholders = ', '.join(['?'] * len(op_tags_ids))
+        sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.id.name}` in ({placeholders})'
         try:
-            query_new_rows = metadata_server_api.query_rows(sql)
+            query_new_rows = metadata_server_api.query_rows(sql, op_tags_ids)
             op_tags = query_new_rows.get('results', [])
         except Exception as e:
             logger.error(e)
@@ -2832,10 +2834,10 @@ class ViaRepoRecentlyChangedFiles(APIView):
         metadata_server_api = MetadataServerAPI(repo_id, username)
         from seafevents.repo_metadata.constants import METADATA_TABLE
 
-        sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE `_file_mtime`>"{since}" AND `_is_dir`=false ORDER BY `_file_mtime` LIMIT {start}, {limit}'
+        sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE `_file_mtime`>? AND `_is_dir`=false ORDER BY `_file_mtime` LIMIT {start}, {limit}'
 
         try:
-            query_result = metadata_server_api.query_rows(sql)
+            query_result = metadata_server_api.query_rows(sql, [since])
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

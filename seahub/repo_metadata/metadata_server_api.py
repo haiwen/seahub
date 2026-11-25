@@ -81,9 +81,9 @@ def list_metadata_view_records(repo_id, user, view, tags_enabled, start=0, limit
             filter_term = filter.get('filter_term', [])
             if filter_term:
                 all_tag_ids = collect_all_tag_ids(filter_term, metadata_server_api)
-                tags_ids_str = ', '.join([f'"{tag_id}"' for tag_id in all_tag_ids])
-                sql = f'SELECT `{TAGS_TABLE.columns.id.name}`, `{TAGS_TABLE.columns.name.name}`, `{TAGS_TABLE.columns.sub_links.name}` FROM `{TAGS_TABLE.name}` WHERE `{TAGS_TABLE.columns.id.name}` IN ({tags_ids_str})'
-                tags_data = metadata_server_api.query_rows(sql)
+                placeholders = ', '.join(['?'] * len(all_tag_ids))
+                sql = f'SELECT `{TAGS_TABLE.columns.id.name}`, `{TAGS_TABLE.columns.name.name}`, `{TAGS_TABLE.columns.sub_links.name}` FROM `{TAGS_TABLE.name}` WHERE `{TAGS_TABLE.columns.id.name}` IN ({placeholders})'
+                tags_data = metadata_server_api.query_rows(sql, all_tag_ids)
                 # update tags filter term
                 filter['filter_term'] = all_tag_ids
     sql = gen_view_data_sql(METADATA_TABLE, columns, view_copy, start, limit, {'tags_data': tags_data, 'username': user})
