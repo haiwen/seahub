@@ -13,6 +13,7 @@ from seahub.api2.models import Token, TokenV2
 from seahub.api2.utils import get_client_ip
 from seahub.repo_api_tokens.models import RepoAPITokens
 from seahub.ocm.models import OCMShare
+from seahub.ocm.settings import ENABLE_OCM
 from seahub.utils import within_time_range
 from seahub.utils.auth import AUTHORIZATION_PREFIX
 try:
@@ -178,6 +179,8 @@ class RepoAPITokenAuthentication(BaseAuthentication):
 
         rat = RepoAPITokens.objects.filter(token=auth[1]).first()
         if not rat:
+            if not ENABLE_OCM:
+                raise AuthenticationFailed('Token inactive or deleted')
             rat = OCMShare.objects.filter(shared_secret=auth[1]).first()
             if not rat:
                 raise AuthenticationFailed('Token inactive or deleted')
