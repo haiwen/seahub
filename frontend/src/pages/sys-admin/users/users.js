@@ -7,6 +7,7 @@ import SysAdminUserSetQuotaDialog from '@/components/dialog/sysadmin-dialog/set-
 import SysAdminAddUserDialog from '@/components/dialog/sysadmin-dialog/sysadmin-add-user-dialog';
 import SysAdminBatchAddAdminDialog from '@/components/dialog/sysadmin-dialog/sysadmin-batch-add-admin-dialog';
 import SysAdminImportUserDialog from '@/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog';
+import SysAdminInviteUserDialog from '@/components/dialog/sysadmin-dialog/sysadmin-invite-user-dialog';
 import toaster from '@/components/toast';
 import SysAdminAdminUser from '@/models/sysadmin-admin-user';
 import SysAdminUser from '@/models/sysadmin-user';
@@ -19,7 +20,9 @@ const { availableRoles } = window.sysadmin.pageOptions;
 
 const propTypes = {
   isAdmin: PropTypes.bool,
-  isLDAPImported: PropTypes.bool
+  isLDAPImported: PropTypes.bool,
+  isInviteUserDialogOpen: PropTypes.bool,
+  toggleInviteUserDialog: PropTypes.func
 };
 
 class Users extends Component {
@@ -330,6 +333,31 @@ class Users extends Component {
     });
   };
 
+  inviteUsers = (emails) => {
+    toaster.notify(gettext('It may take some time, please wait.'));
+    const emailList = emails.split(',').map(email => email.trim()).filter(Boolean);
+    systemAdminAPI.sysAdminInviteUsers(emailList).then((res) => {
+      this.props.toggleInviteUserDialog();
+
+      const users = res.data.success.map(item => new SysAdminUser(item));
+      this.setState({
+        userList: users.concat(this.state.userList)
+      });
+
+      res.data.success.forEach(item => {
+        const msg = gettext('successfully sent email to %s.').replace('%s', item.contact_email || item.email);
+        toaster.success(msg);
+      });
+      res.data.failed.forEach(item => {
+        toaster.danger(`${item.email}: ${item.error_msg}`);
+      });
+    }).catch((error) => {
+      this.props.toggleInviteUserDialog();
+      let errMsg = Utils.getErrorMsg(error);
+      toaster.danger(errMsg);
+    });
+  };
+
   updateUser = (email, key, value, options = {}) => {
     systemAdminAPI.sysAdminUpdateUser(email, key, value, options).then(res => {
       let newUserList = this.state.userList.map(item => {
@@ -404,6 +432,7 @@ class Users extends Component {
       isLDAPImported,
       isImportUserDialogOpen,
       isAddUserDialogOpen,
+      isInviteUserDialogOpen,
       isBatchDeleteUserDialogOpen,
       isBatchSetQuotaDialogOpen,
       isBatchAddAdminDialogOpen,
@@ -457,6 +486,12 @@ class Users extends Component {
             availableRoles={availableRoles}
             addUser={this.addUser}
             toggleDialog={this.props.toggleAddUserDialog}
+          />
+        }
+        {isInviteUserDialogOpen &&
+          <SysAdminInviteUserDialog
+            handleSubmit={this.inviteUsers}
+            toggle={this.props.toggleInviteUserDialog}
           />
         }
         {isBatchSetQuotaDialogOpen &&
