@@ -28,7 +28,7 @@
     "dayjs": "1.10.7",
     "deep-copy": "1.4.2",
     "emoji-mart": "^5.6.0",
-    "i18next": "^25.2.1",
+    "i18next": "^27.2.7",
     "i18next-browser-languagedetector": "^8.1.0",
     "i18next-http-backend": "^4.0.4",
     "idb-keyval": "^6.2.2",
