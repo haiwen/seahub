@@ -75,14 +75,14 @@ def format_markdown_file_content(slug, repo_id, file_path, token, file_response)
         if img_url_re.match(img_url) is not None:
             img_path = img_url[img_url.find('/file/')+5:img_url.find('?')]
             new_img_url = '%s/view-image-via-public-wiki/?slug=%s&path=%s' % (service_url, slug, img_path)
-            html_content = html_content.replace(img_url, new_img_url)
+            html_content = html_content.replace(img_url, escape(new_img_url))
         elif re.compile(r'^\.\./*|^\./').match(img_url):
             if img_url.startswith('../'):
                 img_path = os.path.join(os.path.dirname(os.path.dirname(file_path)), img_url[3:])
             else:
                 img_path = os.path.join(os.path.dirname(file_path), img_url[2:])
             new_img_url = '%s/view-image-via-public-wiki/?slug=%s&path=%s' % (service_url, slug, img_path)
-            html_content = html_content.replace(img_url, new_img_url)
+            html_content = html_content.replace(img_url, escape(new_img_url))
 
     # Replace <a> href to wiki mode
     a_labels = html_doc.xpath('//a')  # Get all <a> labels
@@ -95,15 +95,15 @@ def format_markdown_file_content(slug, repo_id, file_path, token, file_response)
             path = old_href[old_href.find('/file/') + 5:].strip('/')
             if md_url_re.match(old_href) is not None:
                 new_href = '%s/published/%s/%s' % (service_url, slug, path)
-                html_content = html_content.replace(old_href, new_href)
+                html_content = html_content.replace(old_href, escape(new_href))
             else:
                 new_href = '%s/d/%s/files/?p=%s&dl=1' % (service_url, token, path)
-                html_content = html_content.replace(old_href, new_href)
+                html_content = html_content.replace(old_href, escape(new_href))
         elif dir_url_re.match(old_href) is not None:
             url_path = dir_url_re.match(old_href).groups()[0].strip('/')
             path = url_path[url_path.find('/'):].strip('/')
             new_href = '%s/published/%s/%s' % (service_url, slug, path)
-            html_content = html_content.replace(old_href, new_href)
+            html_content = html_content.replace(old_href, escape(new_href))
 
     # Get markdown outlines and format <h> labels
     outlines = list()
