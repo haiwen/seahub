@@ -344,6 +344,7 @@ class UploadLink(APIView):
 
         Permission checking:
         1. default(NOT guest) user;
+        2. link owner;
         """
 
         try:
@@ -351,6 +352,9 @@ class UploadLink(APIView):
         except UploadLinkShare.DoesNotExist:
             error_msg = 'token %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not uls.is_owner(request.user.username):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         link_info = get_upload_link_info(uls)
         return Response(link_info)
@@ -367,6 +371,9 @@ class UploadLink(APIView):
         except UploadLinkShare.DoesNotExist:
             error_msg = 'token %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not uls.is_owner(request.user.username):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         expire_days = request.data.get('expire_days', '')
         expiration_time = request.data.get('expiration_time', '')
