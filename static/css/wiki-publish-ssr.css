@@ -873,6 +873,30 @@ html, body {
   z-index: 1030;
 }
 
+#wiki-ssr-root.mobile #wiki-sdoc-previewer .sdoc-editor-content {
+  min-width: 0 !important;
+}
+
+#wiki-ssr-root.mobile #wiki-content .sdoc-multicolumn-wrapper {
+  display: block;
+  margin: 0;
+}
+
+#wiki-ssr-root.mobile #wiki-content .sdoc-multicolumn-container {
+  display: block;
+  min-height: 0;
+}
+
+#wiki-ssr-root.mobile #wiki-content .sdoc-multicolumn-container > .column {
+  display: block;
+  width: auto !important;
+}
+
+#wiki-ssr-root.mobile #wiki-content .sdoc-column-container {
+  width: 100%;
+  padding: 0;
+}
+
 @media (max-width: 767px) {
   #wiki-ssr-root .cur-view-content {
     min-width: 0;

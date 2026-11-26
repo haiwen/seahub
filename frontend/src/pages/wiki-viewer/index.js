@@ -1,11 +1,14 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { seadocServerUrl, wikiId } from '@/utils/constants';
+import { isMobileDevice } from '@/utils/utils';
 import DocViewer from './doc-viewer';
 
 (function () {
   const previewerContainer = document.getElementById('wiki-sdoc-previewer');
-  if (!previewerContainer || !wikiId || !seadocServerUrl) return;
+  if (!previewerContainer) return;
+  previewerContainer.closest('#wiki-ssr-root')?.classList.toggle('mobile', isMobileDevice);
+  if (!wikiId || !seadocServerUrl) return;
 
   let root = null;
 
