@@ -1,9 +1,15 @@
 import logging
 import json
+from constance import config
+from dateutil.parser import isoparse
+from dateutil.relativedelta import relativedelta
+from django.utils import timezone
+from django.utils.translation import gettext as _
+
 from seahub.group.utils import is_group_admin
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE, CUSTOM_PERMISSION_PREFIX, PERMISSION_INVISIBLE
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission, CustomSharePermissions
-from seahub.utils import is_valid_org_id, normalize_cache_key
+from seahub.utils import get_password_strength_level, is_valid_org_id, is_valid_password, normalize_cache_key
 from seahub.utils.db_api import SeafileDB
 
 import seaserv
@@ -269,6 +275,67 @@ def has_shared_to_group(repo_id, path, gid, org_id=None):
                                                                    path, repo_owner)
 
     return gid in [item.group_id for item in share_items]
+
+
+def validate_link_password(password):
+    if password is None or password == '':
+        if config.SHARE_LINK_FORCE_USE_PASSWORD:
+            raise ValueError(_('Password is required.'))
+        return None
+
+    if not isinstance(password, str):
+        raise ValueError('password invalid.')
+    if len(password) < config.SHARE_LINK_PASSWORD_MIN_LENGTH:
+        raise ValueError(_('Password is too short.'))
+    if get_password_strength_level(password) < config.SHARE_LINK_PASSWORD_STRENGTH_LEVEL:
+        raise ValueError(_('Password is too weak.'))
+    if not is_valid_password(password):
+        raise ValueError(_('Password can only contain number, upper letter, lower letter and other symbols.'))
+    return password
+
+
+def parse_link_expire_date(data, min_days, max_days, default_days=0):
+    expire_days = data.get('expire_days')
+    expiration_time = data.get('expiration_time')
+    if expire_days not in (None, '') and expiration_time not in (None, ''):
+        raise ValueError('Can not pass expire_days and expiration_time at the same time.')
+
+    now = timezone.now()
+    if expire_days not in (None, ''):
+        try:
+            days = int(str(expire_days))
+        except ValueError:
+            raise ValueError('expire_days invalid.')
+        if days <= 0:
+            raise ValueError('expire_days invalid.')
+        if min_days > 0 and days < min_days:
+            raise ValueError(_('Expire days should be greater or equal to %s') % min_days)
+        if max_days > 0 and days > max_days:
+            raise ValueError(_('Expire days should be less than or equal to %s') % max_days)
+        try:
+            return now + relativedelta(days=days)
+        except OverflowError:
+            raise ValueError('expire_days invalid.')
+
+    if expiration_time in (None, ''):
+        return now + relativedelta(days=default_days) if default_days > 0 else None
+
+    try:
+        expire_date = isoparse(expiration_time).astimezone(timezone.get_current_timezone())
+    except (ValueError, TypeError, OverflowError):
+        raise ValueError('expiration_time invalid. It should be in ISO format.')
+
+    if timezone.is_naive(now):
+        expire_date = expire_date.replace(tzinfo=None)
+    else:
+        now = timezone.localtime(now)
+    earliest = (now + relativedelta(days=min_days)).replace(hour=0, minute=0, second=0, microsecond=0)
+    latest = (now + relativedelta(days=max_days)).replace(hour=23, minute=59, second=59, microsecond=0)
+    if min_days > 0 and expire_date < earliest:
+        raise ValueError(_('Expiration time should be later than %s.') % earliest.strftime('%Y-%m-%d %H:%M:%S'))
+    if max_days > 0 and expire_date > latest:
+        raise ValueError(_('Expiration time should be earlier than %s.') % latest.strftime('%Y-%m-%d %H:%M:%S'))
+    return expire_date
 
 
 def check_share_link_user_access(share, username):

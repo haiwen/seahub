@@ -6,8 +6,8 @@ import logging
 import posixpath
 import requests
 import time
-import stat
 
+from django.db import transaction
 from django.http import HttpResponse
 from django.utils.translation import gettext as _
 from rest_framework import status
@@ -16,10 +16,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from seahub.api2.authentication import RepoAPITokenAuthentication
+from seahub.base.accounts import User, UserPermissions
 from seahub.base.models import FileComment, FileTrash
-from seahub.repo_api_tokens.utils import get_dir_file_info_list
+from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.repo_api_tokens.utils import get_dir_file_info_list, get_repo_for_link, check_upload_link_target, \
+    check_share_link_target, can_generate_share_link, log_repo_link_change
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error, to_python_boolean
+from seahub.api2.utils import api_error, to_python_boolean, send_share_link_emails
 from seahub.repo_metadata.constants import METADATA_RECORD_UPDATE_LIMIT
 from seahub.repo_metadata.metadata_server_api import list_metadata_view_records, MetadataServerAPI
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
@@ -30,11 +33,12 @@ from seahub.utils.file_op import if_locked_by_online_office
 from seahub.seadoc.utils import get_seadoc_file_uuid
 from seahub.settings import MAX_PATH
 from seahub.api2.endpoints.move_folder_merge import move_folder_with_merge
-from seahub.api2.endpoints.multi_share_links import check_permissions_arg, get_share_link_info
-from seahub.utils.repo import parse_repo_perm
-from seahub.share.models import FileShare
-from seahub.share.decorators import check_share_link_count
-from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW
+from seahub.api2.endpoints.share_links import check_permissions_arg, get_share_link_info
+from seahub.api2.endpoints.upload_links import get_upload_link_info
+from seahub.constants import PERMISSION_READ_WRITE, REPO_SHARE_LINK_COUNT_LIMIT
+from seahub.share.models import FileShare, UploadLinkShare, make_password
+from seahub.share.utils import SCOPE_ALL_USERS, SCOPE_SPECIFIC_EMAILS, SCOPE_SPECIFIC_USERS, VALID_SHARE_LINK_SCOPE, \
+    validate_link_password, parse_link_expire_date
 
 
 
@@ -48,12 +52,14 @@ from seahub.tags.models import FileUUIDMap
 
 from seahub.utils import normalize_dir_path, check_filename_with_rename, gen_file_upload_url, is_valid_dirent_name, \
     normalize_file_path, render_error, gen_file_get_url, is_pro_version, gen_inner_file_upload_url, \
-    get_file_type_and_ext, SEADOC, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH
+    get_file_type_and_ext, SEADOC, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, \
+    is_valid_email, string2list
 from seahub.utils.file_op import check_file_lock
 
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.views.file import can_preview_file, can_edit_file
 from seahub.search.utils import search_files, ai_search_files
+from seahub.wiki.models import Wiki
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -1416,98 +1422,6 @@ class ViaRepoMoveDir(APIView):
 
         return Response({'success': True})
 
-class ViaRepoShareLink(APIView):
-    authentication_classes = (RepoAPITokenAuthentication, )
-    throttle_classes = (UserRateThrottle,)
-
-    @check_share_link_count
-    def post(self, request):
-        # argument check
-        repo_id = request.repo_api_token_obj.repo_id
-
-        path = request.data.get('path', None)
-        if not path:
-            error_msg = 'path invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        permission = check_folder_permission_by_repo_api(request, repo_id, None)
-        if permission != 'rw':
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        try:
-            perm = check_permissions_arg(request)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'permissions invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        # resource check
-        dirent = None
-        if path != '/':
-            dirent = seafile_api.get_dirent_by_path(repo_id, path)
-            if not dirent:
-                error_msg = 'Dirent %s not found.' % path
-                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        if repo.encrypted:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        username = request.repo_api_token_obj.generated_by
-        repo_folder_permission = seafile_api.check_permission_by_path(repo_id, path, username)
-        if parse_repo_perm(repo_folder_permission).can_generate_share_link is False:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        if repo_folder_permission in (PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW) \
-                and perm != FileShare.PERM_VIEW_ONLY:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        if repo_folder_permission in (PERMISSION_READ,) \
-                and perm not in (FileShare.PERM_VIEW_DL, FileShare.PERM_VIEW_ONLY):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        # can_upload requires rw repo permission
-        if perm == FileShare.PERM_VIEW_DL_UPLOAD and \
-                repo_folder_permission != PERMISSION_READ_WRITE:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        if path != '/':
-            s_type = 'd' if stat.S_ISDIR(dirent.mode) else 'f'
-            if s_type == 'f':
-                file_name = os.path.basename(path.rstrip('/'))
-                can_edit, error_msg = can_edit_file(file_name, dirent.size, repo)
-                if not can_edit and perm in (FileShare.PERM_EDIT_DL, FileShare.PERM_EDIT_ONLY):
-                    error_msg = 'Permission denied.'
-                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        else:
-            s_type = 'd'
-
-        # create share link
-        org_id = get_org_id_by_repo_id(repo_id)
-        if s_type == 'f':
-            fs = FileShare.objects.create_file_link(username, repo_id, path,
-                                                    None, None,
-                                                    permission=perm, org_id=org_id)
-
-        else:
-            fs = FileShare.objects.create_dir_link(username, repo_id, path,
-                                                   None, None,
-                                                   permission=perm, org_id=org_id)
-
-        fs.save()
-        link_info = get_share_link_info(fs)
-        return Response(link_info)
 
 class ViaRepoMetadataRecords(APIView):
     authentication_classes = (RepoAPITokenAuthentication,)
@@ -3031,3 +2945,310 @@ class ViaRepoRecentlyDeletedFiles(APIView):
             files.append(data)
 
         return Response({'files': files})
+
+
+class ViaRepoShareLinks(APIView):
+    authentication_classes = (RepoAPITokenAuthentication, )
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        repo, error = get_repo_for_link(request, UserPermissions.can_generate_share_link)
+        if error is not None:
+            return error
+
+        try:
+            page = int(request.GET.get('page', 1))
+            per_page = int(request.GET.get('per_page', 25))
+        except ValueError:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'page or per_page invalid.')
+        if page < 1 or per_page < 1:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'page or per_page invalid.')
+
+        links = FileShare.objects.filter(repo_id=repo.id).order_by('-id')
+        path = request.GET.get('path')
+        if path:
+            links = links.filter(path__in=(normalize_dir_path(path), normalize_file_path(path) or '/'))
+        offset = (page - 1) * per_page
+        link_infos = []
+        for link in links[offset:offset + per_page]:
+            link_info = get_share_link_info(link, include_password=False)
+            link_info['has_password'] = link.is_encrypted()
+            link_infos.append(link_info)
+        return Response(link_infos)
+
+    def post(self, request):
+        repo, error = get_repo_for_link(request, UserPermissions.can_generate_share_link)
+        if error is not None:
+            return error
+
+        # argument check
+        path = request.data.get('path')
+        if not isinstance(path, str) or not path:
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        path = normalize_file_path(path) or '/'
+
+        try:
+            perm = check_permissions_arg(request)
+        except (AttributeError, TypeError, ValueError, UnboundLocalError):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'permissions invalid.')
+
+        # resource and permission check
+        username = request.repo_api_token_obj.generated_by
+        is_dir, error = check_share_link_target(repo, path, username, perm, creating=True)
+        if error is not None:
+            return error
+        if FileShare.objects.get_share_link_count_by_repo(repo.id) >= REPO_SHARE_LINK_COUNT_LIMIT:
+            error_msg = _('The number of share link exceeds the limit.')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            password = validate_link_password(request.data.get('password'))
+            expire_date = parse_link_expire_date(
+                request.data, settings.SHARE_LINK_EXPIRE_DAYS_MIN, settings.SHARE_LINK_EXPIRE_DAYS_MAX,
+                settings.SHARE_LINK_EXPIRE_DAYS_DEFAULT)
+        except ValueError as e:
+            return api_error(status.HTTP_400_BAD_REQUEST, str(e))
+        description = request.data.get('description')
+
+        scope = request.data.get('user_scope') or SCOPE_ALL_USERS
+        if scope not in VALID_SHARE_LINK_SCOPE:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'user_scope invalid.')
+        authed_details = {}
+        emails = []
+        if scope == SCOPE_SPECIFIC_USERS:
+            users = request.data.get('emails', [])
+            if not isinstance(users, list) or any(not isinstance(email, str) for email in users):
+                return api_error(status.HTTP_400_BAD_REQUEST, 'emails invalid.')
+            authed_users = []
+            for email in dict.fromkeys(users):
+                try:
+                    authed_users.append(User.objects.get(email=email).username)
+                except User.DoesNotExist:
+                    continue
+            authed_details['authed_users'] = authed_users
+        elif scope == SCOPE_SPECIFIC_EMAILS:
+            email_list = request.data.get('emails', '')
+            if not isinstance(email_list, str):
+                return api_error(status.HTTP_400_BAD_REQUEST, 'emails invalid.')
+            emails = [email for email in string2list(email_list) if is_valid_email(email)]
+            authed_details['authed_emails'] = emails
+
+        create_link = FileShare.objects.create_dir_link if is_dir else FileShare.objects.create_file_link
+        with transaction.atomic():
+            link = create_link(username, repo.id, path, password, expire_date, permission=perm,
+                               org_id=get_org_id_by_repo_id(repo.id), description=description)
+            if scope != SCOPE_ALL_USERS:
+                link.user_scope = scope
+                link.authed_details = json.dumps(authed_details)
+                link.save(update_fields=['user_scope', 'authed_details'])
+            if emails:
+                transaction.on_commit(lambda: send_share_link_emails(emails, link, email2nickname(username)),
+                                      robust=True)
+
+        log_repo_link_change(request, 'Created', 'share', link)
+        return Response(get_share_link_info(link))
+
+
+class ViaRepoShareLink(APIView):
+    authentication_classes = (RepoAPITokenAuthentication, )
+    throttle_classes = (UserRateThrottle,)
+
+    def put(self, request, token):
+        repo, error = get_repo_for_link(request, UserPermissions.can_generate_share_link)
+        if error is not None:
+            return error
+
+        # resource check
+        link = FileShare.objects.filter(repo_id=repo.id, token=token).first()
+        if not link:
+            error_msg = 'Link not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        perm = link.permission
+        if 'permissions' in request.data:
+            try:
+                perm = check_permissions_arg(request)
+            except (AttributeError, TypeError, ValueError, UnboundLocalError):
+                return api_error(status.HTTP_400_BAD_REQUEST, 'permissions invalid.')
+
+        # permission check
+        username = request.repo_api_token_obj.generated_by
+        _, error = check_share_link_target(repo, link.path, username, perm)
+        if error is not None:
+            return error
+        if perm != link.permission and link.username != username and not can_generate_share_link(
+                repo.id, link.path, link.username, perm):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        fields = []
+        try:
+            expire_date = parse_link_expire_date(
+                request.data, settings.SHARE_LINK_EXPIRE_DAYS_MIN, settings.SHARE_LINK_EXPIRE_DAYS_MAX)
+            if 'password' in request.data:
+                password = validate_link_password(request.data['password'])
+                link.password = make_password(password) if password is not None else None
+                fields.append('password')
+        except ValueError as e:
+            return api_error(status.HTTP_400_BAD_REQUEST, str(e))
+        if expire_date is not None:
+            link.expire_date = expire_date
+            fields.append('expire_date')
+        if perm != link.permission:
+            link.permission = perm
+            fields.append('permission')
+
+        if fields:
+            link.save(update_fields=fields)
+            log_repo_link_change(request, 'Updated', 'share', link)
+        link_info = get_share_link_info(link, include_password=False)
+        link_info['has_password'] = link.is_encrypted()
+        return Response(link_info)
+
+    def delete(self, request, token):
+        repo, error = get_repo_for_link(request, UserPermissions.can_generate_share_link)
+        if error is not None:
+            return error
+
+        links = FileShare.objects.filter(repo_id=repo.id, token=token)
+        link = links.first()
+        if not link:
+            error_msg = 'Link not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        if link.path == '/' and Wiki.objects.filter(repo_id=repo.id).exists():
+            error_msg = _('There is an associated published library.')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        deleted, _detail = links.delete()
+        if deleted:
+            log_repo_link_change(request, 'Deleted', 'share', link)
+        return Response({'success': True})
+
+
+class ViaRepoUploadLinks(APIView):
+    authentication_classes = (RepoAPITokenAuthentication, )
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        repo, error = get_repo_for_link(request, UserPermissions.can_generate_upload_link)
+        if error is not None:
+            return error
+
+        try:
+            page = int(request.GET.get('page', 1))
+            per_page = int(request.GET.get('per_page', 25))
+        except ValueError:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'page or per_page invalid.')
+        if page < 1 or per_page < 1:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'page or per_page invalid.')
+
+        links = UploadLinkShare.objects.filter(repo_id=repo.id).order_by('-id')
+        path = request.GET.get('path')
+        if path:
+            links = links.filter(path__in=(normalize_dir_path(path), normalize_file_path(path) or '/'))
+        offset = (page - 1) * per_page
+        link_infos = []
+        for link in links[offset:offset + per_page]:
+            link_info = get_upload_link_info(link, include_password=False)
+            link_info['has_password'] = link.is_encrypted()
+            link_infos.append(link_info)
+        return Response(link_infos)
+
+    def post(self, request):
+        repo, error = get_repo_for_link(request, UserPermissions.can_generate_upload_link)
+        if error is not None:
+            return error
+
+        # argument check
+        path = request.data.get('path')
+        if not isinstance(path, str) or not path:
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        path = normalize_dir_path(path)
+
+        # resource and permission check
+        username = request.repo_api_token_obj.generated_by
+        error = check_upload_link_target(repo, path, username)
+        if error is not None:
+            return error
+
+        try:
+            password = validate_link_password(request.data.get('password'))
+            expire_date = parse_link_expire_date(
+                request.data, settings.UPLOAD_LINK_EXPIRE_DAYS_MIN, settings.UPLOAD_LINK_EXPIRE_DAYS_MAX,
+                settings.UPLOAD_LINK_EXPIRE_DAYS_DEFAULT)
+        except ValueError as e:
+            return api_error(status.HTTP_400_BAD_REQUEST, str(e))
+
+        link = UploadLinkShare.objects.get_upload_link_by_path(username, repo.id, path)
+        if not link:
+            with transaction.atomic():
+                link = UploadLinkShare.objects.create_upload_link_share(username, repo.id, path, password, expire_date)
+                description = request.data.get('description')
+                if description:
+                    link.description = description
+                    link.save(update_fields=['description'])
+            log_repo_link_change(request, 'Created', 'upload', link)
+        link_info = get_upload_link_info(link, include_password=False)
+        link_info['has_password'] = link.is_encrypted()
+        return Response(link_info)
+
+
+class ViaRepoUploadLink(APIView):
+    authentication_classes = (RepoAPITokenAuthentication, )
+    throttle_classes = (UserRateThrottle,)
+
+    def put(self, request, token):
+        repo, error = get_repo_for_link(request, UserPermissions.can_generate_upload_link)
+        if error is not None:
+            return error
+
+        # resource check
+        link = UploadLinkShare.objects.filter(repo_id=repo.id, token=token).first()
+        if not link:
+            error_msg = 'Link not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.repo_api_token_obj.generated_by
+        error = check_upload_link_target(repo, link.path, username)
+        if error is not None:
+            return error
+
+        fields = []
+        try:
+            expire_date = parse_link_expire_date(
+                request.data, settings.UPLOAD_LINK_EXPIRE_DAYS_MIN, settings.UPLOAD_LINK_EXPIRE_DAYS_MAX)
+            if 'password' in request.data:
+                password = validate_link_password(request.data['password'])
+                link.password = make_password(password) if password is not None else None
+                fields.append('password')
+        except ValueError as e:
+            return api_error(status.HTTP_400_BAD_REQUEST, str(e))
+        if expire_date is not None:
+            link.expire_date = expire_date
+            fields.append('expire_date')
+
+        if fields:
+            link.save(update_fields=fields)
+            log_repo_link_change(request, 'Updated', 'upload', link)
+        link_info = get_upload_link_info(link, include_password=False)
+        link_info['has_password'] = link.is_encrypted()
+        return Response(link_info)
+
+    def delete(self, request, token):
+        repo, error = get_repo_for_link(request, UserPermissions.can_generate_upload_link)
+        if error is not None:
+            return error
+
+        links = UploadLinkShare.objects.filter(repo_id=repo.id, token=token)
+        link = links.first()
+        if not link:
+            error_msg = 'Link not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        deleted, _detail = links.delete()
+        if deleted:
+            log_repo_link_change(request, 'Deleted', 'upload', link)
+        return Response({'success': True})

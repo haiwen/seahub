@@ -61,7 +61,7 @@ from seahub.repo_tags.models import RepoTags
 logger = logging.getLogger(__name__)
 
 
-def get_share_link_info(fileshare):
+def get_share_link_info(fileshare, include_password=True):
     data = {}
     token = fileshare.token
 
@@ -116,7 +116,8 @@ def get_share_link_info(fileshare):
     data['expire_date'] = expire_date
     data['is_expired'] = fileshare.is_expired()
     data['permissions'] = fileshare.get_permissions()
-    data['password'] = fileshare.get_password()
+    if include_password:
+        data['password'] = fileshare.get_password()
     data['user_scope'] = fileshare.user_scope
     data['description'] = fileshare.description
     data['can_edit'] = False

@@ -4,17 +4,24 @@ import logging
 import posixpath
 import stat
 from urllib.parse import quote
+from rest_framework import status
 from seaserv import seafile_api
 
+from seahub.api2.utils import api_error
+from seahub.base.accounts import User
 from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
+from seahub.repo_api_tokens.models import RepoAPITokens
 from seahub.settings import ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_ROOT
+from seahub.share.models import FileShare
 from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.utils import is_pro_version, FILEEXT_TYPE_MAP, IMAGE, VIDEO
 from seahub.utils.file_tags import get_files_tags_in_dir
-from seahub.utils.repo import is_group_repo_staff, is_repo_owner
+from seahub.utils.repo import is_group_repo_staff, is_repo_owner, parse_repo_perm
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.constants import PERMISSION_INVISIBLE
+from seahub.constants import PERMISSION_INVISIBLE, PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT, \
+    PERMISSION_READ, PERMISSION_READ_WRITE
+from seahub.views.file import can_edit_file
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -236,3 +243,95 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
     file_info_list.sort(key=lambda x: x['name'].lower())
 
     return dir_info_list, file_info_list
+
+
+def check_upload_link_target(repo, path, username):
+    if not seafile_api.get_dir_id_by_path(repo.id, path):
+        error_msg = 'Folder %s not found.' % path
+        return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+    if repo.encrypted or seafile_api.get_repo_status(repo.id) == 1 or \
+            seafile_api.check_permission_by_path(repo.id, path, username) != PERMISSION_READ_WRITE:
+        error_msg = 'Permission denied.'
+        return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+
+def can_generate_share_link(repo_id, path, username, permission):
+    folder_permission = seafile_api.check_permission_by_path(repo_id, path, username)
+    if not folder_permission or not parse_repo_perm(folder_permission).can_generate_share_link:
+        return False
+    if folder_permission in (PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT):
+        return permission == FileShare.PERM_VIEW_ONLY
+    if folder_permission == PERMISSION_READ:
+        return permission in (FileShare.PERM_VIEW_DL, FileShare.PERM_VIEW_ONLY)
+    if permission == FileShare.PERM_VIEW_DL_UPLOAD:
+        return folder_permission == PERMISSION_READ_WRITE
+    return True
+
+
+def check_share_link_target(repo, path, username, permission, creating=False):
+    if repo.encrypted:
+        error_msg = 'Permission denied.'
+        return None, api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+    dirent = None
+    if path != '/':
+        dirent = seafile_api.get_dirent_by_path(repo.id, path)
+        if not dirent:
+            error_msg = 'Dirent %s not found.' % path
+            return None, api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+    is_dir = path == '/' or stat.S_ISDIR(dirent.mode)
+    can_edit = permission in (FileShare.PERM_EDIT_DL, FileShare.PERM_EDIT_ONLY)
+    can_upload = permission == FileShare.PERM_VIEW_DL_UPLOAD
+    if (creating or can_edit or can_upload) and seafile_api.get_repo_status(repo.id) == 1:
+        error_msg = 'Permission denied.'
+        return None, api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+    if not can_generate_share_link(repo.id, path, username, permission):
+        error_msg = 'Permission denied.'
+        return None, api_error(status.HTTP_403_FORBIDDEN, error_msg)
+    if can_upload and not is_dir:
+        error_msg = 'Permission denied.'
+        return None, api_error(status.HTTP_403_FORBIDDEN, error_msg)
+    if can_edit and not is_dir:
+        editable, _ = can_edit_file(os.path.basename(path), dirent.size, repo)
+        if not editable:
+            error_msg = 'Permission denied.'
+            return None, api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+    return is_dir, None
+
+
+def get_repo_for_link(request, can_generate_link):
+    repo_token = getattr(request, 'repo_api_token_obj', None)
+    if not isinstance(repo_token, RepoAPITokens):
+        return None, api_error(status.HTTP_401_UNAUTHORIZED, 'Invalid token')
+
+    if repo_token.permission != PERMISSION_READ_WRITE:
+        error_msg = 'Permission denied.'
+        return None, api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+    try:
+        user = User.objects.get(email=repo_token.generated_by)
+    except User.DoesNotExist:
+        error_msg = 'Permission denied.'
+        return None, api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+    if not user.is_active or not can_generate_link(user.permissions):
+        error_msg = 'Permission denied.'
+        return None, api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+    repo = seafile_api.get_repo(repo_token.repo_id)
+    if not repo:
+        error_msg = 'Library %s not found.' % repo_token.repo_id
+        return None, api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+    return repo, None
+
+
+def log_repo_link_change(request, operation, link_type, link):
+    repo_token = request.repo_api_token_obj
+    logger.info('%s %s link: app_name=%r user=%s repo_id=%s path=%r link_id=%s',
+                operation, link_type, repo_token.app_name, repo_token.generated_by,
+                repo_token.repo_id, link.path, link.pk)
