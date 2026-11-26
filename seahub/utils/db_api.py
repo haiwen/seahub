@@ -1,5 +1,9 @@
-import os
 import configparser
+import os
+import sqlite3
+from contextlib import closing
+from pathlib import Path
+
 from django.db import connection, transaction
 
 
@@ -29,11 +33,12 @@ class WikiInfo(object):
 
 class SeafileDB:
 
-    def __init__(self):
+    def __init__(self, *, sqlite_folder_permissions=False):
 
-        self.db_name = self._get_seafile_db_name()
+        self._folder_permissions_uri = None
+        self.db_name = self._get_seafile_db_name(sqlite_folder_permissions)
 
-    def _get_seafile_db_name(self):
+    def _get_seafile_db_name(self, sqlite_folder_permissions=False):
 
         if env_seafile_db_name := os.environ.get('SEAFILE_MYSQL_DB_SEAFILE_DB_NAME', ''):
             return env_seafile_db_name
@@ -47,6 +52,11 @@ class SeafileDB:
         config = configparser.ConfigParser()
         seafile_conf_path = os.path.join(conf_dir, 'seafile.conf')
         config.read(seafile_conf_path)
+
+        if sqlite_folder_permissions and config.get('database', 'type', fallback='').lower() == 'sqlite':
+            data_dir = Path(os.environ['SEAFILE_DATA_DIR'])
+            self._folder_permissions_uri = (data_dir / 'seafile.db').absolute().as_uri() + '?mode=ro'
+            return None
 
         if not config.has_section('database'):
             return 'seafile_db'
@@ -656,49 +666,36 @@ class SeafileDB:
             cursor.execute(delete_group_share_sql, [username, org_id] if org_id else [username])
 
     def get_share_to_user_invisible_repos_info(self, username):
-
-        repo_ids_sql = f"""
-            SELECT repo_id, `path`
-            FROM `{self.db_name}`.`FolderUserPerm`
-            WHERE user = %s  AND permission='invisible';
-        """
-
-        repo_id_to_invisible_paths = {}
-        with connection.cursor() as cursor:
-            cursor.execute(repo_ids_sql, [username])
-            for repo in cursor.fetchall():
-                repo_id = repo[0]
-                invisible_path = repo[1]
-                invisible_paths_set = repo_id_to_invisible_paths.get(repo_id)
-                if invisible_paths_set:
-                    invisible_paths_set.add(invisible_path)
-                else:
-                    repo_id_to_invisible_paths[repo_id] = {invisible_path}
-
-            return repo_id_to_invisible_paths
+        return self._get_invisible_folders('FolderUserPerm', 'user', (username,))
 
     def get_share_to_group_invisible_repos_info_by_group_ids(self, group_ids):
         if not group_ids:
             return {}
-        placeholders = ','.join(['%s'] * len(group_ids))
+        return self._get_invisible_folders('FolderGroupPerm', 'group_id', tuple(group_ids))
+
+    def _get_invisible_folders(self, table, field, values):
+        # Table and field names are fixed by the two callers above.
+        sqlite_uri = self._folder_permissions_uri
+        placeholder = '?' if sqlite_uri else '%s'
+        placeholders = ','.join([placeholder] * len(values))
+        table_name = f'`{table}`' if sqlite_uri else f'`{self.db_name}`.`{table}`'
         repo_ids_sql = f"""
             SELECT repo_id, `path`
-            FROM `{self.db_name}`.`FolderGroupPerm`
-            WHERE group_id in ({placeholders}) AND permission='invisible';
+            FROM {table_name}
+            WHERE {field} IN ({placeholders}) AND permission='invisible';
         """
-        repo_id_to_invisible_paths = {}
-        with connection.cursor() as cursor:
-            cursor.execute(repo_ids_sql, tuple(group_ids))
-            for repo in cursor.fetchall():
-                repo_id = repo[0]
-                invisible_path = repo[1]
-                invisible_paths_set = repo_id_to_invisible_paths.get(repo_id)
-                if invisible_paths_set:
-                    invisible_paths_set.add(invisible_path)
-                else:
-                    repo_id_to_invisible_paths[repo_id] = {invisible_path}
+        if sqlite_uri:
+            with closing(sqlite3.connect(sqlite_uri, uri=True)) as db:
+                rows = db.execute(repo_ids_sql, values).fetchall()
+        else:
+            with connection.cursor() as cursor:
+                cursor.execute(repo_ids_sql, values)
+                rows = cursor.fetchall()
 
-            return repo_id_to_invisible_paths
+        repo_id_to_invisible_paths = {}
+        for repo_id, path in rows:
+            repo_id_to_invisible_paths.setdefault(repo_id, set()).add(path)
+        return repo_id_to_invisible_paths
 
 
     def get_share_to_user_folder_permission_by_username_and_repo_id(self, username, repo_id):

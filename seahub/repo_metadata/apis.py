@@ -32,7 +32,7 @@ from seahub.file_tags.models import FileTags
 from seahub.repo_tags.models import RepoTags
 from seahub.settings import EMBEDDING_MODEL_CONFIGURED, MD_FILE_COUNT_LIMIT
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.search.utils import get_invisible_repos_info_by_username, is_invisible_path
+from seahub.search.utils import get_invisible_repos_info_by_username, is_invisible_repo_path
 from seahub.utils import HAS_FILE_SEASEARCH
 from seahub.ai.utils import verify_ai_config, verify_chat_ai_config
 
@@ -429,8 +429,8 @@ class MetadataRecords(APIView):
         repo_id_to_invisible_paths = get_invisible_repos_info_by_username(username, org_id)
         results['results'] = [
             r for r in results.get('results', [])
-            if not is_invisible_path(repo_id_to_invisible_paths, repo_id,
-                                    posixpath.join(r.get('_parent_dir', ''), r.get('_name', '')))
+            if not is_invisible_repo_path(repo_id_to_invisible_paths, repo,
+                                          posixpath.join(r.get('_parent_dir', ''), r.get('_name', '')))
         ]
 
         return Response(results)

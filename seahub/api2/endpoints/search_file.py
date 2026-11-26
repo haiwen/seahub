@@ -15,7 +15,7 @@ from seahub.api2.utils import api_error
 
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.search.utils import get_invisible_repos_info_by_username, is_invisible_path
+from seahub.search.utils import get_invisible_repos_info_by_username, is_invisible_repo_path
 from seahub.utils import is_org_context
 
 try:
@@ -46,7 +46,8 @@ class SearchFile(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
-        if not seafile_api.get_repo(repo_id):
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -64,14 +65,14 @@ class SearchFile(APIView):
         repo_id_to_invisible_paths = get_invisible_repos_info_by_username(username, org_id)
 
         for searched_file in searched_files:
+            if is_invisible_repo_path(repo_id_to_invisible_paths, repo, searched_file.path):
+                continue
+
             # {'path': '/123.docx', 'size': 19446, 'mtime': 1604130882, 'is_dir': False}
             dirent_info = {}
             dirent_info['path'] = searched_file.path
             dirent_info['size'] = searched_file.size
             dirent_info['mtime'] = timestamp_to_isoformat_timestr(searched_file.mtime)
-
-            if is_invisible_path(repo_id_to_invisible_paths, repo_id, searched_file.path):
-                    continue
 
             if searched_file.is_dir:
                 dirent_info['type'] = 'folder'

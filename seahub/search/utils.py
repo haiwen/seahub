@@ -2,6 +2,7 @@
 
 import logging
 import os
+import posixpath
 import requests
 import jwt
 import time
@@ -321,7 +322,7 @@ def get_invisible_repos_info_by_username(username, org_id):
     if repo_id_to_invisible_path_set is not None:
         return repo_id_to_invisible_path_set
     
-    seafile_db_api = SeafileDB()
+    seafile_db_api = SeafileDB(sqlite_folder_permissions=True)
     repo_id_to_invisible_path_set = {}
 
     user_repo_to_invisible_path_set = seafile_db_api.get_share_to_user_invisible_repos_info(username)
@@ -345,6 +346,16 @@ def is_invisible_path(repo_id_to_invisible_paths, repo_id, path):
         ip = invisible_path.rstrip('/')
         if path == ip or path.startswith(ip + '/'):
             return True
+    return False
+
+
+def is_invisible_repo_path(repo_id_to_invisible_paths, repo, path):
+    if is_invisible_path(repo_id_to_invisible_paths, repo.id, path):
+        return True
+    if repo.origin_repo_id:
+        # Virtual library results are relative to the shared directory.
+        origin_path = posixpath.join(repo.origin_path, path.lstrip('/'))
+        return is_invisible_path(repo_id_to_invisible_paths, repo.origin_repo_id, origin_path)
     return False
 
 def is_path_in_virtual_root(fullpath, origin_path):
