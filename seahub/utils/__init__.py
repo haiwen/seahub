@@ -1413,11 +1413,14 @@ def check_hashed_password(password, hashed_password):
 
 
 ASCII_RE = re.compile(r'[^\x00-\x7f]')
+DEL_RE = re.compile(r'\x7f')
 
 
 def is_valid_password(password):
 
-    return False if ASCII_RE.search(password) else True
+    # DEL (0x7f) is invisible and is often lost when a password is copied into
+    # email or chat, so it is rejected along with non-ASCII characters.
+    return not DEL_RE.search(password) and not ASCII_RE.search(password)
 
 
 def get_logo_path_by_user(username):

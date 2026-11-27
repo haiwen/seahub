@@ -35,6 +35,16 @@ describe('getFileExtension', () => {
   });
 });
 
+describe('generatePassword', () => {
+  // DEL (0x7f) is invisible and may be lost when the password is copied into
+  // email or chat, so generated passwords must stay printable ASCII.
+  it('should only use printable ASCII characters between 33 and 126', () => {
+    for (let i = 0; i < 2000; i++) {
+      expect(Utils.generatePassword(12)).toMatch(/^[\x21-\x7e]{12}$/);
+    }
+  });
+});
+
 describe('bytesToSize', () => {
   it('should return empty string if bytes is undefined', () => {
     const result = Utils.bytesToSize(undefined);

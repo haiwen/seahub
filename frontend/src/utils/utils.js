@@ -1750,9 +1750,9 @@ export const Utils = {
     // 65~90：A~Z
     // 91~96：[~`
     // 97~122：a~z
-    // 123~127：{~
+    // 123~126：{~
     for (var i = 0; i < length - 4; i++) {
-      password += String.fromCharCode(this.generateSecureRandomInRange(33, 127));
+      password += String.fromCharCode(this.generateSecureRandomInRange(33, 126));
     }
 
     return password;
