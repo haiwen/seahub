@@ -233,6 +233,11 @@ class SystemAdminAPI {
     return this.req.delete(url);
   }
 
+  sysAdminArchiveRepo(repoID, opType) {
+    const url = this.server + '/api/v2.1/admin/libraries/' + repoID + '/archive/';
+    return this.req.post(url, { op_type: opType });
+  }
+
   sysAdminTransferRepo(repoID, userEmail, reshare) {
     const url = this.server + '/api/v2.1/admin/libraries/' + repoID + '/';
     const params = {

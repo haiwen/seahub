@@ -4,15 +4,17 @@ import PropTypes from 'prop-types';
 import { systemAdminAPI } from '@/api/system-admin-api';
 import DeleteRepoDialog from '@/components/dialog/delete-repo-dialog';
 import OpMenu from '@/components/dialog/op-menu';
+import RepoArchiveDialog from '@/components/dialog/repo-archive-dialog';
 import SysAdminLibHistorySettingDialog from '@/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog';
 import SysAdminShareDialog from '@/components/dialog/sysadmin-dialog/sysadmin-share-dialog';
 import TransferDialog from '@/components/dialog/transfer-dialog';
 import EmptyTip from '@/components/empty-tip';
+import Icon from '@/components/icon';
 import Loading from '@/components/loading';
 import ModalPortal from '@/components/modal-portal';
 import Paginator from '@/components/paginator';
 import toaster from '@/components/toast';
-import { gettext, siteRoot, isPro } from '@/utils/constants';
+import { gettext, siteRoot, isPro, enableStorageClasses, canManageLibrary } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import UserLink from '../user-link';
 
@@ -41,6 +43,10 @@ class Content extends Component {
 
   getNextPageList = () => {
     this.props.getListByPage(this.props.pageInfo.current_page + 1);
+  };
+
+  onArchiveRepo = () => {
+    this.props.getListByPage(this.props.pageInfo.current_page);
   };
 
   render() {
@@ -77,6 +83,7 @@ class Content extends Component {
                   onUnfreezedItem={this.onUnfreezedItem}
                   onDeleteRepo={this.props.onDeleteRepo}
                   onTransferRepo={this.props.onTransferRepo}
+                  onArchiveRepo={this.onArchiveRepo}
                   isWiki={this.props.isWiki}
                 />);
               })}
@@ -125,6 +132,7 @@ class Item extends Component {
       isDeleteDialogOpen: false,
       isTransferDialogOpen: false,
       isHistorySettingDialogOpen: false,
+      isArchiveDialogOpen: false,
       isRepoDeleted: false,
     };
   }
@@ -200,6 +208,9 @@ class Item extends Component {
       case 'History Setting':
         this.toggleHistorySettingDialog();
         break;
+      case 'Archive':
+        this.toggleArchiveDialog();
+        break;
       default:
         break;
     }
@@ -219,6 +230,10 @@ class Item extends Component {
 
   toggleHistorySettingDialog = () => {
     this.setState({ isHistorySettingDialogOpen: !this.state.isHistorySettingDialogOpen });
+  };
+
+  toggleArchiveDialog = () => {
+    this.setState({ isArchiveDialogOpen: !this.state.isArchiveDialogOpen });
   };
 
   openHistory = () => {
@@ -256,6 +271,9 @@ class Item extends Component {
       case 'History Setting':
         translateResult = gettext('History Setting');
         break;
+      case 'Archive':
+        translateResult = this.props.repo.archive_status === 'archived' ? gettext('Unarchive') : gettext('Archive');
+        break;
       default:
         break;
     }
@@ -271,10 +289,18 @@ class Item extends Component {
       return ['Delete'];
     }
 
+    const archiveOperations = [];
+    if (isPro && enableStorageClasses && canManageLibrary && repo.repo_type !== 'wiki') {
+      const archiveStatus = repo.archive_status;
+      if (!archiveStatus || archiveStatus === 'archived') {
+        archiveOperations.push('Archive');
+      }
+    }
+
     const index = repo.owner_email.indexOf('@seafile_group');
     let isGroupOwnedRepo = index != -1;
     if (isGroupOwnedRepo) {
-      return ['History', 'Transfer'];
+      return ['History', 'Transfer', ...archiveOperations];
     }
 
     let operations = ['Delete', 'Transfer'];
@@ -284,7 +310,7 @@ class Item extends Component {
     if (isPro && enableSysAdminViewRepo && !repo.encrypted) {
       operations.push('History');
     }
-    operations.push('History Setting');
+    operations.push('History Setting', ...archiveOperations);
     return operations;
   };
 
@@ -295,7 +321,8 @@ class Item extends Component {
       isShareDialogOpen,
       isDeleteDialogOpen,
       isTransferDialogOpen,
-      isHistorySettingDialogOpen
+      isHistorySettingDialogOpen,
+      isArchiveDialogOpen
     } = this.state;
     let iconUrl = Utils.getLibIconUrl(repo);
     let iconTitle = Utils.getLibIconTitle(repo);
@@ -318,7 +345,10 @@ class Item extends Component {
           <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
           {this.props.isWiki ?
             <td>{wikiName}</td> :
-            <td>{this.renderRepoName()}</td>
+            <td>
+              {this.renderRepoName()}
+              {repo.archive_status === 'archived' && <Icon className="ml-1" symbol="archive" />}
+            </td>
           }
           <td>{`${repo.file_count} / ${Utils.bytesToSize(repo.size)}`}</td>
           <td>{repo.id}</td>
@@ -384,6 +414,16 @@ class Item extends Component {
             />
           </ModalPortal>
         }
+        {isArchiveDialogOpen &&
+          <ModalPortal>
+            <RepoArchiveDialog
+              repo={{ ...repo, repo_id: repo.id, repo_name: repo.name }}
+              archiveRepo={(repoID, opType) => systemAdminAPI.sysAdminArchiveRepo(repoID, opType)}
+              onArchiveRepo={this.props.onArchiveRepo}
+              toggle={this.toggleArchiveDialog}
+            />
+          </ModalPortal>
+        }
       </Fragment>
     );
   }
@@ -396,6 +436,7 @@ Item.propTypes = {
   onUnfreezedItem: PropTypes.func.isRequired,
   onDeleteRepo: PropTypes.func.isRequired,
   onTransferRepo: PropTypes.func.isRequired,
+  onArchiveRepo: PropTypes.func.isRequired,
 };
 
 export default Content;
