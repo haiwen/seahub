@@ -3011,8 +3011,10 @@ class ViaRepoShareLinks(APIView):
         except ValueError as e:
             return api_error(status.HTTP_400_BAD_REQUEST, str(e))
         description = request.data.get('description')
+        if 'description' in request.data and not isinstance(description, str):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'description invalid.')
 
-        scope = request.data.get('user_scope') or SCOPE_ALL_USERS
+        scope = request.data.get('user_scope', SCOPE_ALL_USERS)
         if scope not in VALID_SHARE_LINK_SCOPE:
             return api_error(status.HTTP_400_BAD_REQUEST, 'user_scope invalid.')
         authed_details = {}

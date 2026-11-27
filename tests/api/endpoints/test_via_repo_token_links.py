@@ -185,6 +185,46 @@ class ViaRepoTokenLinksTest(TestCase):
         link.refresh_from_db()
         self.assertEqual(data['password'], link.get_password())
 
+    def test_create_share_link_rejects_invalid_scope(self):
+        for scope in ('', None, False, 0, [], {}, ['all_users'], 'invalid'):
+            with self.subTest(scope=scope):
+                data = {'path': self.file, 'user_scope': scope, 'emails': 'member@example.com'}
+                with self.captureOnCommitCallbacks() as callbacks:
+                    response = self.client.post(self.share_url, json.dumps(data), 'application/json', **self.headers)
+                self.assertEqual(400, response.status_code)
+                self.assertEqual('user_scope invalid.', response.json()['error_msg'])
+                self.assertFalse(FileShare.objects.filter(repo_id=self.repo_id).exists())
+                self.assertEqual([], callbacks)
+
+    def test_create_share_link_rejects_invalid_description(self):
+        for description in ([], ['description'], {}, None, 0, False):
+            with self.subTest(description=description):
+                data = {'path': self.file, 'user_scope': 'specific_emails', 'emails': 'member@example.com',
+                        'description': description}
+                with self.captureOnCommitCallbacks() as callbacks:
+                    response = self.client.post(self.share_url, json.dumps(data), 'application/json', **self.headers)
+                self.assertEqual(400, response.status_code)
+                self.assertEqual('description invalid.', response.json()['error_msg'])
+                self.assertFalse(FileShare.objects.filter(repo_id=self.repo_id).exists())
+                self.assertEqual([], callbacks)
+
+    def test_create_share_link_description_round_trip(self):
+        for options in ({}, {'description': ''}, {'description': 'Supplier documents'}):
+            with self.subTest(options=options):
+                data = {'path': self.file, **options}
+                response = self.client.post(self.share_url, json.dumps(data), 'application/json', **self.headers)
+                self.assertEqual(200, response.status_code)
+                info = response.json()
+                description = options.get('description', '')
+                self.assertEqual('all_users', info['user_scope'])
+                self.assertEqual(description, info['description'])
+                link = FileShare.objects.get(token=info['token'])
+                self.assertEqual(description, link.description)
+                response = self.client.get(self.share_url, {'path': self.file}, **self.headers)
+                self.assertEqual(200, response.status_code)
+                self.assertEqual(info['token'], response.json()[0]['token'])
+                self.assertEqual(description, response.json()[0]['description'])
+
     def test_share_link_rejects_invalid_specific_users(self):
         link = FileShare.objects.create_file_link(self.user.username, self.repo_id, self.file,
                                                  description='Original description')
