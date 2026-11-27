@@ -4,73 +4,94 @@ import posixpath
 
 import dateutil.parser
 
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.exceptions import APIException, NotFound, ValidationError
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status
 
 from seaserv import seafile_api
 
+from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error
 
 from seahub.settings import ENABLE_RESUMABLE_FILEUPLOAD
+from seahub.utils.repo import parse_repo_perm
+from seahub.views import check_folder_permission
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
 
+
+def resolve_upload_path(parent_dir, path):
+    if any('\x00' in value or '\\' in value or '..' in value.split('/')
+           for value in (parent_dir, path)):
+        return None
+
+    parent_dir = posixpath.normpath('/' + parent_dir.lstrip('/'))
+    target = posixpath.normpath('/' + posixpath.join(parent_dir, path).lstrip('/'))
+    if posixpath.commonpath((parent_dir, target)) == parent_dir:
+        return target
+    return None
+
+
+def get_file_uploaded_bytes(request, repo_id, parent_dir, can_upload):
+    """Return the offset for a file under a writable upload directory."""
+    parent_dir = resolve_upload_path('/', parent_dir) if parent_dir else None
+    if not parent_dir:
+        raise ValidationError({'error_msg': 'parent_dir invalid.'})
+
+    file_name = request.GET.get('file_name', '')
+    file_path = resolve_upload_path(parent_dir, file_name)
+    if not file_path or file_path == parent_dir or posixpath.basename(file_name) in ('', '.'):
+        raise ValidationError({'error_msg': 'file_name invalid.'})
+
+    file_mtime = request.GET.get('file_mtime')
+    last_modify = 0
+    if file_mtime:
+        try:
+            mtime = dateutil.parser.isoparse(file_mtime)
+            if mtime.tzinfo is None:
+                raise ValueError('Timezone is required.')
+            last_modify = int(mtime.timestamp())
+        except (TypeError, ValueError, OverflowError):
+            error_msg = 'file_mtime invalid, should be ISO 8601 format with timezone.'
+            raise ValidationError({'error_msg': error_msg})
+
+    repo = seafile_api.get_repo(repo_id)
+    if not repo or not seafile_api.get_dir_id_by_path(repo_id, parent_dir) or not can_upload(repo, parent_dir):
+        raise NotFound({'error_msg': 'Not found.'})
+
+    # Resumable uploads can have staged bytes before creating their subdirectories.
+    directory = parent_dir
+    for part in posixpath.relpath(file_path, parent_dir).split('/')[:-1]:
+        subdirectory = posixpath.join(directory, part)
+        if not seafile_api.get_dir_id_by_path(repo_id, subdirectory):
+            break
+        directory = subdirectory
+    if directory != parent_dir and not can_upload(repo, directory):
+        raise NotFound({'error_msg': 'Not found.'})
+
+    try:
+        return seafile_api.get_upload_tmp_file_offset(repo_id, file_path, last_modify)
+    except Exception as e:
+        logger.error(e)
+        raise APIException({'error_msg': 'Internal Server Error'}) from e
+
+
 class RepoFileUploadedBytesView(APIView):
 
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, repo_id):
-        """ For resumable fileupload
+        def can_upload(repo, directory):
+            permission = check_folder_permission(request, repo.id, directory)
+            return permission and parse_repo_perm(permission).can_upload
 
-        Optional file_mtime is an ISO 8601 timestamp with timezone.
-        """
-
-        # argument check
-        parent_dir = request.GET.get('parent_dir', None)
-        if not parent_dir:
-            error_msg = 'parent_dir invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        file_name = request.GET.get('file_name')
-        if not file_name:
-            error_msg = 'file_name invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        file_mtime = request.GET.get('file_mtime')
-        last_modify = 0
-        if file_mtime:
-            try:
-                mtime = dateutil.parser.isoparse(file_mtime)
-                if mtime.tzinfo is None:
-                    raise ValueError('Timezone is required.')
-                last_modify = int(mtime.timestamp())
-            except (TypeError, ValueError, OverflowError):
-                error_msg = 'file_mtime invalid, should be ISO 8601 format with timezone.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        # resource check
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if not seafile_api.get_dir_id_by_path(repo_id, parent_dir):
-            error_msg = 'Folder %s not found.' % parent_dir
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        file_path = posixpath.join(parent_dir, file_name)
-        try:
-            uploadedBytes = seafile_api.get_upload_tmp_file_offset(repo_id, file_path, last_modify)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        response = Response({"uploadedBytes": uploadedBytes})
+        uploaded_bytes = get_file_uploaded_bytes(request, repo_id, request.GET.get('parent_dir'), can_upload)
+        response = Response({'uploadedBytes': uploaded_bytes})
         if ENABLE_RESUMABLE_FILEUPLOAD:
-            response["Accept-Ranges"] = "bytes"
-
+            response['Accept-Ranges'] = 'bytes'
         return response
