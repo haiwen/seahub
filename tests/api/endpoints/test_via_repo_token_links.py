@@ -150,18 +150,24 @@ class ViaRepoTokenLinksTest(TestCase):
             self.assertEqual(description, link.description)
 
     def test_create_and_update_share_link_with_options(self):
-        response = self.client.post(self.share_url, json.dumps({
+        member = User('member@example.com')
+        users = {user.username: user for user in (self.user, member)}
+        data = {
             'path': self.file,
             'password': 'Initial-Supplier-2026!',
             'expire_days': 2,
             'user_scope': 'specific_users',
-            'emails': [self.user.username],
-        }), 'application/json', **self.headers)
+            'emails': [self.user.username, member.username, self.user.username],
+        }
+        with patch.object(User.objects, 'get', side_effect=lambda email: users[email]):
+            with self.captureOnCommitCallbacks() as callbacks:
+                response = self.client.post(self.share_url, json.dumps(data), 'application/json', **self.headers)
         self.assertEqual(200, response.status_code)
+        self.assertEqual([], callbacks)
         info = response.json()
         link = FileShare.objects.get(token=info['token'])
         self.assertEqual('specific_users', link.user_scope)
-        self.assertEqual({'authed_users': [self.user.username]}, json.loads(link.authed_details))
+        self.assertEqual({'authed_users': [self.user.username, member.username]}, json.loads(link.authed_details))
         url = reverse('via-repo-token-share-link', args=[link.token])
 
         data = {'password': 'Updated-Supplier-2026!', 'expiration_time': '2099-12-31T12:00:00+00:00',
@@ -178,6 +184,42 @@ class ViaRepoTokenLinksTest(TestCase):
         self.assertEqual(400, response.status_code)
         link.refresh_from_db()
         self.assertEqual(data['password'], link.get_password())
+
+    def test_share_link_rejects_invalid_specific_users(self):
+        link = FileShare.objects.create_file_link(self.user.username, self.repo_id, self.file,
+                                                 description='Original description')
+        url = reverse('via-repo-token-share-link', args=[link.token])
+        unknown_email = 'unknown@example.com'
+
+        def get_user(email):
+            if email == unknown_email:
+                raise User.DoesNotExist
+            return self.user
+
+        with patch.object(User.objects, 'get', side_effect=get_user):
+            for options, error in (
+                    ({}, 'emails invalid.'),
+                    ({'emails': []}, 'emails invalid.'),
+                    ({'emails': ['']}, 'emails invalid.'),
+                    ({'emails': [None]}, 'emails invalid.'),
+                    ({'emails': self.user.username}, 'emails invalid.'),
+                    ({'emails': [unknown_email]}, 'emails contains an unknown user.'),
+                    ({'emails': [self.user.username, unknown_email]}, 'emails contains an unknown user.')):
+                with self.subTest(options=options):
+                    data = {'user_scope': 'specific_users', 'description': 'Updated description', **options}
+                    response = self.client.post(self.share_url, json.dumps({'path': self.file, **data}),
+                                                'application/json', **self.headers)
+                    self.assertEqual(400, response.status_code)
+                    self.assertEqual(error, response.json()['error_msg'])
+                    self.assertEqual(link.pk, FileShare.objects.get(repo_id=self.repo_id).pk)
+
+                    response = self.update_link(url, data)
+                    self.assertEqual(400, response.status_code)
+                    self.assertEqual(error, response.json()['error_msg'])
+                    link.refresh_from_db()
+                    self.assertEqual('all_users', link.user_scope)
+                    self.assertEqual('', link.authed_details)
+                    self.assertEqual('Original description', link.description)
 
     def test_create_share_link_rejects_invalid_email_recipients(self):
         for options in (

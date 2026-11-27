@@ -3018,15 +3018,14 @@ class ViaRepoShareLinks(APIView):
         authed_details = {}
         emails = []
         if scope == SCOPE_SPECIFIC_USERS:
-            users = request.data.get('emails', [])
-            if not isinstance(users, list) or any(not isinstance(email, str) for email in users):
+            users = request.data.get('emails')
+            if not isinstance(users, list) or not users or any(
+                    not isinstance(email, str) or not email for email in users):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'emails invalid.')
-            authed_users = []
-            for email in dict.fromkeys(users):
-                try:
-                    authed_users.append(User.objects.get(email=email).username)
-                except User.DoesNotExist:
-                    continue
+            try:
+                authed_users = [User.objects.get(email=email).username for email in dict.fromkeys(users)]
+            except User.DoesNotExist:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'emails contains an unknown user.')
             authed_details['authed_users'] = authed_users
         elif scope == SCOPE_SPECIFIC_EMAILS:
             email_list = request.data.get('emails')
