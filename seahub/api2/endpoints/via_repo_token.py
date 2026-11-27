@@ -3017,6 +3017,8 @@ class ViaRepoShareLinks(APIView):
         scope = request.data.get('user_scope', SCOPE_ALL_USERS)
         if scope not in VALID_SHARE_LINK_SCOPE:
             return api_error(status.HTTP_400_BAD_REQUEST, 'user_scope invalid.')
+        if scope == SCOPE_ALL_USERS and 'emails' in request.data:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'emails is not allowed for all_users.')
         authed_details = {}
         emails = []
         if scope == SCOPE_SPECIFIC_USERS:

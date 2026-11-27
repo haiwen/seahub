@@ -196,6 +196,18 @@ class ViaRepoTokenLinksTest(TestCase):
                 self.assertFalse(FileShare.objects.filter(repo_id=self.repo_id).exists())
                 self.assertEqual([], callbacks)
 
+    def test_create_public_share_link_rejects_recipients(self):
+        for options in ({}, {'user_scope': 'all_users'}):
+            for emails in ('member@example.com', ['member@example.com'], '', [], None):
+                with self.subTest(options=options, emails=emails):
+                    data = {'path': self.file, 'emails': emails, **options}
+                    with self.captureOnCommitCallbacks() as callbacks:
+                        response = self.client.post(self.share_url, json.dumps(data), 'application/json', **self.headers)
+                    self.assertEqual(400, response.status_code)
+                    self.assertEqual('emails is not allowed for all_users.', response.json()['error_msg'])
+                    self.assertFalse(FileShare.objects.filter(repo_id=self.repo_id).exists())
+                    self.assertEqual([], callbacks)
+
     def test_create_share_link_rejects_invalid_description(self):
         for description in ([], ['description'], {}, None, 0, False):
             with self.subTest(description=description):
@@ -209,7 +221,7 @@ class ViaRepoTokenLinksTest(TestCase):
                 self.assertEqual([], callbacks)
 
     def test_create_share_link_description_round_trip(self):
-        for options in ({}, {'description': ''}, {'description': 'Supplier documents'}):
+        for options in ({}, {'description': ''}, {'description': 'Supplier documents'}, {'user_scope': 'all_users'}):
             with self.subTest(options=options):
                 data = {'path': self.file, **options}
                 response = self.client.post(self.share_url, json.dumps(data), 'application/json', **self.headers)
