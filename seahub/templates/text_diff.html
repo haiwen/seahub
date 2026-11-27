@@ -34,12 +34,12 @@
 </div>
 {% else %}
 <div id="text-diff-output">
-<table class="diff-con">
+<table class="diff-con" aria-label="{% trans 'File modification details' %}">
     <tr>
-        <th width="3%"></th>
-        <th width="47%">{% trans "before modification" %}</th>
-        <th width="3%"></th>
-        <th width="47%">{% trans "after modification" %}</th>
+        <th width="3%" scope="col" id="diff-before-line-number"><span class="sr-only">{% trans 'Line number before modification' %}</span></th>
+        <th width="47%" scope="col" id="diff-before-content">{% trans "before modification" %}</th>
+        <th width="3%" scope="col" id="diff-after-line-number"><span class="sr-only">{% trans 'Line number after modification' %}</span></th>
+        <th width="47%" scope="col" id="diff-after-content">{% trans "after modification" %}</th>
     </tr>
     {{ diff_result_table|safe }}
 </table>

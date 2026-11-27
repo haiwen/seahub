@@ -4,6 +4,7 @@ import uuid
 from urllib.parse import urlparse
 
 from django.http import HttpResponse
+from django.template.loader import render_to_string
 
 from seahub.utils import render_error, get_service_url
 from seahub.profile.models import Profile
@@ -54,18 +55,10 @@ def billing(request):
     token = jwt.encode(payload, BILLING_SERVICE_JWT_SECRET_KEY,
                        algorithm=BILLING_SERVICE_JWT_ALGORITHM)
 
-    html = f'''
-    <html>
-        <body>
-            <form id="postForm" action="{BILLING_SERVICE_JWT_AUTH_URL}" method="post">
-                <input type="hidden" name="token" value="{token}">
-            </form>
-            <script>
-                document.getElementById('postForm').submit();
-            </script>
-        </body>
-    </html>
-    '''
+    html = render_to_string('billing/handoff.html', {
+        'billing_auth_url': BILLING_SERVICE_JWT_AUTH_URL,
+        'token': token,
+    })
     response = HttpResponse(html)
     response['Content-Type'] = 'text/html'
     return response

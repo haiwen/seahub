@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Billing</title>
+    </head>
+    <body>
+        <main>
+            <form id="postForm" action="{{ billing_auth_url }}" method="post">
+                <input type="hidden" name="token" value="{{ token }}">
+            </form>
+        </main>
+        <script>
+            document.getElementById('postForm').submit();
+        </script>
+    </body>
+</html>

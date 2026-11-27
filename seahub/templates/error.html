@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
+{% block sub_title %}{% trans "Error" %} - {% endblock %}
+
 {% block main_content %}
 <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center">
   {% if organization_inactive %}

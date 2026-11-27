@@ -1,9 +1,9 @@
 {% load i18n %}
-<li class="wiki-page-item-wrapper" role="treeitem"{% if item.has_children %} aria-expanded="{% if item.is_expanded %}true{% else %}false{% endif %}"{% endif %}>
+<li class="wiki-page-item-wrapper">
   <div class="wiki-page-item readonly{% if item.is_current %} selected-page{% endif %}">
     {% if item.has_children %}
-    <button type="button" class="wiki-nav-item-icon{% if item.is_expanded %} expanded{% endif %}" aria-label="{% trans 'Toggle navigation section' %}" aria-expanded="{% if item.is_expanded %}true{% else %}false{% endif %}"{% if item.depth > 0 %} style="margin-left: {% widthratio item.depth 1 24 %}px;"{% endif %}>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <button type="button" id="wiki-nav-toggle-{{ item.id }}" class="wiki-nav-item-icon{% if item.is_expanded %} expanded{% endif %}" aria-label="{% trans 'Toggle navigation section' %}" aria-labelledby="wiki-nav-toggle-{{ item.id }} wiki-nav-page-{{ item.id }}" aria-controls="wiki-nav-children-{{ item.id }}" aria-expanded="{% if item.is_expanded %}true{% else %}false{% endif %}"{% if item.depth > 0 %} style="margin-left: {% widthratio item.depth 1 24 %}px;"{% endif %}>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <polyline points="9 18 15 12 9 6"></polyline>
       </svg>
     </button>
@@ -12,12 +12,13 @@
     {% endif %}
 
     <a class="wiki-page-item-main"
+       id="wiki-nav-page-{{ item.id }}"
        href="{{ item.url }}"
        data-page-id="{{ item.id }}"
-       {% if item.is_current %}aria-current="true"{% else %}aria-current="false"{% endif %}
+       {% if item.is_current %}aria-current="page"{% endif %}
        title="{{ item.name }}">
       <div class="wiki-page-content">
-        <span class="nav-item-icon">
+        <span class="nav-item-icon" aria-hidden="true">
           {% if item.icon %}
           <span style="font-size: 14px;">{{ item.icon }}</span>
           {% elif item.has_children %}
@@ -39,7 +40,7 @@
   </div>
 
   {% if item.children %}
-  <ul class="wiki-nav-children{% if not item.is_expanded %} collapsed{% endif %}" role="group"{% if item.is_expanded %} style="height: auto;"{% else %} style="height: 0;"{% endif %}>
+  <ul id="wiki-nav-children-{{ item.id }}" class="wiki-nav-children{% if not item.is_expanded %} collapsed{% endif %}"{% if item.is_expanded %} style="height: auto;"{% else %} style="height: 0;" inert aria-hidden="true"{% endif %}>
     {% for item in item.children %}
       {% include "wiki/_wiki_publish_ssr_nav_item.html" with item=item %}
     {% endfor %}

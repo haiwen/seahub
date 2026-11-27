@@ -1,13 +1,16 @@
 <!-- This file is used to communicate with seafile zimlet on SSO login.  -->
 <!-- Please copy this file to <seafile-root>/seahub-data/custom/templates/shibboleth/success.html, create new path if missing. -->
 <!-- For security issue, please replace "*" in `parent.postMessage(msg, "*");` with your zimbra service origin, e.g. "https://zimbra-service.com" -->
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>Login success</title>
     </head>
     <body>
+        <main>
         Login success
-    </body>
+        </main>
 
     <script>
     if (!String.prototype.trim) {
@@ -42,4 +45,5 @@
      }
 
     </script>
+    </body>
 </html>

@@ -1,7 +1,10 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html>
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
-  <title>{% block title %}{% endblock %}</title>
+  <meta charset="utf-8" />
+  <title>{% block title %}{% trans "Two-Factor Authentication" %}{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script>
@@ -9,7 +12,8 @@
   <![endif]-->
 </head>
 <body>
-  <div class="alert alert-success"><p class="container">Provide a template named
+  <main>
+  <div class="alert alert-success" lang="en"><p class="container">Provide a template named
     <code>two_factor/_base.html</code> to style this page and remove this message.</p></div>
 
   {% block content_wrapper %}
@@ -17,5 +21,6 @@
       {% block content %}{% endblock %}
     </div>
   {% endblock %}
+  </main>
 </body>
 </html>

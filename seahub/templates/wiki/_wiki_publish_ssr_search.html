@@ -27,11 +27,13 @@
     id="wiki-search-modal"
     role="dialog"
     aria-modal="true"
+    aria-hidden="true"
     aria-label="{% trans 'Search' %}"
     data-searching="{% trans 'Searching...' %}"
     data-untitled="{% trans 'Untitled' %}"
     data-current-page="{% trans 'Current page' %}"
     data-search-failed="{% trans 'Search failed' %}"
+    data-results-found="{% trans 'Results found' %}"
 >
     <div class="wiki2-search-modal__dialog" role="document">
         <div class="wiki2-search-modal__body">
@@ -50,6 +52,13 @@
                     type="text"
                     class="form-control"
                     id="wiki-search-input"
+                    role="combobox"
+                    aria-label="{% trans 'Search' %}"
+                    aria-autocomplete="list"
+                    aria-controls="wiki-search-result-list"
+                    aria-expanded="false"
+                    aria-busy="false"
+                    aria-describedby="wiki-search-announcement"
                     placeholder="{% trans 'Search' %}"
                     autocomplete="off"
                 >
@@ -108,5 +117,6 @@
         </div>
     </div>
     <span class="wiki2-search-clear-tooltip" id="wiki-search-clear-tooltip" role="tooltip">{% trans "Clear search" %}</span>
+    <div class="sr-only" id="wiki-search-announcement" role="status" aria-live="polite" aria-atomic="true"></div>
 </div>
 {% endif %}

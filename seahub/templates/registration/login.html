@@ -55,9 +55,11 @@ html, body, #wrapper { height:100%; }
 
         {% if form.captcha %}
         <div class="ovhd mt-3">
+            <label for="id_captcha_1" class="sr-only">{% trans "CAPTCHA" %}</label>
             <button type="button" id="refresh-captcha" title="{% trans "Refresh" %}" aria-label="{% trans "Refresh" %}" class="op-icon fright"></button>
             {{ form.captcha }}
         </div>
+        <span id="captcha-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></span>
         {% endif %}
 
         <input type="hidden" name="next" value="{% if next %}{{ next|escape }}{% else %}{{ SITE_ROOT }}{% endif %}" />
@@ -79,6 +81,9 @@ html, body, #wrapper { height:100%; }
         {% endif %}
         {% else %}
         <p class="error mt-2 hide" role="alert" id="login-error" data-form-error></p>
+        {% endif %}
+        {% if form.captcha %}
+        <p class="error mt-2 hide" role="alert" id="captcha-refresh-error" aria-atomic="true"></p>
         {% endif %}
 
         <label class="checkbox-label mt-3 mb-0 remember-me">
@@ -185,17 +190,54 @@ function setCaptchaInputWidth() {
 }
 $(window).on('load', setCaptchaInputWidth);
 $('.captcha').on('load', setCaptchaInputWidth);
+var captchaAnswer = $('#id_captcha_1');
+var captchaError = $('#id_captcha_error');
+if (!captchaError.length && captchaAnswer.attr('aria-invalid') === 'true') {
+    captchaError = $('#login-form .errorlist').first().attr('id', 'id_captcha_error');
+}
+function describeCaptchaError(include) {
+    var descriptions = (captchaAnswer.attr('aria-describedby') || '').split(/\s+/).filter(Boolean);
+    descriptions = descriptions.filter(function(description) { return description !== 'id_captcha_error'; });
+    if (include) descriptions.push('id_captcha_error');
+    if (descriptions.length) {
+        captchaAnswer.attr('aria-describedby', descriptions.join(' '));
+    } else {
+        captchaAnswer.removeAttr('aria-describedby');
+    }
+}
+if (captchaError.length) describeCaptchaError(true);
+var captchaAudio = $('.captcha').parent('a');
+captchaAudio.attr('aria-label', "{% trans 'Play CAPTCHA as audio file' %}");
+var captchaRefreshSequence = 0;
+function captchaRefreshFailed() {
+    $('#captcha-refresh-error').removeClass('hide').text("{% trans "Failed to refresh the CAPTCHA, please try again later." %}");
+}
 $('#refresh-captcha').on('click', function() {
+    var refreshSequence = ++captchaRefreshSequence;
+    $('#captcha-status').empty();
     $.ajax({
         url: '{% url 'captcha-refresh' %}',
         dataType:'json',
         cache:false,
         success: function(data) {
+            if (refreshSequence !== captchaRefreshSequence) return;
+            if (!data || typeof data.key !== 'string' || !data.key ||
+                    typeof data.image_url !== 'string' || !data.image_url ||
+                    (captchaAudio.length && (typeof data.audio_url !== 'string' || !data.audio_url))) {
+                captchaRefreshFailed();
+                return;
+            }
             $('.captcha').attr('src', data['image_url']);
             $('#id_captcha_0').val(data['key']);
+            captchaAnswer.val('').removeAttr('aria-invalid');
+            describeCaptchaError(false);
+            if (data['audio_url']) captchaAudio.attr('href', data['audio_url']);
+            $('#captcha-refresh-error').empty().addClass('hide');
+            $('#captcha-status').text("{% trans 'CAPTCHA refreshed.' %}");
         },
         error: function() {
-            $('.error').removeClass('hide').html("{% trans "Failed to refresh the CAPTCHA, please try again later." %}");
+            if (refreshSequence !== captchaRefreshSequence) return;
+            captchaRefreshFailed();
         }
     });
     return false;

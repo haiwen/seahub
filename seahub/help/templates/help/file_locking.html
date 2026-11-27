@@ -7,7 +7,7 @@
 <p>{% trans "File locking works on both the web app and the desktop syncing client. We'll introduce them one by one." %}</p>
 <h4>{% trans "File locking on the Web App" %}</h4>
 <p>{% blocktrans %}To lock a file, you can navigate into the file's folder on the web app, and click on the "operations" drop-down menu.{% endblocktrans %}</p>
-<img src="{{ MEDIA_URL }}img/help/web_lock_file.png" alt="" />
+<img src="{{ MEDIA_URL }}img/help/web_lock_file.png" alt="{% trans 'Choose Lock from the file operations menu.' %}" />
 <p>{% blocktrans %}After the file is locked, you can see a red "stop sign" at the corner of the file icon. Moving the mouse on the stop sign, you can see who locks the file. And you can also unlock a file that's locked by you. But you cannot unlock files locked by others.{% endblocktrans %}</p>
 <img src="{{ MEDIA_URL }}img/help/web_file_locked.png" alt="" />
 <h4>{% trans "File locking on the desktop client" %}</h4>
@@ -15,7 +15,7 @@
 <p>{% blocktrans %}To lock a file, just right click on a synced file and choose "lock this file" in the "Seafile" menu.{% endblocktrans %}</p>
 <img src="{{ MEDIA_URL }}img/help/desktop_lock_file.png" alt="" />
 <p>{% blocktrans %}If a file is locked by you, you can see an orange "stop sign" on the file icon. You can choose to unlock it.{% endblocktrans %}</p>
-<img src="{{ MEDIA_URL }}img/help/desktop_my_locked_file.png" alt="" />
+<img src="{{ MEDIA_URL }}img/help/desktop_my_locked_file.png" alt="{% trans 'Right-click a file locked by you and choose unlock this file in the Seafile menu.' %}" />
 <p>{% blocktrans %}If a file is locked by other user, you can see a red "stop sign" on the file icon. The file is automatically set to read-only. You cannot modify it until it's unlocked.{% endblocktrans %}</p>
 <img src="{{ MEDIA_URL }}img/help/desktop_other_locked_file.png" alt="" />
 <p>{% trans "If a library is not synced, you can still use cloud file browser to lock and unlock files in it." %}</p>

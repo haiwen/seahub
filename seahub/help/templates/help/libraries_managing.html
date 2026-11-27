@@ -9,8 +9,8 @@
   <li>{% trans "Each library can be synced to desktop clients separately. You can choose which libraries to be synced." %}</li>
 </ul>
 <p>{% blocktrans %}When you log into Seafile's web app for the first time, Seafile automatically creates a default library named "My Library" for you. You can also create more libraries. Here is what it looks like when you've created a few libraries.{% endblocktrans %}</p>
-<p><img src="{{ MEDIA_URL }}img/help/libraries_view.png" alt="" /></p>
+<p><img src="{{ MEDIA_URL }}img/help/libraries_view.png" alt="{% trans 'The My Libraries page lists your libraries. Select New Library to create another library.' %}" /></p>
 <p>{% trans "You can navigate into a library and manage your files and folders. You can upload, download, rename, move, copy and delete files." %}</p>
-<p><img src="{{ MEDIA_URL }}img/help/library_browse.png" alt="" /></p>
+<p><img src="{{ MEDIA_URL }}img/help/library_browse.png" alt="{% trans 'Inside a library, use Upload or New in the toolbar, or open the operations menu for a file to choose actions such as Rename, Move and Copy.' %}" /></p>
 <p>{% blocktrans %}After <a href="{{ SITE_ROOT }}help/install_sync/">syncing a library with desktop client</a>, you can do any file operations inside the local library folder. The operations will be uploaded to the server. {% endblocktrans %}</p>
 {% endblock %}

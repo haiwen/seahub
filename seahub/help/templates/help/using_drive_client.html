@@ -8,73 +8,73 @@
 <p>{% blocktrans %}You'll be asked to choose a drive letter for the virtual drive. By default, "S:" will be used.{% endblocktrans %}</p>
 <p>{% trans "Then you'll be asked to log into your Seafile server." %}</p>
 
-<img src="{{ MEDIA_URL }}img/help/drive-login.png" alt="Drive client login" />
+<img src="{{ MEDIA_URL }}img/help/drive-login.png" alt="{% trans 'Add an account: enter the server address, email or username, password and computer name, then select Login.' %}" />
 <p>{% trans "After successfully log into the server, the Drive client starts to fetch library and file list from the server. The file contents are not downloaded at this moment. So it'll not take very long. You can let it run in the background. You'll be noticed when the fetch is done." %}</p>
-<img src="{{ MEDIA_URL }}img/help/drive-fetch-finish.png" alt="Drive client fetch files">
+<img src="{{ MEDIA_URL }}img/help/drive-fetch-finish.png" alt="{% trans 'After the file list is downloaded, select Finish to open the SeaDrive folder.' %}">
 <p>{% trans "The virtual drive folder will be opened. You'll find it works just like an ordinary hard drive on your computer. The top level folders in the virtual drive are libraries on the Seafile server. File contents will be downloaded when you open a file. Recently opened file will be cached in your local disk. All cached files will be marked with a green tick." %}</p>
-<img src="{{ MEDIA_URL }}img/help/drive.png" alt="Drive window" />
+<img src="{{ MEDIA_URL }}img/help/drive.png" alt="{% trans 'SeaDrive folder in File Explorer' %}" />
 
-<h4>{% trans "Synced State" %}</h4>
+<h4 id="drive-synced-state">{% trans "Synced State" %}</h4>
 <p>{% trans "Files and folders in the virtual drive are in either cloud-only, synced, or in partially synced state." %}</p>
-<table>
+<table aria-labelledby="drive-synced-state">
   <thead>
     <tr>
-      <th width="20%">{% trans "State" %}</th>
-      <th width="15%">{% trans "Icon" %}</th>
-      <th width="65%">{% trans "Details" %}</th>
+      <th width="20%" scope="col" id="drive-sync-state">{% trans "State" %}</th>
+      <th width="15%" scope="col" id="drive-sync-icon">{% trans "Icon" %}</th>
+      <th width="65%" scope="col" id="drive-sync-details">{% trans "Details" %}</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>{% trans "Cloud-only content" %}</td>
-      <td><img src="{{ MEDIA_URL }}img/help/cloud.png" alt="cloud-only icon" width="48" /></td>
-      <td>{% trans "Cloud-only content shows in the virtual drive, but doesn’t use the full amount of space that the file would. In your file explorer, you can see the file, but the content isn’t fully downloaded until you need it. What downloaded is only information about the file, such as its name, its size and the date it was updated." %}</td>
+      <td role="rowheader" id="drive-cloud-only" headers="drive-sync-state">{% trans "Cloud-only content" %}</td>
+      <td headers="drive-sync-icon drive-cloud-only"><img src="{{ MEDIA_URL }}img/help/cloud.png" alt="{% trans 'Cloud-only content' %}" width="48" /></td>
+      <td headers="drive-sync-details drive-cloud-only">{% trans "Cloud-only content shows in the virtual drive, but doesn’t use the full amount of space that the file would. In your file explorer, you can see the file, but the content isn’t fully downloaded until you need it. What downloaded is only information about the file, such as its name, its size and the date it was updated." %}</td>
     </tr>
     <tr>
-      <td>{% trans "Synced content" %}</td>
-      <td><img src="{{ MEDIA_URL }}img/help/synced.png" alt="synced icon" width="48" /></td>
-      <td>{% trans "Synced content is downloaded and saved on the hard drive of your computer. You can directly edit these files from applications on your computer." %}</td>
+      <td role="rowheader" id="drive-synced" headers="drive-sync-state">{% trans "Synced content" %}</td>
+      <td headers="drive-sync-icon drive-synced"><img src="{{ MEDIA_URL }}img/help/synced.png" alt="{% trans 'Synced content' %}" width="48" /></td>
+      <td headers="drive-sync-details drive-synced">{% trans "Synced content is downloaded and saved on the hard drive of your computer. You can directly edit these files from applications on your computer." %}</td>
     </tr>
     <tr>
-      <td>{% trans "Partially synced content" %}</td>
-      <td><img src="{{ MEDIA_URL }}img/help/partial-synced.png" alt="partial synced icon" width="48" /></td>
-      <td>{% trans "Partially synced folders contain both synced and cloud-only files or folders." %}</td>
+      <td role="rowheader" id="drive-partially-synced" headers="drive-sync-state">{% trans "Partially synced content" %}</td>
+      <td headers="drive-sync-icon drive-partially-synced"><img src="{{ MEDIA_URL }}img/help/partial-synced.png" alt="{% trans 'Partially synced content' %}" width="48" /></td>
+      <td headers="drive-sync-details drive-partially-synced">{% trans "Partially synced folders contain both synced and cloud-only files or folders." %}</td>
     </tr>
   </tbody>
 </table>
 
-<h4>{% trans "Special States" %}</h4>
+<h4 id="drive-special-states">{% trans "Special States" %}</h4>
 <p>{% blocktrans %}For files that are already synced to local computer, they may be in 3 other special states, besides the normal "synced" state. {% endblocktrans %}</p>
-<table>
+<table aria-labelledby="drive-special-states">
   <thead>
     <tr>
-      <th width="20%">{% trans "State" %}</th>
-      <th width="15%">{% trans "Icon" %}</th>
-      <th width="65%">{% trans "Details" %}</th>
+      <th width="20%" scope="col" id="drive-special-state">{% trans "State" %}</th>
+      <th width="15%" scope="col" id="drive-special-icon">{% trans "Icon" %}</th>
+      <th width="65%" scope="col" id="drive-special-details">{% trans "Details" %}</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>{% trans "Locked by other user" %}</td>
-      <td><img src="{{ MEDIA_URL }}img/help/locked.png" alt="locked icon" width="48" /></td>
-      <td>{% trans "The file is locked by other user on the server. You can only open the file in read-only mode. You cannot modify, delete, rename or move the file." %}</td>
+      <td role="rowheader" id="drive-locked-by-other" headers="drive-special-state">{% trans "Locked by other user" %}</td>
+      <td headers="drive-special-icon drive-locked-by-other"><img src="{{ MEDIA_URL }}img/help/locked.png" alt="{% trans 'Locked by other user' %}" width="48" /></td>
+      <td headers="drive-special-details drive-locked-by-other">{% trans "The file is locked by other user on the server. You can only open the file in read-only mode. You cannot modify, delete, rename or move the file." %}</td>
     </tr>
     <tr>
-      <td>{% trans "Locked by me" %}</td>
-      <td><img src="{{ MEDIA_URL }}img/help/locked-by-me.png" alt="locked by me icon" width="48" /></td>
-      <td>{% trans "The file is locked by you. This prevents others from modifying the file." %}</td>
+      <td role="rowheader" id="drive-locked-by-me" headers="drive-special-state">{% trans "Locked by me" %}</td>
+      <td headers="drive-special-icon drive-locked-by-me"><img src="{{ MEDIA_URL }}img/help/locked-by-me.png" alt="{% trans 'Locked by me' %}" width="48" /></td>
+      <td headers="drive-special-details drive-locked-by-me">{% trans "The file is locked by you. This prevents others from modifying the file." %}</td>
     </tr>
     <tr>
-      <td>{% trans "Read-only" %}</td>
-      <td><img src="{{ MEDIA_URL }}img/help/read-only.png" alt="read only icon" width="48" /></td>
-      <td>{% trans "The folder or library of this file is shared with read-only permission with you. You cannot modify, delete or move the file." %}</td>
+      <td role="rowheader" id="drive-read-only" headers="drive-special-state">{% trans "Read-only" %}</td>
+      <td headers="drive-special-icon drive-read-only"><img src="{{ MEDIA_URL }}img/help/read-only.png" alt="{% trans 'Read-only' %}" width="48" /></td>
+      <td headers="drive-special-details drive-read-only">{% trans "The folder or library of this file is shared with read-only permission with you. You cannot modify, delete or move the file." %}</td>
     </tr>
   </tbody>
 </table>
 <p>{% trans "The Drive client regularly cleans up unused cached files in the background. You can also limit the local cache space." %}</p>
-<img src="{{ MEDIA_URL }}img/help/drive-cache-setting.png" alt="Drive cache settings" />
+<img src="{{ MEDIA_URL }}img/help/drive-cache-setting.png" alt="{% trans 'In Settings, open the Advanced tab to set the cache clean interval in minutes and the cache size limit in GB.' %}" />
 <p>{% trans "You can log into multiple accounts in the Drive client. However, only files on the current selected server will be shown in the virtual drive. You can switch among accounts." %}</p>
-<img src="{{ MEDIA_URL }}img/help/drive-accounts.png" alt="Drive client accounts" />
+<img src="{{ MEDIA_URL }}img/help/drive-accounts.png" alt="{% trans 'Open Accounts in the SeaDrive menu to switch accounts or add an account.' %}" />
 
 <h4>{% trans "FAQ" %}</h4>
 <p><b>{% trans "1. Why can't I create new files or delete folders in root folder?" %}</b></p>

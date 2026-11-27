@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block sub_title %}{% trans "Client login complete" %} - {% endblock %}
+
 {% block main_content %}
 <div class="text-panel">
     <p>{% trans "The client has logged in. Please open the client to confirm." %}</p>

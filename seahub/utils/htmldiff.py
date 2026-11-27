@@ -29,6 +29,9 @@ Class HtmlDiff:
 import heapq
 from collections import namedtuple as _namedtuple
 from functools import reduce
+from html import escape
+
+from django.utils.translation import gettext as _
 
 Match = _namedtuple('Match', 'a b size')
 
@@ -1861,9 +1864,14 @@ class HtmlDiff(object):
         linenum -- line number (used for line number column)
         text -- line text to be marked up
         """
+        side_name = ('before', 'after')[side]
+        line_attributes = ' headers="diff-%s-line-number"' % side_name
+        content_headers = 'diff-%s-content' % side_name
         try:
             linenum = '%d' % linenum
             id = ' id="%s%s"' % (self._prefix[side], linenum)
+            line_attributes += id + ' role="rowheader"'
+            content_headers += ' %s%s' % (self._prefix[side], linenum)
         except TypeError:
             # handle blank lines where linenum is '>' or ''
             id = ''
@@ -1886,11 +1894,14 @@ class HtmlDiff(object):
                replace('\t', '&nbsp;')
 
         if cls:
-            return '<td class="diff-header">%s</td><td class=%s>%s</td>' \
-               % (linenum, cls, text)
+            change_label = _('Removed:') if side == 0 else _('Added:')
+            text = '<span class="sr-only">%s </span>%s' % (
+                escape(change_label), text)
+            return '<td class="diff-header"%s>%s</td><td class=%s headers="%s">%s</td>' \
+               % (line_attributes, linenum, cls, content_headers, text)
         else:
-            return '<td class="diff-header">%s</td><td>%s</td>' \
-               % (linenum, text)
+            return '<td class="diff-header"%s>%s</td><td headers="%s">%s</td>' \
+               % (line_attributes, linenum, content_headers, text)
 
     def _make_prefix(self):
         """Create unique anchor prefixes"""

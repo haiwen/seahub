@@ -5,7 +5,7 @@
 {% block email_con %}
 
 <p style="font-size:14px; line-height: 1.5; color:#121214; margin:.2em 0 12px;">{% blocktrans with name=user_name %}Hi, {{ name }}{% endblocktrans %}</p>
-<p style="font-size:14px; line-height: 1.5; color:#434144; margin:.2em 0;">
+<p id="notices-summary" style="font-size:14px; line-height: 1.5; color:#434144; margin:.2em 0;">
 {% blocktrans count num=notice_count %}
 You've got 1 new notice on {{ site_name }}:
 {% plural %}
@@ -13,15 +13,18 @@ You've got {{num}} new notices on {{ site_name }}:
 {% endblocktrans %}
 </p>
 
-    <table style="width:100%; margin:12px 0 20px; table-layout:fixed; border-spacing: 0; border-collapse: collapse;">
+    <table aria-labelledby="notices-summary" style="width:100%; margin:12px 0 20px; table-layout:fixed; border-spacing: 0; border-collapse: collapse;">
+        <thead>
         <tr>
-            <th width="9%" style="padding: 5px 3px; border-bottom: 1px solid #eee;"></th>
-            <th width="69%" style="padding: 5px 3px; border-bottom: 1px solid #eee; font-size:13px; text-align: left; font-weight: normal; color: #9c9c9c;">{% trans "Message" %}</th>
-            <th width="22%" style="padding: 5px 3px; border-bottom: 1px solid #eee; font-size:13px; text-align: left; font-weight: normal; color: #9c9c9c;">{% trans "Time" %}</th>
+            <td width="9%" style="padding: 5px 3px; border-bottom: 1px solid #eee;"></td>
+            <th id="notices-message" scope="col" width="69%" style="padding: 5px 3px; border-bottom: 1px solid #eee; font-size:13px; text-align: left; font-weight: normal; color: #9c9c9c;">{% trans "Message" %}</th>
+            <th scope="col" width="22%" style="padding: 5px 3px; border-bottom: 1px solid #eee; font-size:13px; text-align: left; font-weight: normal; color: #9c9c9c;">{% trans "Time" %}</th>
         </tr>
+        </thead>
+        <tbody>
         {% for notice in notices %}
         <tr>
-            <td style="padding:8px 3px 5px; border-bottom: 1px solid #eee; text-align:center; vertical-align:top;"><img src="{{notice.avatar_src}}" width="32" height="32" alt="" style="border-radius:1000px;" /></td>
+            <td headers="notices-message" style="padding:8px 3px 5px; border-bottom: 1px solid #eee; text-align:center; vertical-align:top;"><img src="{{notice.avatar_src}}" width="32" height="32" alt="" style="border-radius:1000px;" /></td>
             <td style="padding: 5px 3px; border-bottom: 1px solid #eee; font-size: 13px; color: #333; word-wrap: break-word;">
                 {% if notice.is_repo_share_msg %}
                     <p style="line-height:1.5; margin:.2em 10px .2em 0;">
@@ -81,6 +84,7 @@ You've got {{num}} new notices on {{ site_name }}:
             <td style="padding: 5px 3px; border-bottom: 1px solid #eee; font-size: 13px; color: #333; word-wrap: break-word;">{{ notice.timestamp|date:"Y-m-d G:i:s"}}</td>
         </tr>
         {% endfor %}
+        </tbody>
     </table>
 
 <p style="font-size:14px;color:#434144;">

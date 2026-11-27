@@ -42,10 +42,11 @@
     <body data-bs-theme="{% if request.session.dark_mode %}dark{% else %}light{% endif %}">
         <div id="wiki-ssr-root">
             {# Left navigation panel #}
-            <aside class="wiki2-side-panel" id="wiki-side-panel" aria-label="{% trans 'Wiki navigation' %}">
+            <nav class="wiki2-side-panel" id="wiki-side-panel" aria-label="{% trans 'Wiki navigation' %}">
                 <div class="wiki2-side-panel-top">
                     <h1 class="h4 text-truncate ml-0 mb-0 wiki-repo-name" title="{{ wiki_repo_name }}">{{ wiki_repo_name }}</h1>
                     <button
+                        type="button"
                         class="wiki-mobile-close"
                         id="side-panel-close"
                         aria-label="{% trans 'Close navigation' %}"
@@ -67,7 +68,6 @@
                                 <ul
                                     class="wiki-nav-tree"
                                     id="wiki-nav-tree"
-                                    role="tree"
                                     aria-label="{% trans 'Pages' %}"
                                 >
                                     {% for item in wiki_navigation %}
@@ -78,13 +78,18 @@
                         </div>
                     </div>
                 </div>
-            </aside>
+            </nav>
             {# Desktop resize handle for the left navigation panel #}
             <div
                 id="wiki-resize-handle"
                 role="separator"
                 aria-orientation="vertical"
                 aria-label="{% trans 'Resize navigation panel' %}"
+                aria-controls="wiki-side-panel"
+                aria-valuemin="160"
+                aria-valuemax="520"
+                aria-valuenow="260"
+                tabindex="0"
             ></div>
             {# Main reading area #}
             <main class="wiki2-main-panel" id="wiki-main-panel">
@@ -92,8 +97,11 @@
                 <div class="wiki2-main-panel-north" id="wiki-top-bar">
                     <div class="wiki2-main-panel-north-content">
                         <button
+                            type="button"
                             class="wiki-mobile-btn"
                             id="menu-toggle-btn"
+                            aria-controls="wiki-side-panel"
+                            aria-expanded="false"
                             aria-label="{% trans 'Open navigation' %}"
                             title="{% trans 'Navigation' %}"
                         >
@@ -149,7 +157,7 @@
                                         </div>
                                     </div>
                                     {% endif %}
-                                    <h1 class="wiki-sdoc-title" id="wiki-page-title">{{ wiki_title }}</h1>
+                                    <h1 class="wiki-sdoc-title" id="wiki-page-title" tabindex="-1">{{ wiki_title }}</h1>
                                 </div>
                                 {# Server-rendered page body converted from the source sdoc file #}
                                 <div id="wiki-sdoc-previewer">
@@ -175,6 +183,7 @@
         </div>
         {# Mobile overlay backdrop for the side panel #}
         <div class="wiki-mobile-overlay" id="wiki-mobile-overlay" aria-hidden="true"></div>
+        <div class="sr-only" id="wiki-navigation-status" role="status" aria-live="polite" aria-atomic="true"></div>
         {% if is_pro %}
         {% include "wiki/_wiki_publish_ssr_search.html" with placement="modal" %}
         {% endif %}
@@ -362,6 +371,9 @@ function getElement(id) {
   function setChildrenExpanded(childrenEl, expanded) {
     if (!childrenEl) return;
 
+    childrenEl.inert = !expanded;
+    childrenEl.setAttribute('aria-hidden', String(!expanded));
+
     if (expanded) {
       childrenEl.classList.remove('collapsed');
       var expandedHeight = childrenEl.scrollHeight;
@@ -397,21 +409,16 @@ function getElement(id) {
     if (!childrenEl) return;
 
     var open = !toggle.classList.contains('expanded');
-    wrapper.setAttribute('aria-expanded', String(open));
+    if (!open && childrenEl.contains(document.activeElement)) {
+      toggle.focus({ preventScroll: true });
+    }
     toggle.setAttribute('aria-expanded', String(open));
     toggle.classList.toggle('expanded', open);
     setChildrenExpanded(childrenEl, open);
   }
 
   navToggles.forEach(function (toggle) {
-    toggle.addEventListener('click', function (e) {
-      toggleNavSection(toggle);
-    });
-
-    toggle.addEventListener('keydown', function (e) {
-      if (e.key !== 'Enter' && e.key !== ' ') return;
-      e.preventDefault();
-      e.stopPropagation();
+    toggle.addEventListener('click', function () {
       toggleNavSection(toggle);
     });
   });
@@ -428,23 +435,83 @@ function getElement(id) {
   var overlay = getElement('wiki-mobile-overlay');
   var menuBtn = getElement('menu-toggle-btn');
   var closeBtn = getElement('side-panel-close');
+  var mobileViewport = window.matchMedia('(max-width: 767px)');
 
   function openSidePanel() {
-    sidePanel && sidePanel.classList.add('mobile-open');
-    overlay && (overlay.classList.add('visible'), overlay.removeAttribute('aria-hidden'));
+    if (!sidePanel || !mobileViewport.matches) return;
+
+    sidePanel.inert = false;
+    sidePanel.classList.add('mobile-open');
+    overlay && overlay.classList.add('visible');
     menuBtn && menuBtn.setAttribute('aria-expanded', 'true');
+    closeBtn && closeBtn.focus({ preventScroll: true });
   }
   function closeSidePanel() {
+    var wasOpen = sidePanel && sidePanel.classList.contains('mobile-open');
+    if (wasOpen && menuBtn) {
+      menuBtn.focus({ preventScroll: true });
+    }
     sidePanel && sidePanel.classList.remove('mobile-open');
-    overlay && (overlay.classList.remove('visible'), overlay.setAttribute('aria-hidden', 'true'));
+    if (sidePanel) sidePanel.inert = mobileViewport.matches;
+    overlay && overlay.classList.remove('visible');
     menuBtn && menuBtn.setAttribute('aria-expanded', 'false');
   }
 
+  function focusSidePanelPage() {
+    if (!sidePanel) return;
+    sidePanel.inert = false;
+    var navLink = sidePanel.querySelector('.wiki-page-item-main[aria-current="page"]') ||
+      sidePanel.querySelector('.wiki-page-item-main');
+    if (navLink && navLink.closest('[inert]')) {
+      navLink = sidePanel.querySelector('.wiki-page-item-main');
+    }
+    var focusTarget = navLink || getElement('wiki-page-title');
+    if (focusTarget) {
+      if (!navLink) focusTarget.setAttribute('tabindex', '-1');
+      focusTarget.focus({ preventScroll: true });
+    }
+  }
+
+  function syncSidePanelViewport() {
+    if (!sidePanel) return;
+
+    var focusedElement = document.activeElement;
+    var focusIsInSidePanel = sidePanel.contains(focusedElement);
+    var wasOpen = sidePanel.classList.contains('mobile-open');
+    sidePanel.inert = mobileViewport.matches && !wasOpen;
+
+    if (mobileViewport.matches) {
+      if (!wasOpen && focusIsInSidePanel && menuBtn) {
+        menuBtn.focus({ preventScroll: true });
+      }
+    } else {
+      sidePanel.classList.remove('mobile-open');
+      overlay && overlay.classList.remove('visible');
+      menuBtn && menuBtn.setAttribute('aria-expanded', 'false');
+      if (focusedElement === closeBtn || focusedElement === menuBtn) {
+        focusSidePanelPage();
+      }
+    }
+  }
+
+  syncSidePanelViewport();
+  mobileViewport.addEventListener('change', syncSidePanelViewport);
+  [menuBtn, closeBtn].forEach(function (control) {
+    if (!control) return;
+    control.addEventListener('focusout', function (event) {
+      if (!mobileViewport.matches && !event.relatedTarget) focusSidePanelPage();
+    });
+  });
   menuBtn && menuBtn.addEventListener('click', openSidePanel);
   closeBtn && closeBtn.addEventListener('click', closeSidePanel);
   overlay && overlay.addEventListener('click', closeSidePanel);
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') closeSidePanel();
+    var searchModal = getElement('wiki-search-modal');
+    if (e.defaultPrevented || (searchModal && !searchModal.classList.contains('hidden'))) return;
+    if (e.key === 'Escape' && sidePanel && sidePanel.classList.contains('mobile-open')) {
+      e.preventDefault();
+      closeSidePanel();
+    }
   });
 
   var headerPrefixes = document.querySelectorAll('.sdoc-toggle-header-prefix');
@@ -515,15 +582,25 @@ function getElement(id) {
   var resizeHandle = document.getElementById('wiki-resize-handle');
   var SIDE_MIN = 160, SIDE_MAX = 520, RESIZE_KEY = 'sf_wiki_side_panel_width';
 
-  function applySideWidth(w) {
-    w = Math.max(SIDE_MIN, Math.min(SIDE_MAX, w));
-    document.documentElement.style.setProperty('--wiki-side-width', w + 'px');
+  function applySideWidth(width) {
+    width = Math.max(SIDE_MIN, Math.min(SIDE_MAX, width));
+    document.documentElement.style.setProperty('--wiki-side-width', width + 'px');
     if (sidePanel) {
-      sidePanel.style.width = w + 'px';
-      sidePanel.style.minWidth = w + 'px';
-      sidePanel.style.maxWidth = w + 'px';
+      sidePanel.style.width = width + 'px';
+      sidePanel.style.minWidth = width + 'px';
+      sidePanel.style.maxWidth = width + 'px';
     }
-    return w;
+    if (resizeHandle) resizeHandle.setAttribute('aria-valuenow', String(width));
+    return width;
+  }
+
+  function persistSideWidth() {
+    try {
+      localStorage.setItem(
+        RESIZE_KEY,
+        parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--wiki-side-width'))
+      );
+    } catch (e) {}
   }
 
   try {
@@ -533,6 +610,33 @@ function getElement(id) {
   }
 
   if (!resizeHandle) return;
+
+  var mobileViewport = window.matchMedia('(max-width: 767px)');
+  function syncResizeHandle() {
+    if (mobileViewport.matches && document.activeElement === resizeHandle) {
+      var menuBtn = document.getElementById('menu-toggle-btn');
+      menuBtn && menuBtn.focus({ preventScroll: true });
+    }
+    resizeHandle.tabIndex = mobileViewport.matches ? -1 : 0;
+    resizeHandle.inert = mobileViewport.matches;
+    resizeHandle.setAttribute('aria-hidden', String(mobileViewport.matches));
+  }
+  syncResizeHandle();
+  mobileViewport.addEventListener('change', syncResizeHandle);
+
+  resizeHandle.addEventListener('keydown', function (event) {
+    if (event.defaultPrevented || mobileViewport.matches || event.ctrlKey || event.metaKey || event.altKey) return;
+    var width = parseFloat(resizeHandle.getAttribute('aria-valuenow'));
+    if (event.key === 'ArrowLeft') width -= 10;
+    else if (event.key === 'ArrowRight') width += 10;
+    else if (event.key === 'Home') width = SIDE_MIN;
+    else if (event.key === 'End') width = SIDE_MAX;
+    else return;
+
+    event.preventDefault();
+    applySideWidth(width);
+    persistSideWidth();
+  });
 
   var resizing = false;
 
@@ -554,12 +658,7 @@ function getElement(id) {
     resizeHandle.classList.remove('dragging');
     document.body.style.cursor = '';
     document.body.style.userSelect = '';
-    try {
-      localStorage.setItem(
-        RESIZE_KEY,
-        parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--wiki-side-width'))
-      );
-    } catch (e) {}
+    persistSideWidth();
   });
 })();
 
@@ -783,10 +882,14 @@ function getElement(id) {
     if (!pageTitle || !title) return;
 
     pageTitle.textContent = title;
+    var repoName = window.wiki && window.wiki.config && window.wiki.config.repoName;
+    document.title = title + (repoName ? ' - ' + repoName : '');
+    var navigationStatus = getElement('wiki-navigation-status');
+    if (navigationStatus) navigationStatus.textContent = title;
   }
 
   function getCurrentNavPageId() {
-    var currentLink = document.querySelector('#wiki-nav-tree .wiki-page-item-main[aria-current="true"]');
+    var currentLink = document.querySelector('#wiki-nav-tree .wiki-page-item-main[aria-current="page"]');
     return currentLink ? currentLink.getAttribute('data-page-id') : '';
   }
 
@@ -886,9 +989,9 @@ function getElement(id) {
   function updateActiveNav(pageId) {
     if (!pageId) return;
 
-    var currentLink = document.querySelector('#wiki-nav-tree .wiki-page-item-main[aria-current="true"]');
+    var currentLink = document.querySelector('#wiki-nav-tree .wiki-page-item-main[aria-current="page"]');
     if (currentLink) {
-      currentLink.setAttribute('aria-current', 'false');
+      currentLink.removeAttribute('aria-current');
       var currentItem = currentLink.closest('.wiki-page-item');
       if (currentItem) {
         currentItem.classList.remove('selected-page');
@@ -898,7 +1001,7 @@ function getElement(id) {
     var nextLink = document.querySelector('#wiki-nav-tree .wiki-page-item-main[data-page-id="' + pageId + '"]');
     if (!nextLink) return;
 
-    nextLink.setAttribute('aria-current', 'true');
+    nextLink.setAttribute('aria-current', 'page');
     var nextItem = nextLink.closest('.wiki-page-item');
     if (nextItem) {
       nextItem.classList.add('selected-page');
@@ -911,18 +1014,18 @@ function getElement(id) {
 
     var wrapper = navLink.closest('.wiki-page-item-wrapper');
     while (wrapper) {
-      wrapper.setAttribute('aria-expanded', 'true');
-
       for (var i = 0; i < wrapper.children.length; i++) {
         var child = wrapper.children[i];
         if (child.classList && child.classList.contains('wiki-nav-children')) {
           child.classList.remove('collapsed');
           child.style.height = 'auto';
+          child.inert = false;
+          child.setAttribute('aria-hidden', 'false');
           break;
         }
       }
 
-      var toggle = wrapper.querySelector(':scope > .wiki-page-item > .wiki-nav-item-icon');
+      var toggle = wrapper.querySelector(':scope > .wiki-page-item > button.wiki-nav-item-icon');
       if (toggle) {
         toggle.classList.add('expanded');
         toggle.setAttribute('aria-expanded', 'true');
@@ -995,6 +1098,7 @@ function getElement(id) {
     var searchResultPanel = getElement('wiki-search-result-panel');
     var searchResultList = getElement('wiki-search-result-list');
     var searchResultContainer = getElement('wiki-search-result-container');
+    var searchAnnouncement = getElement('wiki-search-announcement');
 
     if (!searchTrigger || !searchModal || !searchBackdrop || !searchInput || !searchClear || !searchClearTooltip || !searchStatus || !searchStatusDefault || !searchStatusNoResult || !searchStatusMessage || !searchResultPanel || !searchResultList || !searchResultContainer) {
       return;
@@ -1006,14 +1110,17 @@ function getElement(id) {
       results: [],
       highlightIndex: -1,
       debounceTimer: null,
-      abortController: null
+      abortController: null,
+      opener: null,
+      background: []
     };
 
     var searchText = {
       searching: searchModal.getAttribute('data-searching') || '',
       untitled: searchModal.getAttribute('data-untitled') || '',
       currentPage: searchModal.getAttribute('data-current-page') || '',
-      searchFailed: searchModal.getAttribute('data-search-failed') || ''
+      searchFailed: searchModal.getAttribute('data-search-failed') || '',
+      resultsFound: searchModal.getAttribute('data-results-found') || ''
     };
 
     function positionSearchClearTooltip() {
@@ -1073,6 +1180,27 @@ function getElement(id) {
       searchStatusMessage.textContent = imageState ? '' : message;
       searchStatus.classList.toggle('wiki2-search-status--empty', Boolean(imageState));
       searchStatus.classList.remove('hidden');
+      if (searchAnnouncement) {
+        searchAnnouncement.textContent = imageState === 'default' ? searchStatusDefault.textContent.trim() :
+          imageState === 'no-result' ? searchStatusNoResult.textContent.trim() : message;
+      }
+    }
+
+    function clearActiveSearchResult() {
+      searchInput.removeAttribute('aria-activedescendant');
+      searchInput.setAttribute('aria-expanded', 'false');
+    }
+
+    function cancelSearchRequest() {
+      if (searchState.abortController) {
+        searchState.abortController.abort();
+        searchState.abortController = null;
+      }
+      if (searchState.debounceTimer) {
+        clearTimeout(searchState.debounceTimer);
+        searchState.debounceTimer = null;
+      }
+      searchInput.setAttribute('aria-busy', 'false');
     }
 
     function normalizeSearchResults(results) {
@@ -1108,6 +1236,7 @@ function getElement(id) {
     }
 
     function renderSearchResults() {
+      clearActiveSearchResult();
       searchResultList.innerHTML = '';
 
       if (!searchInput.value.trim()) {
@@ -1126,6 +1255,7 @@ function getElement(id) {
 
       searchStatus.classList.add('hidden');
       searchResultPanel.classList.remove('hidden');
+      searchInput.setAttribute('aria-expanded', 'true');
 
       searchState.results.forEach(function (item, index) {
         var resultItem = document.createElement('li');
@@ -1134,6 +1264,7 @@ function getElement(id) {
           resultItem.classList.add('is-highlighted', 'wiki2-search-result-item-highlight');
         }
         resultItem.setAttribute('role', 'option');
+        resultItem.id = 'wiki-search-option-' + index;
         resultItem.setAttribute('aria-selected', index === searchState.highlightIndex ? 'true' : 'false');
         resultItem.setAttribute('tabindex', '-1');
         resultItem.setAttribute('data-page-id', item.pageId);
@@ -1179,12 +1310,17 @@ function getElement(id) {
         });
 
         searchResultList.appendChild(resultItem);
+        if (index === searchState.highlightIndex) {
+          searchInput.setAttribute('aria-activedescendant', resultItem.id);
+        }
       });
 
       scrollHighlightedResultIntoView();
     }
 
     function resetSearchResults() {
+      cancelSearchRequest();
+      clearActiveSearchResult();
       searchState.results = [];
       searchState.highlightIndex = -1;
       searchState.isLoading = false;
@@ -1193,37 +1329,51 @@ function getElement(id) {
       setSearchStatus('', 'default');
     }
 
-    function closeSearchModal() {
+    function restoreSearchFocus() {
+      var candidates = [searchState.opener, searchTrigger, getElement('menu-toggle-btn'), getElement('wiki-page-title')];
+      for (var index = 0; index < candidates.length; index++) {
+        var candidate = candidates[index];
+        if (candidate && candidate.isConnected && !candidate.closest('[inert]') && candidate.getClientRects().length) {
+          candidate.focus({ preventScroll: true });
+          return;
+        }
+      }
+    }
+
+    function closeSearchModal(options) {
       searchState.isOpen = false;
       searchModal.classList.add('hidden');
       searchBackdrop.classList.add('hidden');
       searchModal.setAttribute('aria-hidden', 'true');
       searchBackdrop.setAttribute('aria-hidden', 'true');
-      if (searchState.abortController) {
-        searchState.abortController.abort();
-        searchState.abortController = null;
-      }
-      if (searchState.debounceTimer) {
-        clearTimeout(searchState.debounceTimer);
-        searchState.debounceTimer = null;
-      }
+      searchState.background.forEach(function (entry) {
+        entry.element.inert = entry.inert;
+      });
+      searchState.background = [];
       searchInput.value = '';
       searchClear.classList.add('hidden');
       hideSearchClearTooltip();
       resetSearchResults();
-      if (searchModal.contains(document.activeElement)) {
-        document.activeElement.blur();
-      }
+      if (!options || options.restoreFocus !== false) restoreSearchFocus();
     }
 
     function openSearchModal() {
+      if (searchState.isOpen) return;
+      searchState.opener = document.activeElement;
+      searchState.background = Array.prototype.filter.call(document.body.children, function (element) {
+        return element !== searchModal && element !== searchBackdrop && element.tagName !== 'SCRIPT';
+      }).map(function (element) {
+        var entry = { element: element, inert: Boolean(element.inert) };
+        element.inert = true;
+        return entry;
+      });
       searchState.isOpen = true;
       searchModal.classList.remove('hidden');
       searchBackdrop.classList.remove('hidden');
       searchModal.setAttribute('aria-hidden', 'false');
       searchBackdrop.setAttribute('aria-hidden', 'false');
       setTimeout(function () {
-        searchInput.focus();
+        if (searchState.isOpen) searchInput.focus();
       }, 0);
     }
 
@@ -1232,16 +1382,22 @@ function getElement(id) {
       if (!item) return;
       if (item.pageId === getCurrentNavPageId()) return;
 
-      closeSearchModal();
-      navigateToWikiPage(item.pageId, buildPageUrl(item.pageId, { includeHash: false }));
+      closeSearchModal({ restoreFocus: false });
+      var navigated = navigateToWikiPage(item.pageId, buildPageUrl(item.pageId, { includeHash: false }));
+      var sidePanel = getElement('wiki-side-panel');
+      var titleIsCovered = window.matchMedia('(max-width: 767px)').matches &&
+        sidePanel && sidePanel.classList.contains('mobile-open');
+      var pageTitle = getElement('wiki-page-title');
+      if (navigated && pageTitle && !titleIsCovered) pageTitle.focus({ preventScroll: true });
+      else restoreSearchFocus();
     }
 
     function searchWiki(query) {
-      if (searchState.abortController) {
-        searchState.abortController.abort();
-      }
-
-      searchState.abortController = new AbortController();
+      cancelSearchRequest();
+      var controller = new AbortController();
+      searchState.abortController = controller;
+      searchInput.setAttribute('aria-busy', 'true');
+      clearActiveSearchResult();
       searchState.isLoading = true;
       searchState.results = [];
       searchState.highlightIndex = -1;
@@ -1265,22 +1421,30 @@ function getElement(id) {
           query: query,
           search_wiki: window.wiki.config.wikiId
         }),
-        signal: searchState.abortController.signal
+        signal: controller.signal
       }).then(function (response) {
         if (!response.ok) {
           throw new Error('Request failed');
         }
         return response.json();
       }).then(function (data) {
+        if (!searchState.isOpen || searchState.abortController !== controller || searchInput.value.trim() !== query) return;
         searchState.isLoading = false;
         searchState.abortController = null;
+        searchInput.setAttribute('aria-busy', 'false');
         searchState.results = normalizeSearchResults(data.results || []);
         searchState.highlightIndex = searchState.results.length ? 0 : -1;
         renderSearchResults();
+        if (searchAnnouncement && searchState.results.length) {
+          searchAnnouncement.textContent = searchText.resultsFound + ': ' + searchState.results.length;
+        }
       }).catch(function (error) {
         if (error && error.name === 'AbortError') return;
+        if (!searchState.isOpen || searchState.abortController !== controller || searchInput.value.trim() !== query) return;
         searchState.isLoading = false;
         searchState.abortController = null;
+        searchInput.setAttribute('aria-busy', 'false');
+        clearActiveSearchResult();
         searchState.results = [];
         searchState.highlightIndex = -1;
         searchResultPanel.classList.add('hidden');
@@ -1297,6 +1461,27 @@ function getElement(id) {
       closeSearchModal();
     });
     searchBackdrop.addEventListener('click', closeSearchModal);
+    searchModal.addEventListener('keydown', function (event) {
+      if (!searchState.isOpen) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        event.stopPropagation();
+        closeSearchModal();
+        return;
+      }
+      if (event.key !== 'Tab') return;
+      var controls = Array.prototype.filter.call(searchModal.querySelectorAll('input, button, a[href], [tabindex]'), function (element) {
+        return !element.disabled && element.tabIndex >= 0 && element.getClientRects().length && getComputedStyle(element).visibility !== 'hidden';
+      });
+      var first = controls[0] || searchInput;
+      var last = controls[controls.length - 1] || searchInput;
+      if (controls.indexOf(document.activeElement) === -1 ||
+          (event.shiftKey && document.activeElement === first) ||
+          (!event.shiftKey && document.activeElement === last)) {
+        event.preventDefault();
+        (event.shiftKey ? last : first).focus();
+      }
+    });
     searchClear.addEventListener('click', function () {
       searchInput.value = '';
       searchClear.classList.add('hidden');
@@ -1336,19 +1521,12 @@ function getElement(id) {
     });
 
     searchInput.addEventListener('input', function () {
+      cancelSearchRequest();
+      clearActiveSearchResult();
       var query = searchInput.value.trim();
       searchClear.classList.toggle('hidden', !query);
 
-      if (searchState.debounceTimer) {
-        clearTimeout(searchState.debounceTimer);
-        searchState.debounceTimer = null;
-      }
-
       if (!query) {
-        if (searchState.abortController) {
-          searchState.abortController.abort();
-          searchState.abortController = null;
-        }
         resetSearchResults();
         return;
       }
@@ -1361,12 +1539,6 @@ function getElement(id) {
     });
 
     searchInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        closeSearchModal();
-        return;
-      }
-
       if (e.key === 'ArrowDown' && searchState.results.length) {
         e.preventDefault();
         e.stopPropagation();
