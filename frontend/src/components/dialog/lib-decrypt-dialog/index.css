@@ -43,9 +43,9 @@
 }
 
 .lib-decrypt-form .error {
-  margin: 0 0 8px;
-  color: var(--bs-danger);
-  font-size: 14px;
+  margin: 4px 0 0;
+  font-size: 12px;
+  font-weight: 500;
   line-height: 20px;
 }
 
