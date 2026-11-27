@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 {% load i18n %}
-<html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
+  <meta charset="utf-8" />
   <title>{% trans "The server understood the request, but is refusing to fulfill it." %}</title>
 </head>
 <body>
+  <main>
   <h1>{% trans "The server understood the request, but is refusing to fulfill it." %}</h1>
 
   <p>{% trans "Sorry, but your IP address is not in trusted IP address range." %}</p>
 
   <p>{% trans "Please contact the webmaster." %}</p>
+  </main>
 </body>
 </html>

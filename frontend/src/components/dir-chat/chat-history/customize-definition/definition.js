@@ -22,6 +22,22 @@ const Definition = ({ element, attributes, sources, onOpen, disableAutoWidth = f
     }
   }, [onOpen, source]);
 
+  const handleKeyDown = useCallback((event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      if (!event.repeat) handleClick();
+    } else if (event.key === ' ') {
+      event.preventDefault();
+    }
+  }, [handleClick]);
+
+  const handleKeyUp = useCallback((event) => {
+    if (event.key === ' ') {
+      event.preventDefault();
+      handleClick();
+    }
+  }, [handleClick]);
+
   const definitionWidth = useMemo(() => {
     const offsetWidth = sources.length > 3 ? '48px' : '0px';
     return `calc((100% - 16px - ${offsetWidth}) / 3)`;
@@ -38,9 +54,13 @@ const Definition = ({ element, attributes, sources, onOpen, disableAutoWidth = f
 
   return (
     <div
+      role="button"
+      tabIndex={0}
       className={classNames('sea-ai-chat-customize-definition', { 'ml-0': identifierIndex % 3 === 0 })}
       style={definitionStyle}
       onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      onKeyUp={handleKeyUp}
       data-id={element.id}
       {...attributes}
     >

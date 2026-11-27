@@ -11,20 +11,21 @@
       <input type="password" name="password" id="password" class="form-control" autofocus />
     </div>
     <button type="submit" class="btn btn-primary sf-btn-submit">{% trans "Submit" %}</button>
-    <p class="error hide" role="alert"></p>
+    <p class="error hide" role="alert" id="repo-decrypt-error" data-form-error></p>
   </form>
 </div>
 {% endblock %}
 {% block extra_script %}
 <script type="text/javascript">
+  $(function() {
+    formValidation.setup(document.getElementById('repo-decrypt-form'));
+  });
   $('#repo-decrypt-form').on('submit', function() {
     var $form = $(this),
-        password = $('[name="password"]', $form).val().trim(),
-        $error = $('.error', $form);
+        password = $('[name="password"]', $form).val().trim();
 
     if (!password) {
-        $error.html("{% trans "Please enter the password." %}").removeClass('hide');
-        return false;
+        return formValidation.showError(this, 'password', "{% trans "Please enter the password." %}");
     }
 
     var $submitBtn = $('[type="submit"]', $form);
@@ -43,8 +44,8 @@
         },
         error: function(xhr) {
             var error_msg = prepareAjaxErrorMsg(xhr);
-            $error.html(error_msg).removeClass('hide');
             enable($submitBtn);
+            formValidation.showError($form[0], [], error_msg);
         }
     });
 

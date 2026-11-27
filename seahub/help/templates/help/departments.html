@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block help_con %}
-<h3 class="hd">{% trans "Managing and using departments" %}</h3>
+<h3 class="hd" id="help-page-title">{% trans "Managing and using departments" %}</h3>
 <p>{% trans "Some organizations consist of complex department hierarchy. There are usually two common use cases for file management in these organizations:" %}</p>
 <ul>
   <li>{% trans "There should be a common file sharing space for the organization. The folder hierarchy should map the department hierarchy. There will be separate folder or space assigned to each department." %}</li>
@@ -31,7 +31,7 @@
 <h5 id="create-and-manage-shared-libraries-in-departments">{% trans "Create and manage shared libraries in departments" %}</h5>
 <p>{% trans "Department libraries can be created by the system admin or department admin. There is also an option to control whether individual users can share libraries with a department." %}</p>
 <p>{% trans "All the above operations can be done in the system admin interface. See the below screenshot for information." %}</p>
-<p><img src="{{ MEDIA_URL }}img/help/sys_admin_departments.png" alt=""></p>
+<p><img src="{{ MEDIA_URL }}img/help/sys_admin_departments.png" alt="{% trans 'In System Admin, open Departments and select a department. Use New Sub-department, Add Member and New Library to manage its contents.' %}"></p>
 <h4 id="dept-admin">{% trans "Department admin" %}</h4>
 <p>{% trans "As noted above, department admin is a special role assigned by the system admin to some members of a department. Department admins can perform the following operations in a department after login to his/her own account." %}</p>
 <ul>
@@ -40,7 +40,7 @@
   <li>{% trans "Manage libraries in his/her department" %}</li>
 </ul>
 <p>{% trans "If a user is the admin of a department, he/she can add or delete members in the department. Any users registered in the system can be added as member of the department. But if the departments are imported from AD, the changes to membership will be overwritten on the next sync with AD." %}</p>
-<p><img src="{{ MEDIA_URL }}img/help/dept_admin_manage_members.png" alt=""></p>
+<p><img src="{{ MEDIA_URL }}img/help/dept_admin_manage_members.png" alt="{% trans 'Open the department settings and choose Manage Members to add or remove department members.' %}"></p>
 <p>{% trans "Department admin can manage the libraries in the department. The supported operations are:" %}</p>
 <ul>
   <li>{% trans "Create or delete library" %}</li>
@@ -48,7 +48,7 @@
   <li>{% trans "Share a library with users or groups outside of this department. This is very useful for cross-department collaboration." %}</li>
   <li>{% blocktrans %}Set fine-grained permission to folders in the libraries for users or sub-departments in this department. This works like <a href="{{ SITE_ROOT }}help/folder_permission/">the folder permission feature</a>.{% endblocktrans %}</li>
 </ul>
-<p><img src="{{ MEDIA_URL }}img/help/dept_admin_manage_libs.png" alt=""></p>
+<p><img src="{{ MEDIA_URL }}img/help/dept_admin_manage_libs.png" alt="{% trans 'Use the share and delete controls on a department library row, or open its operations menu for Rename, Permission and Details.' %}"></p>
 <h4 id="dept-members">{% trans "Department members" %}</h4>
 <p>{% blocktrans %}A normal member of the department can use the department just like a group. Each department is presented to its members as a group. A user can not only access to the libraries in the department he/she belongs to, but also the libraries in the parent departments of his/her department. For example, if John is in the "EMEA" sub-department under the "Sales" department, and "Sales" is a sub-department under the company "ACME", John can then access to the groups "EMEA", "Sales" and "ACME". The groups for departments are marked with a "building" icon next to its name.{% endblocktrans %}</p>
 {% endblock %}

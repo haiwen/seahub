@@ -1,0 +1,86 @@
+var formValidation = (function() {
+    var states = new WeakMap();
+
+    function describe(element, descriptionId, include) {
+        var descriptions = (element.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+        descriptions = descriptions.filter(id => id !== descriptionId);
+        if (include) descriptions.push(descriptionId);
+        if (descriptions.length) {
+            element.setAttribute('aria-describedby', descriptions.join(' '));
+        } else {
+            element.removeAttribute('aria-describedby');
+        }
+    }
+
+    function clear(form) {
+        var state = states.get(form);
+        if (!state || !state.active) return;
+        state.fields.forEach(previous => {
+            if (previous.invalid === null) {
+                previous.field.removeAttribute('aria-invalid');
+            } else {
+                previous.field.setAttribute('aria-invalid', previous.invalid);
+            }
+            if (!previous.described) describe(previous.field, state.error.id, false);
+        });
+        if (state.formDescriptionAdded) describe(form, state.error.id, false);
+        state.fields = [];
+        state.active = false;
+    }
+
+    function setup(form) {
+        if (!form) return null;
+        if (states.has(form)) return states.get(form);
+        var state = {error: form.querySelector('[data-form-error]'), fields: [], active: false};
+        states.set(form, state);
+        function onEdit(event) {
+            if (state.fields.some(previous => previous.field === event.target)) clear(form);
+        }
+        form.addEventListener('input', onEdit);
+        form.addEventListener('change', onEdit);
+
+        var summary = form.querySelector('.errorlist.nonfield, [data-server-error]');
+        if (summary && summary.textContent.trim()) {
+            if (!summary.id) summary.id = form.id + '-server-error';
+            describe(form, summary.id, true);
+            summary.setAttribute('tabindex', '-1');
+            summary.focus();
+        } else {
+            var invalid = form.querySelector('[aria-invalid="true"]:not([type="hidden"]):not(:disabled)');
+            if (invalid) invalid.focus();
+        }
+        return state;
+    }
+
+    function showError(form, fieldNames, messageHtml) {
+        var state = setup(form);
+        if (!state || !state.error) return false;
+        clear(form);
+        if (!state.error.id) state.error.id = form.id + '-error';
+        var names = Array.isArray(fieldNames) ? fieldNames : [fieldNames];
+        state.fields = names.map(name => form.elements.namedItem(name)).filter(Boolean).map(field => {
+            var previous = {
+                field: field,
+                invalid: field.getAttribute('aria-invalid'),
+                described: (field.getAttribute('aria-describedby') || '').split(/\s+/).includes(state.error.id)
+            };
+            field.setAttribute('aria-invalid', 'true');
+            describe(field, state.error.id, true);
+            return previous;
+        });
+        state.formDescriptionAdded = !state.fields.length && !(form.getAttribute('aria-describedby') || '').split(/\s+/).includes(state.error.id);
+        if (!state.fields.length) describe(form, state.error.id, true);
+        state.error.innerHTML = messageHtml;
+        state.error.classList.remove('hide');
+        state.active = true;
+        if (state.fields.length) {
+            state.fields[0].field.focus();
+        } else {
+            state.error.setAttribute('tabindex', '-1');
+            state.error.focus();
+        }
+        return false;
+    }
+
+    return { setup: setup, showError: showError };
+})();

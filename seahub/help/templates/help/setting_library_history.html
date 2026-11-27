@@ -3,7 +3,7 @@
 
 {% block help_con %}
 
-<h3 class="hd">{% trans "Setting library history retention period" %}</h3>
+<h3 class="hd" id="help-page-title">{% trans "Setting library history retention period" %}</h3>
 <p>{% trans "A library's history retention period length controls how long you can access your history data in the following features:" %}</p>
 <ul>
 <li>{% trans "Restore deleted files: you cannot restore files and folders deleted before the retention period." %}</li>
@@ -16,6 +16,6 @@
   <li>{% blocktrans %}Move the cursor onto the row of the library. An operation menu will appear. Click "History Setting" in the drop-down menu.{% endblocktrans %}</li>
 <li>{% trans "In the pop-up dialog, you can set the length of file retention period." %}</li>
 </ul>
-<p><img src="{{ MEDIA_URL }}img/help/history_setting.png" alt=""></p>
+<p><img src="{{ MEDIA_URL }}img/help/history_setting.png" alt="{% trans 'In My Libraries, open the operations menu for a library and choose History Setting.' %}"></p>
 
 {% endblock %}

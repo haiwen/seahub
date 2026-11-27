@@ -60,7 +60,7 @@
       <div class="cf-turnstile mt-2" data-sitekey="{{ turnstile_site_key }}"></div>
       {% endif %}
 
-      <p class="error hide" role="alert"></p>
+      <p class="error hide" role="alert" id="signup-form-error" data-form-error></p>
       <button type="submit" class="submit btn btn-primary btn-block">{% trans "Sign Up" %}</button>
     </form>
     <div class="login-panel-bottom-container">
@@ -88,6 +88,7 @@
   {% include "snippets/password_strength_js.html" %}
   $(function () {
     setupPasswordField("id_password1", passwd_tip, template);
+    formValidation.setup(document.getElementById('signup-form'));
   });
   $('#signup-form').on('submit', function() {
     var email = $('input[name="email"]').val().trim(),
@@ -95,24 +96,19 @@
       pwd2 = $('input[name="password2"]').val().trim();
 
     if (!email) {
-      $('.error').html("{% trans "Email cannot be blank" %}").removeClass('hide');
-      return false;
+      return formValidation.showError(this, 'email', "{% trans "Email cannot be blank" %}");
     }
     if (!pwd1) {
-      $('.error').html("{% trans "Password cannot be blank" %}").removeClass('hide');
-      return false;
+      return formValidation.showError(this, 'password1', "{% trans "Password cannot be blank" %}");
     }
     if (!pwd2) {
-      $('.error').html("{% trans "Please enter the password again" %}").removeClass('hide');
-      return false;
+      return formValidation.showError(this, 'password2', "{% trans "Please enter the password again" %}");
     }
     if (pwd1 != pwd2) {
-      $('.error').html("{% trans "Passwords don't match" %}").removeClass('hide');
-      return false;
+      return formValidation.showError(this, ['password2', 'password1'], "{% trans "Passwords don't match" %}");
     }
     if (!checkPasswordStrength(pwd1, {{strong_pwd_required}})) {
-      $('.error').html(passwd_tip).removeClass('hide');
-      return false;
+      return formValidation.showError(this, 'password1', passwd_tip);
     }
   });
 

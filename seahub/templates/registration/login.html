@@ -47,17 +47,19 @@ html, body, #wrapper { height:100%; }
 <div class="login-panel" id="log-in-panel">
     <h1 class="login-panel-hd">{% trans "Log In" %}</h1>
     <form action="" method="post" id="login-form">{% csrf_token %}
-        <input type="text" name="login" placeholder="{% trans "Email or Username" %}" aria-label="{% trans "Email or Username" %}" title="{% trans "Email or Username" %}" value="" class="input mb-3" />
+        <input type="text" name="login" placeholder="{% trans "Email or Username" %}" aria-label="{% trans "Email or Username" %}" title="{% trans "Email or Username" %}" value="" class="input mb-3" autocomplete="username" />
         <div class="position-relative">
-          <input id="password-input" type="password" name="password" placeholder="{% trans "Password" %}" aria-label="{% trans "Password" %}" title="{% trans "Password" %}" value="" class="input" autocomplete="off" />
+          <input id="password-input" type="password" name="password" placeholder="{% trans "Password" %}" aria-label="{% trans "Password" %}" title="{% trans "Password" %}" value="" class="input" autocomplete="current-password" />
           <button type="button" id="toggle-show-password" class="password-visibility-icon" title="{% trans 'Show password' %}" aria-label="{% trans 'Show password' %}" data-show-label="{% trans 'Show password' %}" data-hide-label="{% trans 'Hide password' %}" aria-pressed="false"></button>
         </div>
 
         {% if form.captcha %}
         <div class="ovhd mt-3">
+            <label for="id_captcha_1" class="sr-only">{% trans "CAPTCHA" %}</label>
             <button type="button" id="refresh-captcha" title="{% trans "Refresh" %}" aria-label="{% trans "Refresh" %}" class="op-icon fright"></button>
             {{ form.captcha }}
         </div>
+        <span id="captcha-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></span>
         {% endif %}
 
         <input type="hidden" name="next" value="{% if next %}{{ next|escape }}{% else %}{{ SITE_ROOT }}{% endif %}" />
@@ -65,20 +67,23 @@ html, body, #wrapper { height:100%; }
         {% if form.captcha.errors %}
         {{ form.captcha.errors}}
         {% elif form.errors.freeze_account %}
-        <p class="error mt-2" role="alert">{{ form.errors.freeze_account }}</p>
+        <p class="error mt-2" role="alert" id="login-error" data-form-error data-server-error>{{ form.errors.freeze_account }}</p>
         {% elif form.errors.inactive %}
-        <p class="error mt-2" role="alert">{{ form.errors.inactive }}</p>
+        <p class="error mt-2" role="alert" id="login-error" data-form-error data-server-error>{{ form.errors.inactive }}</p>
         {% elif form.errors.invalid_input %}
-        <p class="error mt-2" role="alert">{{ form.errors.invalid_input }}</p>
+        <p class="error mt-2" role="alert" id="login-error" data-form-error data-server-error>{{ form.errors.invalid_input }}</p>
         {% elif form.errors.not_found %}
-        <p class="error mt-2" role="alert">{{ form.errors.not_found }}</p>
+        <p class="error mt-2" role="alert" id="login-error" data-form-error data-server-error>{{ form.errors.not_found }}</p>
         {% elif form.errors.disable_pwd_login %}
-        <p class="error mt-2" role="alert">{% trans "Please use Single Sign-On to login." %}</p>
+        <p class="error mt-2" role="alert" id="login-error" data-form-error data-server-error>{% trans "Please use Single Sign-On to login." %}</p>
         {% else %}
-        <p class="error mt-2" role="alert">{% trans "Incorrect email or password" %}</p>
+        <p class="error mt-2" role="alert" id="login-error" data-form-error data-server-error>{% trans "Incorrect email or password" %}</p>
         {% endif %}
         {% else %}
-        <p class="error mt-2 hide" role="alert"></p>
+        <p class="error mt-2 hide" role="alert" id="login-error" data-form-error></p>
+        {% endif %}
+        {% if form.captcha %}
+        <p class="error mt-2 hide" role="alert" id="captcha-refresh-error" aria-atomic="true"></p>
         {% endif %}
 
         <label class="checkbox-label mt-3 mb-0 remember-me">
@@ -185,17 +190,54 @@ function setCaptchaInputWidth() {
 }
 $(window).on('load', setCaptchaInputWidth);
 $('.captcha').on('load', setCaptchaInputWidth);
+var captchaAnswer = $('#id_captcha_1');
+var captchaError = $('#id_captcha_error');
+if (!captchaError.length && captchaAnswer.attr('aria-invalid') === 'true') {
+    captchaError = $('#login-form .errorlist').first().attr('id', 'id_captcha_error');
+}
+function describeCaptchaError(include) {
+    var descriptions = (captchaAnswer.attr('aria-describedby') || '').split(/\s+/).filter(Boolean);
+    descriptions = descriptions.filter(function(description) { return description !== 'id_captcha_error'; });
+    if (include) descriptions.push('id_captcha_error');
+    if (descriptions.length) {
+        captchaAnswer.attr('aria-describedby', descriptions.join(' '));
+    } else {
+        captchaAnswer.removeAttr('aria-describedby');
+    }
+}
+if (captchaError.length) describeCaptchaError(true);
+var captchaAudio = $('.captcha').parent('a');
+captchaAudio.attr('aria-label', "{% trans 'Play CAPTCHA as audio file' %}");
+var captchaRefreshSequence = 0;
+function captchaRefreshFailed() {
+    $('#captcha-refresh-error').removeClass('hide').text("{% trans "Failed to refresh the CAPTCHA, please try again later." %}");
+}
 $('#refresh-captcha').on('click', function() {
+    var refreshSequence = ++captchaRefreshSequence;
+    $('#captcha-status').empty();
     $.ajax({
         url: '{% url 'captcha-refresh' %}',
         dataType:'json',
         cache:false,
         success: function(data) {
+            if (refreshSequence !== captchaRefreshSequence) return;
+            if (!data || typeof data.key !== 'string' || !data.key ||
+                    typeof data.image_url !== 'string' || !data.image_url ||
+                    (captchaAudio.length && (typeof data.audio_url !== 'string' || !data.audio_url))) {
+                captchaRefreshFailed();
+                return;
+            }
             $('.captcha').attr('src', data['image_url']);
             $('#id_captcha_0').val(data['key']);
+            captchaAnswer.val('').removeAttr('aria-invalid');
+            describeCaptchaError(false);
+            if (data['audio_url']) captchaAudio.attr('href', data['audio_url']);
+            $('#captcha-refresh-error').empty().addClass('hide');
+            $('#captcha-status').text("{% trans 'CAPTCHA refreshed.' %}");
         },
         error: function() {
-            $('.error').removeClass('hide').html("{% trans "Failed to refresh the CAPTCHA, please try again later." %}");
+            if (refreshSequence !== captchaRefreshSequence) return;
+            captchaRefreshFailed();
         }
     });
     return false;
@@ -203,13 +245,15 @@ $('#refresh-captcha').on('click', function() {
 
 $('#login-form').on('submit', function(){
     if (!$('input[name="login"]').val().trim()) {
-        $('.error').removeClass('hide').html("{% trans "Email or username cannot be blank" %}");
-        return false;
+        return formValidation.showError(this, 'login', "{% trans "Email or username cannot be blank" %}");
     }
     if (!$('input[name="password"]').val().trim()) {
-        $('.error').removeClass('hide').html("{% trans "Password cannot be blank" %}");
-        return false;
+        return formValidation.showError(this, 'password', "{% trans "Password cannot be blank" %}");
     }
+});
+
+$(function() {
+    formValidation.setup(document.getElementById('login-form'));
 });
 
 {% if enable_sso %}

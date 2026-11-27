@@ -1,8 +1,10 @@
 {% extends "base.html" %}
+{% load i18n %}
+
+{% block sub_title %}{% trans "Payment result" %} - {% endblock %}
 
 {% block main_panel %}
 <div class="text-panel">
   <p>{{ info }}</p>
 </div>
 {% endblock %}
-

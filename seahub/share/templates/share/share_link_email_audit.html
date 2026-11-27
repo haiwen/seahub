@@ -40,10 +40,12 @@ html, body, #wrapper { height:100%; }
     <p class="text-center">{% trans "Please provide your email address to continue." %}</p>
     <form action="" method="post" id="email-audit-form" class="con">{% csrf_token %}
       <div class="d-flex mt-2 mb-3">
-        <input type="text" class="input email-input mr-2" name="email" value="{{email}}" placeholder="{% trans "Enter your email address" %}" />
+        <label for="email" class="sr-only">{% trans "Enter your email address" %}</label>
+        <input id="email" type="text" class="input email-input mr-2" name="email" value="{{email}}" placeholder="{% trans "Enter your email address" %}" autocomplete="email" />
         <button type="button" id="get-code" class="btn btn-primary btn-sm text-truncate get-code-btn flex-shrink-0" title="{% trans "Get code" %}">{% trans "Get code" %}</button>
       </div>
-      <input id="code" type="text" class="input d-block" name="code" placeholder="{% trans "Paste the verification code here" %}" />
+      <label for="code" class="sr-only">{% trans "Paste the verification code here" %}</label>
+      <input id="code" type="text" class="input d-block" name="code" placeholder="{% trans "Paste the verification code here" %}" autocomplete="one-time-code" />
 
       {% if err_msg %}
       <p class="error" role="alert">{{ err_msg }}</p>

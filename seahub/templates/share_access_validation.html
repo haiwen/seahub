@@ -21,22 +21,23 @@
     <input type="hidden" name="token" value="{{ token }}" />
     <div class="form-group">
       <label for="password">{% trans "Password" %}</label>
-      <input type="password" name="password" id="password" class="form-control" autofocus />
+      <input type="password" name="password" id="password" class="form-control" autofocus{% if err_msg %} aria-invalid="true" aria-describedby="share-password-error"{% endif %} />
     </div>
-    <p class="error{% if not err_msg %} hide{% endif %}" role="alert">{{ err_msg }}</p>
+    <p class="error{% if not err_msg %} hide{% endif %}" role="alert" id="share-password-error" data-form-error>{{ err_msg }}</p>
     <button type="submit" class="btn btn-primary sf-btn-submit">{% trans "Submit" %}</button>
   </form>
 </div>
 {% endblock %}
 {% block extra_script %}
 <script type="text/javascript">
+$(function() {
+    formValidation.setup(document.getElementById('share-passwd-form'));
+});
 $('#share-passwd-form').on('submit', function() {
     var form = $(this),
-        pwd = $('[name="password"]', form).val(),
-        err = $('.error',form);
+        pwd = $('[name="password"]', form).val();
     if (!pwd.trim()) {
-        err.html("{% trans "Please enter the password." %}").removeClass('hide');
-        return false;
+        return formValidation.showError(this, 'password', "{% trans "Please enter the password." %}");
     }
 });
 </script>

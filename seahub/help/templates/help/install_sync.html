@@ -3,17 +3,17 @@
 
 {% block help_con %}
 
-<h3 class="hd">{% trans "Installing Seafile client program" %}</h3>
+<h3 class="hd" id="help-page-title">{% trans "Installing Seafile client program" %}</h3>
 
 <p>{% trans "After downloading Seafile client program, you have 3 steps left to get it up and running." %}</p>
 
 <h4>{% trans "1. Select a disk partition to store local Seafile data" %}</h4>
-<img src="{{ MEDIA_URL }}img/help/seafile-init-choose-folder.png" alt="{% trans "Selecting a folder to store Seafile data" %}" />
+<img src="{{ MEDIA_URL }}img/help/seafile-init-choose-folder.png" alt="{% trans 'Select Choose to pick a folder for Seafile data, then select Next. A Seafile subfolder is created there to store downloaded libraries by default.' %}" />
 
 <h4>{% trans "2. Add an account" %}</h4>
 <p>{% trans "Add an account on your private Seafile server or our public server." %}</p>
 
-<img src="{{ MEDIA_URL }}img/help/seafile-add-account.png" alt=""  />
+<img src="{{ MEDIA_URL }}img/help/seafile-add-account.png" alt="{% trans 'Add an account: enter the server address, email or username, password and computer name, then select Login.' %}"  />
 
 <h4>{% trans "3. Sync a library" %}</h4>
 <ul>
@@ -21,15 +21,15 @@
     <li>{% trans "Then you add some files into the library. They will be automatically synced with cloud platform." %}</li>
 </ul>
 
-<img src="{{ MEDIA_URL }}img/help/seafile-sync-library.png" alt="" />
+<img src="{{ MEDIA_URL }}img/help/seafile-sync-library.png" alt="{% trans 'Right-click a library and choose Sync this library.' %}" />
 
 <h4>{% trans "4. (Optional) Create a library" %}</h4>
 
 <p>{% trans "You can also create a library from a local folder." %}</p>
 
-<img src="{{ MEDIA_URL }}img/help/seafile-create-library.png" alt="" /><br />
+<img src="{{ MEDIA_URL }}img/help/seafile-create-library.png" alt="{% trans 'Choose Select or Drop Folder to Sync to create a library from a local folder.' %}" /><br />
 
-<img src="{{ MEDIA_URL }}img/help/seafile-create-library-02.png" alt="" />
+<img src="{{ MEDIA_URL }}img/help/seafile-create-library-02.png" alt="{% trans 'Create a library: choose the folder path, enter a library name, optionally enable encryption and enter a password, then select OK.' %}" />
 
 <h4>{% trans "5. Browse files on the cloud" %}</h4>
 <p>{% blocktrans %}In some occasions, you want to modify files on the cloud directly without syncing them. Seafile client comes with a "cloud file browser" to meet this need. Click an unsynced library will open the cloud file browser.{% endblocktrans %}</p>

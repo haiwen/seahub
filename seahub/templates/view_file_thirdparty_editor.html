@@ -1,5 +1,7 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html>
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
 <meta charset="utf-8">
 <title>{{ filename }}</title>
@@ -26,7 +28,7 @@ iframe {
     <input name="access_token_ttl" value="{{access_token_ttl}}" type="hidden"/>
 </form>
 
-<iframe id="office_frame" name="office_frame"></iframe>
+<iframe id="office_frame" name="office_frame" title="{{ filename }}"></iframe>
 
 <script type="text/javascript">
     document.getElementById('office_form').submit();

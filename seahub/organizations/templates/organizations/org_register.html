@@ -24,13 +24,13 @@
     <h1 class="login-panel-hd">{% trans "Signup" %}</h1>
     <form action="" method="post" id="signup-form">{% csrf_token %}
       <label for="org_name">{% trans "Organization Name" %}</label>
-      <input id="org_name" type="text" name="org_name" value="{{ form.org_name.value|default_if_none:"" }}" class="input" />
+      <input id="org_name" type="text" name="org_name" value="{{ form.org_name.value|default_if_none:"" }}" class="input" autocomplete="organization"{% if form.org_name.errors %} aria-invalid="true" aria-describedby="id_org_name_error"{% endif %} />
       {{ form.org_name.errors }}
 
       {% if not org_auto_url_prefix %}
       <label for="org-url-prefix">Organization URL</label>
       <div id="org-url">
-        {{ service_url_scheme }}:// <input type="text" name="url_prefix" value="{{ form.url_prefix.value|default_if_none:"" }}" class="input" id="org-url-prefix" />.{{ service_url_remaining }}
+        {{ service_url_scheme }}:// <input type="text" name="url_prefix" value="{{ form.url_prefix.value|default_if_none:"" }}" class="input" id="org-url-prefix"{% if form.url_prefix.errors %} aria-invalid="true" aria-describedby="id_url_prefix_error"{% endif %} />.{{ service_url_remaining }}
       </div>
       {% endif %}
 
@@ -38,21 +38,21 @@
 
       {% if form.name.field.required %}
       <label for="name">{% trans "Admin Name" %}</label>
-      <input id="name" type="text" name="name" maxlength="255" value="{{ form.name.value|default_if_none:"" }}" class="input" />
+      <input id="name" type="text" name="name" maxlength="255" value="{{ form.name.value|default_if_none:"" }}" class="input" autocomplete="name"{% if form.name.errors %} aria-invalid="true" aria-describedby="id_name_error"{% endif %} />
       {{ form.name.errors }}
       {% endif %}
 
       <label for="email">{% trans "Admin Email" %}</label>
-      <input id="email" type="text" name="email" maxlength="255" value="{{ form.email.value|default_if_none:"" }}" class="input" />
+      <input id="email" type="text" name="email" maxlength="255" value="{{ form.email.value|default_if_none:"" }}" class="input" autocomplete="email"{% if form.email.errors %} aria-invalid="true" aria-describedby="id_email_error"{% endif %} />
       {{ form.email.errors }}
 
       <label for="password1">{% trans "Password" %}</label>
       <div class="position-relative" id="password-input1">
-        <input id="password1" type="password" name="password1" value="" class="input" />
+        <input id="password1" type="password" name="password1" value="" class="input" autocomplete="new-password" />
       </div>
       <label for="password2">{% trans "Confirm Password" %}</label>
       <div class="position-relative" id="password-input2">
-        <input id="password2" type="password" name="password2" value="" class="input" />
+        <input id="password2" type="password" name="password2" value="" class="input" autocomplete="new-password" />
       </div>
 
       {{ form.non_field_errors }}
@@ -61,7 +61,7 @@
       <div class="cf-turnstile mt-2" data-sitekey="{{ turnstile_site_key }}"></div>
       {% endif %}
 
-      <p class="error hide" role="alert"></p>
+      <p class="error hide" role="alert" id="signup-form-error" data-form-error></p>
       <button type="submit" class="submit btn btn-primary btn-block">{% trans "Submit" %}</button>
     </form>
     <div class="login-panel-bottom-container">
@@ -93,28 +93,24 @@
       pwd2 = $('input[name="password2"]').val().trim();
 
     if (!email) {
-      $('.error').html("{% trans "Email cannot be blank" %}").removeClass('hide');
-      return false;
+      return formValidation.showError(this, 'email', "{% trans "Email cannot be blank" %}");
     }
     if (!pwd1) {
-      $('.error').html("{% trans "Password cannot be blank" %}").removeClass('hide');
-      return false;
+      return formValidation.showError(this, 'password1', "{% trans "Password cannot be blank" %}");
     }
     if (!pwd2) {
-      $('.error').html("{% trans "Please enter the password again" %}").removeClass('hide');
-      return false;
+      return formValidation.showError(this, 'password2', "{% trans "Please enter the password again" %}");
     }
     if (pwd1 != pwd2) {
-      $('.error').html("{% trans "Passwords don't match" %}").removeClass('hide');
-      return false;
+      return formValidation.showError(this, ['password2', 'password1'], "{% trans "Passwords don't match" %}");
     }
     if (!checkPasswordStrength(pwd1, {{strong_pwd_required}})) {
-      $('.error').html(passwd_tip).removeClass('hide');
-      return false;
+      return formValidation.showError(this, 'password1', passwd_tip);
     }
   });
   $(function () {
     setupPasswordField("password1", passwd_tip, template);
+    formValidation.setup(document.getElementById('signup-form'));
   });
   {% endif %}
 </script>

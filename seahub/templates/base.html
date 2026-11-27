@@ -32,7 +32,7 @@
         {% endif %}
         {% endblock info_bar_message %}
 
-        <div id="header" class="{% block header_css_class %}d-flex{% endblock %}">
+        <header id="header" class="{% block header_css_class %}d-flex{% endblock %}">
             <a href="{{ SITE_ROOT }}" id="logo" aria-label="{{ site_title }}" title="{{ site_title }}">
                 <img src="{{ MEDIA_URL }}{{ logo_path }}" title="{{ site_title }}" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
             </a>
@@ -48,7 +48,7 @@
                     <ul class="sf-popover-con">
                         {% for LANG in LANGUAGES %}
                         <li>
-                            <a href="{% url 'i18n' %}?lang={{ LANG.0 }}">{{ LANG.1 }}</a>
+                            <a href="{% url 'i18n' %}?lang={{ LANG.0 }}" lang="{{ LANG.0 }}" hreflang="{{ LANG.0 }}">{{ LANG.1 }}</a>
                         </li>
                         {% endfor %}
                     </ul>
@@ -56,7 +56,7 @@
             </div>
             {% endif %}
             {% endblock %}
-        </div>
+        </header>
 
         <main id="main" class="container-fluid w100 flex-auto {% block main_class %}ov-auto{% endblock %}">{# since #wrapper is `d-flex`, 'w100' is necessary here. #}
             {% block main_content %}
@@ -215,6 +215,7 @@ $('#info-bar .close').on('keydown', function(event) {
     });
 })();
 {% endif %}
+{% include "snippets/form_validation_js.html" %}
 </script>
 {% block extra_script %}{% endblock %}
 </body>

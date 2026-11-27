@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block sub_title %}{% trans "Help" %} - {% endblock %}
+
 {% block header_right %}
 {# removed the content on the top right corner #}
 {% endblock %}
@@ -43,9 +45,9 @@
 
 {% block main_content %}
 <div class="row flex-1 w-100 d-flex">
-    <div id="help-side-nav" class="side-textnav col-md-3 side-nav help-side-nav h100">
+    <nav id="help-side-nav" class="side-textnav col-md-3 side-nav help-side-nav h100" aria-label="{% trans 'Help' %}">
         <div class="d-block d-md-none logo-container">
-            <a href="{{ SITE_ROOT }}">
+            <a href="{{ SITE_ROOT }}" aria-label="{{ site_title }}">
                 <img src="{{ MEDIA_URL }}{{ logo_path }}" title="{{ site_title }}" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
             </a>
         </div>
@@ -106,8 +108,8 @@
                 <li class="tab"><a href="{{ SITE_ROOT }}help/encrypted_libraries/">{% trans "How to use encrypted libraries" %}</a></li>
             </ul>
         </div>
-    </div>
-    <div class="help-con article col-md-9 ov-auto flex-1 h100" id="right-panel">
+    </nav>
+    <div class="help-con article col-md-9 ov-auto flex-1 h100" id="right-panel" role="region" aria-labelledby="help-page-title" tabindex="0">
       {% block help_con %}{% endblock %}
     </div>
 </div>
@@ -119,6 +121,11 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+var helpPageTitle = document.getElementById('help-page-title');
+if (helpPageTitle) {
+    document.title = helpPageTitle.textContent.trim() + ' - ' + document.title;
+}
+
 $('.side-nav li').each(function(index) {
     var $link = $('a', $(this));
     var link_href = $link.attr('href');
@@ -126,6 +133,7 @@ $('.side-nav li').each(function(index) {
     if (link_href == location.pathname ||
       link_href == location.pathname + 'introduction/') {
       $(this).addClass('tab-cur');
+      $link.attr('aria-current', 'page');
       if ($(this).offset().top > $(window).height()) {
         var preSavedScrollTop;
         try {
