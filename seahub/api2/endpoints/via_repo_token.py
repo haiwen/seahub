@@ -7,6 +7,7 @@ import posixpath
 import requests
 import time
 
+from django.contrib.auth.hashers import check_password
 from django.db import transaction
 from django.http import HttpResponse
 from django.utils.translation import gettext as _
@@ -3098,6 +3099,45 @@ class ViaRepoShareLink(APIView):
         if perm != link.permission:
             link.permission = perm
             fields.append('permission')
+        if 'description' in request.data:
+            description = request.data['description']
+            if not isinstance(description, str):
+                return api_error(status.HTTP_400_BAD_REQUEST, 'description invalid.')
+            link.description = description
+            fields.append('description')
+
+        if 'emails' in request.data and 'user_scope' not in request.data:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'user_scope is required when updating emails.')
+        if 'user_scope' in request.data:
+            scope = request.data['user_scope']
+            if scope not in VALID_SHARE_LINK_SCOPE:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'user_scope invalid.')
+
+            if scope != link.user_scope or 'emails' in request.data:
+                if scope == SCOPE_ALL_USERS:
+                    if 'emails' in request.data:
+                        return api_error(status.HTTP_400_BAD_REQUEST, 'emails is not allowed for all_users.')
+                    authed_details = ''
+                elif scope == SCOPE_SPECIFIC_USERS:
+                    emails = request.data.get('emails')
+                    if not isinstance(emails, list) or not emails or any(
+                            not isinstance(email, str) or not email for email in emails):
+                        return api_error(status.HTTP_400_BAD_REQUEST, 'emails invalid.')
+                    try:
+                        users = [User.objects.get(email=email).username for email in dict.fromkeys(emails)]
+                    except User.DoesNotExist:
+                        return api_error(status.HTTP_400_BAD_REQUEST, 'emails contains an unknown user.')
+                    authed_details = json.dumps({'authed_users': users})
+                else:
+                    email_list = request.data.get('emails')
+                    emails = string2list(email_list) if isinstance(email_list, str) else []
+                    if not emails or any(not is_valid_email(email) for email in emails):
+                        return api_error(status.HTTP_400_BAD_REQUEST, 'emails invalid.')
+                    authed_details = json.dumps({'authed_emails': emails})
+
+                link.user_scope = scope
+                link.authed_details = authed_details
+                fields.extend(['user_scope', 'authed_details'])
 
         if fields:
             link.save(update_fields=fields)
@@ -3173,19 +3213,37 @@ class ViaRepoUploadLinks(APIView):
         if error is not None:
             return error
 
+        link = UploadLinkShare.objects.get_upload_link_by_path(username, repo.id, path)
+        description = request.data.get('description')
+        if 'description' in request.data and not isinstance(description, str):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'description invalid.')
+
+        password = None
         try:
-            password = validate_link_password(request.data.get('password'))
+            if not link or 'password' in request.data:
+                password = validate_link_password(request.data.get('password'))
             expire_date = parse_link_expire_date(
                 request.data, settings.UPLOAD_LINK_EXPIRE_DAYS_MIN, settings.UPLOAD_LINK_EXPIRE_DAYS_MAX,
-                settings.UPLOAD_LINK_EXPIRE_DAYS_DEFAULT)
+                0 if link else settings.UPLOAD_LINK_EXPIRE_DAYS_DEFAULT)
         except ValueError as e:
             return api_error(status.HTTP_400_BAD_REQUEST, str(e))
 
-        link = UploadLinkShare.objects.get_upload_link_by_path(username, repo.id, path)
-        if not link:
+        if link:
+            password_matches = True
+            if 'password' in request.data:
+                if password is None:
+                    password_matches = not link.is_encrypted()
+                else:
+                    password_matches = check_password(password, link.password) or password == link.get_password()
+
+            # Relative expiry is calculated from this request, so changing it requires PUT.
+            if (not password_matches or request.data.get('expire_days') not in (None, '')
+                    or (expire_date is not None and expire_date != link.expire_date)
+                    or (description is not None and description != link.description)):
+                return api_error(status.HTTP_409_CONFLICT, 'Upload link options differ. Use PUT to update the link.')
+        else:
             with transaction.atomic():
                 link = UploadLinkShare.objects.create_upload_link_share(username, repo.id, path, password, expire_date)
-                description = request.data.get('description')
                 if description:
                     link.description = description
                     link.save(update_fields=['description'])
@@ -3229,6 +3287,12 @@ class ViaRepoUploadLink(APIView):
         if expire_date is not None:
             link.expire_date = expire_date
             fields.append('expire_date')
+        if 'description' in request.data:
+            description = request.data['description']
+            if not isinstance(description, str):
+                return api_error(status.HTTP_400_BAD_REQUEST, 'description invalid.')
+            link.description = description
+            fields.append('description')
 
         if fields:
             link.save(update_fields=fields)
