@@ -5,7 +5,7 @@ django_picklefield==3.3.*
 django_formtools==2.5.*
 django_simple_captcha==0.6.*
 djangosaml2==1.11.*
-djangorestframework==3.16.*
+djangorestframework==3.18.*
 python-dateutil==2.9.*
 pyjwt==2.15.*
 pycryptodome==3.23.*
@@ -23,10 +23,10 @@ cffi==1.17.1
 captcha==0.7.*
 openpyxl==3.1.*
 Markdown==3.8.*
-bleach==5.0.*
+bleach==6.4.*
 python-ldap==3.4.*
 pypinyin==0.55.*
-dnspython==2.7.*
-pillow-heif==1.0.*
+dnspython==2.9.*
+pillow-heif==1.8.*
 redis==6.2.*
-cairosvg==2.8.*
+cairosvg==2.9.*
