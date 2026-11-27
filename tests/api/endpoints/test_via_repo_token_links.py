@@ -179,6 +179,35 @@ class ViaRepoTokenLinksTest(TestCase):
         link.refresh_from_db()
         self.assertEqual(data['password'], link.get_password())
 
+    def test_create_share_link_rejects_invalid_email_recipients(self):
+        for options in (
+                {},
+                {'emails': ' ,;\n'},
+                {'emails': 'invalid'},
+                {'emails': 'member@example.com,invalid'},
+                {'emails': ['member@example.com']}):
+            with self.subTest(options=options):
+                data = {'path': self.file, 'user_scope': 'specific_emails', **options}
+                with self.captureOnCommitCallbacks() as callbacks:
+                    response = self.client.post(self.share_url, json.dumps(data), 'application/json', **self.headers)
+                self.assertEqual(400, response.status_code)
+                self.assertFalse(FileShare.objects.filter(repo_id=self.repo_id).exists())
+                self.assertEqual([], callbacks)
+
+    def test_create_share_link_notifies_valid_email_recipients(self):
+        data = {'path': self.file, 'user_scope': 'specific_emails', 'emails': 'member@example.com'}
+        with patch('seahub.api2.endpoints.via_repo_token.send_share_link_emails') as send_emails:
+            with self.captureOnCommitCallbacks(execute=True) as callbacks:
+                response = self.client.post(self.share_url, json.dumps(data), 'application/json', **self.headers)
+                self.assertEqual(200, response.status_code)
+                send_emails.assert_not_called()
+
+        link = FileShare.objects.get(token=response.json()['token'])
+        self.assertEqual({'authed_emails': ['member@example.com']}, json.loads(link.authed_details))
+        self.assertEqual(1, len(callbacks))
+        self.assertEqual(1, send_emails.call_count)
+        self.assertEqual((['member@example.com'], link), send_emails.call_args.args[:2])
+
     def test_update_share_link_description_and_scope(self):
         link = FileShare.objects.create_file_link(self.user.username, self.repo_id, self.file,
                                                  description='Original description')

@@ -3029,10 +3029,10 @@ class ViaRepoShareLinks(APIView):
                     continue
             authed_details['authed_users'] = authed_users
         elif scope == SCOPE_SPECIFIC_EMAILS:
-            email_list = request.data.get('emails', '')
-            if not isinstance(email_list, str):
+            email_list = request.data.get('emails')
+            emails = string2list(email_list) if isinstance(email_list, str) else []
+            if not emails or any(not is_valid_email(email) for email in emails):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'emails invalid.')
-            emails = [email for email in string2list(email_list) if is_valid_email(email)]
             authed_details['authed_emails'] = emails
 
         create_link = FileShare.objects.create_dir_link if is_dir else FileShare.objects.create_file_link
