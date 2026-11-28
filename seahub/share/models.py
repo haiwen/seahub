@@ -53,14 +53,15 @@ def get_share_link_password_version(sharelink):
     return salted_hmac('share-link-password', sharelink.password or '', algorithm='sha256').hexdigest()
 
 
-def set_share_link_access(request, token, is_upload_link=False):
+def set_share_link_access(request, token, is_upload_link=False, *, sharelink=None):
     """Remember which shared download/upload link user can access without
     providing password.
     """
     if request.session is not None:
         link_key = _get_link_key(token, is_upload_link)
-        model = UploadLinkShare if is_upload_link else FileShare
-        sharelink = model.objects.filter(token=token).first()
+        if sharelink is None:
+            model = UploadLinkShare if is_upload_link else FileShare
+            sharelink = model.objects.filter(token=token).first()
         if sharelink:
             request.session[link_key] = get_share_link_password_version(sharelink)
     else:
@@ -138,7 +139,7 @@ def check_share_link_common(request, sharelink, is_upload_link=False):
         return (False, msg)
 
     if check_password(password, sharelink.password) or password == sharelink.get_password():
-        set_share_link_access(request, sharelink.token, is_upload_link)
+        set_share_link_access(request, sharelink.token, is_upload_link, sharelink=sharelink)
         return (True, msg)
     else:
         msg = _("Please enter a correct password.")

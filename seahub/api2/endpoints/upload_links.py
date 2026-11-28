@@ -38,7 +38,7 @@ from seahub.settings import UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
 logger = logging.getLogger(__name__)
 
 
-def get_upload_link_info(uls):
+def get_upload_link_info(uls, include_password=True):
     data = {}
     token = uls.token
 
@@ -82,7 +82,8 @@ def get_upload_link_info(uls):
     data['username'] = uls.username
     data['expire_date'] = expire_date
     data['is_expired'] = uls.is_expired()
-    data['password'] = uls.get_password()
+    if include_password:
+        data['password'] = uls.get_password()
     data['description'] = uls.description
 
     return data
